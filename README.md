@@ -23,6 +23,7 @@
 - [要件定義書](docs/requirements.md)
 - [実装タスク分解](docs/implementation-tasks.md)
 - [Phase 1 詳細設計](docs/phase1-foundation-design.md)
+- [Phase 1 Issue ドラフト](docs/issue-drafts-phase1.md)
 
 ## 初期版の前提
 
