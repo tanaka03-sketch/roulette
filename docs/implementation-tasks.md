@@ -36,6 +36,8 @@
 
 ### Phase 1. プロジェクト土台とデータモデル
 
+補足設計: `docs/phase1-foundation-design.md`
+
 #### TASK-001 データ型と保存キーを定義する
 
 - 内容:
