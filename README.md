@@ -27,6 +27,12 @@ npm run dev
 
 開発サーバー起動後は、Vite の表示するローカル URL から利用します。
 
+## Verify
+
+```bash
+npm test
+```
+
 ## Documents
 
 - [要件定義書](docs/requirements.md)
