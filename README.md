@@ -38,6 +38,7 @@ npm run build
 
 - GitHub Actions の暫定復旧として、`cache: npm` を外した CI 構成を適用済みです。
 - 本命対応は lockfile 運用の確定と `package-lock.json` の反映です。
+- `package-lock.json` を渡すときの手順は `docs/requirements/package-lock-handoff-2026-05-16.md` を参照してください。
 - 詳細は `docs/requirements/ci-remediation-plan-2026-05-16.md` と Issue `#13` を参照してください。
 
 ## Documents
@@ -48,6 +49,7 @@ npm run build
 - [Phase 1 Issue ドラフト](docs/issue-drafts-phase1.md)
 - [CI 修正方針ドラフト](docs/requirements/ci-remediation-plan-2026-05-16.md)
 - [CI Issue ドラフト](docs/issue-drafts-ci.md)
+- [package-lock 受け渡し手順](docs/requirements/package-lock-handoff-2026-05-16.md)
 
 ## 初期版の前提
 
