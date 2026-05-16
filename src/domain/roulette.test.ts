@@ -27,7 +27,9 @@ describe('getEligibleCandidates', () => {
     ];
     const settings: RouletteSettings = { excludeDrawnCandidates: true };
 
-    expect(getEligibleCandidates(candidates, settings).map((candidate) => candidate.id)).toEqual(['a']);
+    expect(
+      getEligibleCandidates(candidates, settings).map((candidate) => candidate.id),
+    ).toEqual(['a']);
   });
 
   it('keeps duplicate names as separate candidates by id', () => {
@@ -37,7 +39,9 @@ describe('getEligibleCandidates', () => {
     ];
     const settings: RouletteSettings = { excludeDrawnCandidates: false };
 
-    expect(getEligibleCandidates(candidates, settings).map((candidate) => candidate.id)).toEqual(['a', 'b']);
+    expect(
+      getEligibleCandidates(candidates, settings).map((candidate) => candidate.id),
+    ).toEqual(['a', 'b']);
   });
 });
 
@@ -74,10 +78,7 @@ describe('getDrawAvailability', () => {
   });
 
   it('allows drawing when at least two eligible candidates exist', () => {
-    const candidates = [
-      createCandidate({ id: 'a' }),
-      createCandidate({ id: 'b' }),
-    ];
+    const candidates = [createCandidate({ id: 'a' }), createCandidate({ id: 'b' })];
 
     expect(getDrawAvailability(candidates, { excludeDrawnCandidates: true })).toEqual({
       canDraw: true,
@@ -125,5 +126,4 @@ describe('markCandidateAsDrawn', () => {
     ]);
     expect(original[1].drawn).toBe(false);
   });
-}
-);
+});
