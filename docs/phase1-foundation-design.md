@@ -277,8 +277,13 @@ UI 側では次の順で呼び出す。
 2. `canDraw === false` なら理由コードに応じてメッセージ表示
 3. `getEligibleCandidates(state.candidates, state.settings)`
 4. `pickRandomCandidate(eligibleCandidates)`
-5. 設定が `excludeDrawnCandidates === true` の場合だけ `markCandidateAsDrawn(...)`
+5. `markCandidateAsDrawn(...)` で当選候補を抽選済み状態へ更新する
 6. 状態保存と結果表示
+
+補足:
+
+- `excludeDrawnCandidates` は「次回以降の抽選対象から外すかどうか」を決める設定であり、当選結果そのものを履歴として `drawn` 更新するかどうかとは分けて扱う
+- `docs/requirements.md` の 4.1 と 4.3 を正本として、初期版では設定 ON / OFF に関わらず抽選結果は `drawn` 更新する
 
 この順にすることで、抽選可否判定、対象絞り込み、乱数選択、状態更新の責務が混ざらない。
 
