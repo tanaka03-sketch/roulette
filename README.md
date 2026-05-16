@@ -25,7 +25,7 @@ npm install
 npm run dev
 ```
 
-開発サーバー起動後は、Vite の表示するローカル URL から利用します。
+開発サーバー起動後は、 Vite の表示するローカル URL から利用します。
 
 ## Verify
 
@@ -36,10 +36,10 @@ npm run build
 
 ## CI Note
 
-- GitHub Actions の暫定復旧として、`cache: npm` を外した CI 構成を適用済みです。
-- 本命対応は lockfile 運用の確定と `package-lock.json` の反映です。
-- `package-lock.json` を渡すときの手順は `docs/requirements/package-lock-handoff-2026-05-16.md` を参照してください。
-- 詳細は `docs/requirements/ci-remediation-plan-2026-05-16.md` と Issue `#13` を参照してください。
+- GitHub Actions の CI は `main` への push と pull request で自動実行されます。
+- CI は `actions/setup-node@v4` の `cache: npm` を有効にしたうえで、`npm ci`、`npm test`、`npm run build` を順に実行します。
+- `package-lock.json` はリポジトリ管理下に置き、ローカル手順と CI の依存関係解決方式をそろえています。
+- CI の整備経緯は `docs/requirements/ci-remediation-plan-2026-05-16.md` と Issue `#13` を参照してください。
 
 ## Documents
 
