@@ -18,6 +18,15 @@
 - ページ再読み込み後の状態復元
 - PC / スマートフォン対応
 
+## Setup
+
+```bash
+npm install
+npm run dev
+```
+
+開発サーバー起動後は、Vite の表示するローカル URL から利用します。
+
 ## Documents
 
 - [要件定義書](docs/requirements.md)
@@ -32,4 +41,3 @@
 - 外部 API 連携なし
 - サーバー側保存なし
 - 同名候補は許可し、内部 ID で区別
-
