@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { DEFAULT_STATE, STORAGE_KEYS, type RouletteState } from '../domain/roulette';
 import {
   clearRouletteState,
@@ -33,6 +33,7 @@ function createState(): RouletteState {
 describe('rouletteStorage', () => {
   beforeEach(() => {
     window.localStorage.clear();
+    vi.restoreAllMocks();
   });
 
   it('returns the default state when storage is empty', () => {
@@ -45,6 +46,22 @@ describe('rouletteStorage', () => {
     saveRouletteState(state);
 
     expect(loadRouletteState()).toEqual(state);
+  });
+
+  it('falls back to the default state when localStorage access is blocked', () => {
+    vi.spyOn(window, 'localStorage', 'get').mockImplementation(() => {
+      throw new DOMException('Blocked', 'SecurityError');
+    });
+
+    expect(loadRouletteState()).toEqual(DEFAULT_STATE);
+  });
+
+  it('falls back to the default state when getItem throws', () => {
+    vi.spyOn(window.localStorage, 'getItem').mockImplementation(() => {
+      throw new DOMException('Blocked', 'SecurityError');
+    });
+
+    expect(loadRouletteState()).toEqual(DEFAULT_STATE);
   });
 
   it('falls back to the default state when stored JSON is broken', () => {
