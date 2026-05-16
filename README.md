@@ -31,7 +31,14 @@ npm run dev
 
 ```bash
 npm test
+npm run build
 ```
+
+## CI Note
+
+- GitHub Actions の暫定復旧として、`cache: npm` を外した CI 構成を適用済みです。
+- 本命対応は lockfile 運用の確定と `package-lock.json` の反映です。
+- 詳細は `docs/requirements/ci-remediation-plan-2026-05-16.md` と Issue `#13` を参照してください。
 
 ## Documents
 
