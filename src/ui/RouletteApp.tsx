@@ -30,6 +30,7 @@ export function RouletteApp() {
     totalCount,
     setCandidateName,
     handleAddCandidate,
+    handleClearCandidates,
     handleDeleteCandidate,
     handleResetDrawnCandidates,
     handleStartDraw,
@@ -186,9 +187,14 @@ export function RouletteApp() {
             </button>
             <p className="helper-text">{availabilityHint}</p>
 
-            <button className="secondary-button" type="button" onClick={handleResetDrawnCandidates}>
-              抽選済み状態をリセット
-            </button>
+            <div className="action-row">
+              <button className="secondary-button" type="button" onClick={handleResetDrawnCandidates}>
+                抽選済み状態をリセット
+              </button>
+              <button className="danger-button" type="button" onClick={handleClearCandidates}>
+                候補をすべて削除
+              </button>
+            </div>
 
             {feedbackMessage ? <p className="status-banner">{feedbackMessage}</p> : null}
             {storageError ? <p className="error-banner">{storageError}</p> : null}
