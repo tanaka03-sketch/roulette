@@ -74,6 +74,35 @@ describe('RouletteApp', () => {
     expect(screen.getAllByText(/抽選済み|未抽選/)).toHaveLength(2);
   });
 
+  it('locks candidate and settings changes while drawing', async () => {
+    vi.useFakeTimers();
+    vi.spyOn(Math, 'random').mockReturnValue(0);
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+
+    render(<RouletteApp />);
+
+    const input = screen.getByLabelText('候補名');
+    await user.type(input, '候補A');
+    await user.click(screen.getByRole('button', { name: '追加' }));
+    await user.type(input, '候補B');
+    await user.click(screen.getByRole('button', { name: '追加' }));
+
+    await user.click(screen.getByRole('button', { name: '抽選開始' }));
+
+    expect(input).toBeDisabled();
+    expect(screen.getByRole('checkbox')).toBeDisabled();
+    expect(screen.getByRole('button', { name: '抽選済み状態をリセット' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: '候補をすべて削除' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: '候補 候補A を編集' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: '候補 候補A を削除' })).toBeDisabled();
+
+    await act(async () => {
+      vi.advanceTimersByTime(900);
+    });
+
+    expect(screen.getByText('結果: 候補A')).toBeInTheDocument();
+  });
+
   it('resets drawn candidates after confirmation', async () => {
     vi.useFakeTimers();
     vi.spyOn(Math, 'random').mockReturnValue(0);
