@@ -99,6 +99,7 @@ export function RouletteApp() {
                   value={candidateName}
                   maxLength={120}
                   placeholder="例: ランチ / 企画案 / 発表順"
+                  disabled={isDrawing}
                   onChange={(event) => setCandidateName(event.target.value)}
                   onKeyDown={(event) => {
                     if (event.key === 'Enter') {
@@ -107,7 +108,12 @@ export function RouletteApp() {
                     }
                   }}
                 />
-                <button className="primary-button" type="button" onClick={handleAddCandidate}>
+                <button
+                  className="primary-button"
+                  type="button"
+                  disabled={isDrawing}
+                  onClick={handleAddCandidate}
+                >
                   追加
                 </button>
               </div>
@@ -135,6 +141,7 @@ export function RouletteApp() {
                               type="text"
                               value={editingCandidateName}
                               maxLength={120}
+                              disabled={isDrawing}
                               onChange={(event) =>
                                 setEditingCandidateName(event.target.value)
                               }
@@ -149,6 +156,7 @@ export function RouletteApp() {
                               <button
                                 className="secondary-button"
                                 type="button"
+                                disabled={isDrawing}
                                 onClick={handleSaveCandidateEdit}
                               >
                                 保存
@@ -156,6 +164,7 @@ export function RouletteApp() {
                               <button
                                 className="ghost-button"
                                 type="button"
+                                disabled={isDrawing}
                                 onClick={handleCancelEditingCandidate}
                               >
                                 キャンセル
@@ -180,6 +189,7 @@ export function RouletteApp() {
                               <button
                                 className="ghost-button"
                                 type="button"
+                                disabled={isDrawing}
                                 onClick={() => handleStartEditingCandidate(candidate)}
                                 aria-label={`候補 ${candidate.name} を編集`}
                               >
@@ -188,6 +198,7 @@ export function RouletteApp() {
                               <button
                                 className="ghost-button"
                                 type="button"
+                                disabled={isDrawing}
                                 onClick={() => handleDeleteCandidate(candidate.id)}
                                 aria-label={`候補 ${candidate.name} を削除`}
                               >
@@ -216,6 +227,7 @@ export function RouletteApp() {
               <input
                 type="checkbox"
                 checked={excludeDrawnCandidates}
+                disabled={isDrawing}
                 onChange={handleToggleExcludeDrawnCandidates}
               />
               <span>抽選済み候補を次回抽選から除外する</span>
@@ -252,10 +264,20 @@ export function RouletteApp() {
             <p className="helper-text">{availabilityHint}</p>
 
             <div className="action-row">
-              <button className="secondary-button" type="button" onClick={handleResetDrawnCandidates}>
+              <button
+                className="secondary-button"
+                type="button"
+                disabled={isDrawing}
+                onClick={handleResetDrawnCandidates}
+              >
                 抽選済み状態をリセット
               </button>
-              <button className="danger-button" type="button" onClick={handleClearCandidates}>
+              <button
+                className="danger-button"
+                type="button"
+                disabled={isDrawing}
+                onClick={handleClearCandidates}
+              >
                 候補をすべて削除
               </button>
             </div>
