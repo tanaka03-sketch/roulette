@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   createCandidateId,
   getDrawAvailability,
@@ -32,10 +32,8 @@ export function useRouletteApp() {
   const [lastResult, setLastResult] = useState<RouletteCandidate | null>(null);
   const drawTimerRef = useRef<number | null>(null);
 
-  const availability = useMemo(
-    () => getDrawAvailability(state.candidates, state.settings),
-    [state.candidates, state.settings],
-  );
+  const availability = getDrawAvailability(state.candidates, state.settings);
+  const eligibleCandidates = getEligibleCandidates(state.candidates, state.settings);
 
   useEffect(() => {
     try {
@@ -53,11 +51,6 @@ export function useRouletteApp() {
       }
     };
   }, []);
-
-  const eligibleCandidates = useMemo(
-    () => getEligibleCandidates(state.candidates, state.settings),
-    [state.candidates, state.settings],
-  );
 
   function handleAddCandidate() {
     const trimmedName = candidateName.trim();
