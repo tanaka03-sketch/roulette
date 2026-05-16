@@ -9,8 +9,16 @@ import {
   type RouletteStorageData,
 } from '../domain/roulette';
 
-function hasLocalStorage(): boolean {
-  return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
+function getLocalStorage(): Storage | null {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  try {
+    return window.localStorage;
+  } catch {
+    return null;
+  }
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -57,11 +65,18 @@ function createDefaultState(): RouletteState {
 }
 
 export function loadRouletteState(): RouletteState {
-  if (!hasLocalStorage()) {
+  const storage = getLocalStorage();
+  if (storage === null) {
     return createDefaultState();
   }
 
-  const rawValue = window.localStorage.getItem(STORAGE_KEYS.rouletteState);
+  let rawValue: string | null;
+  try {
+    rawValue = storage.getItem(STORAGE_KEYS.rouletteState);
+  } catch {
+    return createDefaultState();
+  }
+
   if (rawValue === null) {
     return createDefaultState();
   }
@@ -82,7 +97,8 @@ export function loadRouletteState(): RouletteState {
 }
 
 export function saveRouletteState(state: RouletteState): void {
-  if (!hasLocalStorage()) {
+  const storage = getLocalStorage();
+  if (storage === null) {
     return;
   }
 
@@ -92,16 +108,18 @@ export function saveRouletteState(state: RouletteState): void {
     settings: { ...state.settings },
   };
 
-  window.localStorage.setItem(
-    STORAGE_KEYS.rouletteState,
-    JSON.stringify(payload),
-  );
+  storage.setItem(STORAGE_KEYS.rouletteState, JSON.stringify(payload));
 }
 
 export function clearRouletteState(): void {
-  if (!hasLocalStorage()) {
+  const storage = getLocalStorage();
+  if (storage === null) {
     return;
   }
 
-  window.localStorage.removeItem(STORAGE_KEYS.rouletteState);
+  try {
+    storage.removeItem(STORAGE_KEYS.rouletteState);
+  } catch {
+    // Ignore blocked storage cleanup failures and keep the app usable.
+  }
 }
