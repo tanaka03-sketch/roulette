@@ -21,6 +21,8 @@ export function RouletteApp() {
     availability,
     candidateName,
     candidates,
+    editingCandidateId,
+    editingCandidateName,
     eligibleCount,
     excludeDrawnCandidates,
     feedbackMessage,
@@ -29,11 +31,15 @@ export function RouletteApp() {
     storageError,
     totalCount,
     setCandidateName,
+    setEditingCandidateName,
     handleAddCandidate,
+    handleCancelEditingCandidate,
     handleClearCandidates,
     handleDeleteCandidate,
     handleResetDrawnCandidates,
+    handleSaveCandidateEdit,
     handleStartDraw,
+    handleStartEditingCandidate,
     handleToggleExcludeDrawnCandidates,
   } = useRouletteApp();
 
@@ -117,24 +123,82 @@ export function RouletteApp() {
                 <p className="empty-state">まだ候補がありません。</p>
               ) : (
                 <ul className="candidate-list">
-                  {candidates.map((candidate) => (
-                    <li key={candidate.id} className="candidate-row">
-                      <div className="candidate-copy">
-                        <span className="candidate-name">{candidate.name}</span>
-                        <span className={candidate.drawn ? 'candidate-badge is-drawn' : 'candidate-badge'}>
-                          {candidate.drawn ? '抽選済み' : '未抽選'}
-                        </span>
-                      </div>
-                      <button
-                        className="ghost-button"
-                        type="button"
-                        onClick={() => handleDeleteCandidate(candidate.id)}
-                        aria-label={`候補 ${candidate.name} を削除`}
-                      >
-                        削除
-                      </button>
-                    </li>
-                  ))}
+                  {candidates.map((candidate) => {
+                    const isEditing = editingCandidateId === candidate.id;
+
+                    return (
+                      <li key={candidate.id} className="candidate-row">
+                        {isEditing ? (
+                          <div className="candidate-edit-grid">
+                            <input
+                              className="text-input"
+                              type="text"
+                              value={editingCandidateName}
+                              maxLength={120}
+                              onChange={(event) =>
+                                setEditingCandidateName(event.target.value)
+                              }
+                              onKeyDown={(event) => {
+                                if (event.key === 'Enter') {
+                                  event.preventDefault();
+                                  handleSaveCandidateEdit();
+                                }
+                              }}
+                            />
+                            <div className="candidate-action-row">
+                              <button
+                                className="secondary-button"
+                                type="button"
+                                onClick={handleSaveCandidateEdit}
+                              >
+                                保存
+                              </button>
+                              <button
+                                className="ghost-button"
+                                type="button"
+                                onClick={handleCancelEditingCandidate}
+                              >
+                                キャンセル
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="candidate-copy">
+                              <span className="candidate-name">{candidate.name}</span>
+                              <span
+                                className={
+                                  candidate.drawn
+                                    ? 'candidate-badge is-drawn'
+                                    : 'candidate-badge'
+                                }
+                              >
+                                {candidate.drawn ? '抽選済み' : '未抽選'}
+                              </span>
+                            </div>
+                            <div className="candidate-action-row is-inline">
+                              <button
+                                className="ghost-button"
+                                type="button"
+                                onClick={() => handleStartEditingCandidate(candidate)}
+                                aria-label={`候補 ${candidate.name} を編集`}
+                              >
+                                編集
+                              </button>
+                              <button
+                                className="ghost-button"
+                                type="button"
+                                onClick={() => handleDeleteCandidate(candidate.id)}
+                                aria-label={`候補 ${candidate.name} を削除`}
+                              >
+                                削除
+                              </button>
+                            </div>
+                          </>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
               )}
             </div>
