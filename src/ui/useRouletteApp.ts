@@ -26,6 +26,8 @@ function getAvailabilityMessage(availability: DrawAvailability): string | null {
 export function useRouletteApp() {
   const [state, setState] = useState<RouletteState>(() => loadRouletteState());
   const [candidateName, setCandidateName] = useState('');
+  const [editingCandidateId, setEditingCandidateId] = useState<string | null>(null);
+  const [editingCandidateName, setEditingCandidateName] = useState('');
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
   const [storageError, setStorageError] = useState<string | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -52,6 +54,11 @@ export function useRouletteApp() {
     };
   }, []);
 
+  function resetEditingState() {
+    setEditingCandidateId(null);
+    setEditingCandidateName('');
+  }
+
   function handleAddCandidate() {
     const trimmedName = candidateName.trim();
     if (trimmedName.length === 0) {
@@ -77,6 +84,57 @@ export function useRouletteApp() {
     setFeedbackMessage(null);
   }
 
+  function handleStartEditingCandidate(candidate: RouletteCandidate) {
+    setEditingCandidateId(candidate.id);
+    setEditingCandidateName(candidate.name);
+    setFeedbackMessage(null);
+  }
+
+  function handleCancelEditingCandidate() {
+    resetEditingState();
+  }
+
+  function handleSaveCandidateEdit() {
+    if (editingCandidateId === null) {
+      return;
+    }
+
+    const trimmedName = editingCandidateName.trim();
+    if (trimmedName.length === 0) {
+      setFeedbackMessage('候補を入力してください');
+      return;
+    }
+
+    const now = new Date().toISOString();
+    setState((currentState) => ({
+      ...currentState,
+      candidates: currentState.candidates.map((candidate) => {
+        if (candidate.id !== editingCandidateId) {
+          return candidate;
+        }
+
+        return {
+          ...candidate,
+          name: trimmedName,
+          updatedAt: now,
+        };
+      }),
+    }));
+    if (lastResult?.id === editingCandidateId) {
+      setLastResult((currentResult) =>
+        currentResult === null
+          ? null
+          : {
+              ...currentResult,
+              name: trimmedName,
+              updatedAt: now,
+            },
+      );
+    }
+    resetEditingState();
+    setFeedbackMessage('候補名を更新しました');
+  }
+
   function handleDeleteCandidate(candidateId: string) {
     setState((currentState) => ({
       ...currentState,
@@ -87,6 +145,9 @@ export function useRouletteApp() {
     setLastResult((currentResult) =>
       currentResult?.id === candidateId ? null : currentResult,
     );
+    if (editingCandidateId === candidateId) {
+      resetEditingState();
+    }
   }
 
   function handleToggleExcludeDrawnCandidates() {
@@ -167,6 +228,7 @@ export function useRouletteApp() {
       candidates: [],
     }));
     setCandidateName('');
+    resetEditingState();
     setLastResult(null);
     setFeedbackMessage('候補リストをすべて削除しました');
   }
@@ -175,6 +237,8 @@ export function useRouletteApp() {
     availability,
     candidateName,
     candidates: state.candidates,
+    editingCandidateId,
+    editingCandidateName,
     eligibleCount: eligibleCandidates.length,
     excludeDrawnCandidates: state.settings.excludeDrawnCandidates,
     feedbackMessage,
@@ -183,11 +247,15 @@ export function useRouletteApp() {
     storageError,
     totalCount: state.candidates.length,
     setCandidateName,
+    setEditingCandidateName,
     handleAddCandidate,
+    handleCancelEditingCandidate,
     handleClearCandidates,
     handleDeleteCandidate,
     handleResetDrawnCandidates,
+    handleSaveCandidateEdit,
     handleStartDraw,
+    handleStartEditingCandidate,
     handleToggleExcludeDrawnCandidates,
   };
 }
