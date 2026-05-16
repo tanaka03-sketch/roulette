@@ -24,6 +24,12 @@ GitHub Actions の CI が依存関係導入段階で停止している状態を�
 - GitHub Actions 上の注釈では、`package-lock.json`、`npm-shrinkwrap.json`、`yarn.lock` のいずれかが必要とされている。
 - この失敗により、`npm test` と `npm run build` は未実行のまま停止している。
 
+### 2.3 現在の作業環境で確認できた制約
+
+- こちらの実行環境では npm レジストリへの取得が `403 Forbidden` で失敗し、`package-lock.json` の生成を完了できなかった。
+- そのため、本命案である「ロックファイル追加」をこの場で自動反映するには追加判断または別経路が必要である。
+- 一方、CI ワークフローから `cache: npm` を外す暫定復旧は、現行情報だけでも実施可能である。
+
 ## 3. 修正方針候補
 
 ### 3.1 推奨案
@@ -69,9 +75,11 @@ npm を正式なパッケージ管理方式として扱い、`package-lock.json`
 - 依存導入コマンドを `npm install` のまま維持するか、`npm ci` に切り替えるか。
 - Node.js 22 を継続利用するか、LTS 基準に寄せるか。
 - `actions/checkout` と `actions/setup-node` の更新タイミングをどう決めるか。
+- 本命案のための `package-lock.json` をどの環境で生成・反映するか。
 
 ## 7. 次の実務候補
 
 - CI 修正作業の Issue 化
 - `package-lock.json` 運用ルールの README 追記
 - CI 修正 PR の受入観点整理
+- 暫定復旧として `cache: npm` を外す変更の実施
