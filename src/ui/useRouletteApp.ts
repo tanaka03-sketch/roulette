@@ -126,6 +126,7 @@ export function useRouletteApp() {
         updatedAt: now,
       });
       setIsDrawing(false);
+      drawTimerRef.current = null;
       setFeedbackMessage(`結果: ${winner.name}`);
     }, 900);
   }
@@ -149,6 +150,27 @@ export function useRouletteApp() {
     setFeedbackMessage('抽選済み状態をリセットしました');
   }
 
+  function handleClearCandidates() {
+    const shouldClear = window.confirm('候補リストをすべて削除しますか？');
+    if (!shouldClear) {
+      return;
+    }
+
+    if (drawTimerRef.current !== null) {
+      window.clearTimeout(drawTimerRef.current);
+      drawTimerRef.current = null;
+      setIsDrawing(false);
+    }
+
+    setState((currentState) => ({
+      ...currentState,
+      candidates: [],
+    }));
+    setCandidateName('');
+    setLastResult(null);
+    setFeedbackMessage('候補リストをすべて削除しました');
+  }
+
   return {
     availability,
     candidateName,
@@ -162,6 +184,7 @@ export function useRouletteApp() {
     totalCount: state.candidates.length,
     setCandidateName,
     handleAddCandidate,
+    handleClearCandidates,
     handleDeleteCandidate,
     handleResetDrawnCandidates,
     handleStartDraw,
