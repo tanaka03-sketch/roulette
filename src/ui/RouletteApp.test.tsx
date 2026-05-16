@@ -1,188 +1,170 @@
-import { act } from 'react';
-import { createRoot, type Root } from 'react-dom/client';
+import { act, render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { STORAGE_KEYS } from '../domain/roulette';
 import { RouletteApp } from './RouletteApp';
 
-type RenderedApp = {
-  container: HTMLDivElement;
-  unmount: () => void;
-};
-
-let renderedApp: RenderedApp | null = null;
-
-function renderApp(): RenderedApp {
-  const container = document.createElement('div');
-  document.body.appendChild(container);
-  const root: Root = createRoot(container);
-
-  act(() => {
-    root.render(<RouletteApp />);
-  });
-
-  const result = {
-    container,
-    unmount: () => {
-      act(() => {
-        root.unmount();
-      });
-      container.remove();
-    },
-  };
-
-  renderedApp = result;
-  return result;
+function getSavedState() {
+  const raw = window.localStorage.getItem(STORAGE_KEYS.rouletteState);
+  return raw === null ? null : JSON.parse(raw);
 }
-
-function getButton(label: string): HTMLButtonElement {
-  const button = Array.from(document.querySelectorAll('button')).find(
-    (element) => element.textContent?.trim() === label,
-  );
-
-  if (!(button instanceof HTMLButtonElement)) {
-    throw new Error(`Button not found: ${label}`);
-  }
-
-  return button;
-}
-
-function getCandidateInput(): HTMLInputElement {
-  const input = document.querySelector('#candidateName');
-
-  if (!(input instanceof HTMLInputElement)) {
-    throw new Error('Candidate input not found');
-  }
-
-  return input;
-}
-
-function getExcludeCheckbox(): HTMLInputElement {
-  const checkbox = document.querySelector('input[type="checkbox"]');
-
-  if (!(checkbox instanceof HTMLInputElement)) {
-    throw new Error('Exclude checkbox not found');
-  }
-
-  return checkbox;
-}
-
-function getCandidateRows(): HTMLLIElement[] {
-  return Array.from(document.querySelectorAll('.candidate-row'));
-}
-
-function getDeleteButtons(label: string): HTMLButtonElement[] {
-  return Array.from(
-    document.querySelectorAll(`button[aria-label="${label}"]`),
-  ).filter((element): element is HTMLButtonElement => element instanceof HTMLButtonElement);
-}
-
-function changeInput(input: HTMLInputElement, value: string) {
-  act(() => {
-    input.value = value;
-    input.dispatchEvent(new Event('input', { bubbles: true }));
-  });
-}
-
-function click(element: Element) {
-  act(() => {
-    element.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
-  });
-}
-
-function addCandidate(name: string) {
-  changeInput(getCandidateInput(), name);
-  click(getButton('追加'));
-}
-
-beforeEach(() => {
-  window.localStorage.clear();
-});
-
-afterEach(() => {
-  if (renderedApp !== null) {
-    renderedApp.unmount();
-    renderedApp = null;
-  }
-
-  vi.useRealTimers();
-  vi.restoreAllMocks();
-  window.localStorage.clear();
-  document.body.replaceChildren();
-});
 
 describe('RouletteApp', () => {
-  it('allows duplicate candidate names and deletes only the selected candidate row', () => {
-    renderApp();
-
-    addCandidate('重複');
-    addCandidate('重複');
-
-    expect(getCandidateRows()).toHaveLength(2);
-
-    const deleteButtons = getDeleteButtons('候補 重複 を削除');
-    expect(deleteButtons).toHaveLength(2);
-
-    click(deleteButtons[0]);
-
-    expect(getCandidateRows()).toHaveLength(1);
-    expect(document.body.textContent).toContain('重複');
+  beforeEach(() => {
+    window.localStorage.clear();
+    vi.restoreAllMocks();
   });
 
-  it('keeps candidate text escaped instead of inserting HTML', () => {
-    renderApp();
+  afterEach(() => {
+    vi.useRealTimers();
+  });
 
-    addCandidate('<img src=x onerror=alert(1)>');
+  it('adds duplicate candidate names as separate id-based entries and persists them', async () => {
+    const user = userEvent.setup();
 
-    expect(document.body.textContent).toContain('<img src=x onerror=alert(1)>');
+    render(<RouletteApp />);
+
+    const input = screen.getByLabelText('候補名');
+    await user.type(input, '重複候補');
+    await user.click(screen.getByRole('button', { name: '追加' }));
+    await user.type(input, '重複候補');
+    await user.click(screen.getByRole('button', { name: '追加' }));
+
+    expect(screen.getAllByText('重複候補')).toHaveLength(2);
+
+    const savedState = getSavedState();
+    expect(savedState?.candidates).toHaveLength(2);
+    expect(savedState?.candidates[0].id).not.toBe(savedState?.candidates[1].id);
+  });
+
+  it('renders candidate text safely instead of inserting html', async () => {
+    const user = userEvent.setup();
+
+    render(<RouletteApp />);
+
+    const input = screen.getByLabelText('候補名');
+    await user.type(input, '<img src=x onerror=alert(1)>');
+    await user.click(screen.getByRole('button', { name: '追加' }));
+
+    expect(screen.getByText('<img src=x onerror=alert(1)>')).toBeInTheDocument();
     expect(document.querySelector('img')).toBeNull();
   });
 
-  it('draws a deterministic result and then blocks drawing when only one eligible candidate remains', () => {
+  it('draws from eligible candidates and marks the winner as drawn', async () => {
     vi.useFakeTimers();
     vi.spyOn(Math, 'random').mockReturnValue(0);
-    renderApp();
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 
-    expect(getButton('抽選開始').disabled).toBe(true);
+    render(<RouletteApp />);
 
-    addCandidate('A');
-    addCandidate('B');
+    const input = screen.getByLabelText('候補名');
+    await user.type(input, '候補A');
+    await user.click(screen.getByRole('button', { name: '追加' }));
+    await user.type(input, '候補B');
+    await user.click(screen.getByRole('button', { name: '追加' }));
 
-    const drawButton = getButton('抽選開始');
-    expect(drawButton.disabled).toBe(false);
+    await user.click(screen.getByRole('button', { name: '抽選開始' }));
 
-    click(drawButton);
-    expect(document.body.textContent).toContain('抽選中...');
-
-    act(() => {
+    await act(async () => {
       vi.advanceTimersByTime(900);
     });
 
-    expect(document.body.textContent).toContain('結果: A');
-    const rows = getCandidateRows();
-    expect(rows[0].textContent).toContain('抽選済み');
-    expect(rows[1].textContent).toContain('未抽選');
-    expect(document.body.textContent).toContain('抽選には2件以上の候補が必要です');
+    expect(screen.getByText('結果: 候補A')).toBeInTheDocument();
+    expect(screen.getByText('1件 / 2件 から抽選できます')).toBeInTheDocument();
+    expect(screen.getAllByText(/抽選済み|未抽選/)).toHaveLength(2);
   });
 
-  it('persists candidates and exclude setting through localStorage', () => {
-    const firstRender = renderApp();
+  it('resets drawn candidates after confirmation', async () => {
+    vi.useFakeTimers();
+    vi.spyOn(Math, 'random').mockReturnValue(0);
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 
-    addCandidate('保存A');
-    addCandidate('保存B');
+    render(<RouletteApp />);
 
-    expect(getExcludeCheckbox().checked).toBe(true);
-    click(getExcludeCheckbox());
-    expect(getExcludeCheckbox().checked).toBe(false);
-    expect(window.localStorage.getItem(STORAGE_KEYS.rouletteState)).not.toBeNull();
+    const input = screen.getByLabelText('候補名');
+    await user.type(input, '候補A');
+    await user.click(screen.getByRole('button', { name: '追加' }));
+    await user.type(input, '候補B');
+    await user.click(screen.getByRole('button', { name: '追加' }));
+    await user.click(screen.getByRole('button', { name: '抽選開始' }));
 
-    firstRender.unmount();
-    renderedApp = null;
+    await act(async () => {
+      vi.advanceTimersByTime(900);
+    });
 
-    renderApp();
+    await user.click(screen.getByRole('button', { name: '抽選済み状態をリセット' }));
 
-    expect(getCandidateRows()).toHaveLength(2);
-    expect(document.body.textContent).toContain('保存A');
-    expect(document.body.textContent).toContain('保存B');
-    expect(getExcludeCheckbox().checked).toBe(false);
+    expect(screen.getByText('抽選済み状態をリセットしました')).toBeInTheDocument();
+    expect(screen.getByText('2件 / 2件 から抽選できます')).toBeInTheDocument();
+    expect(screen.getAllByText('未抽選')).toHaveLength(2);
+  });
+
+  it('clears all candidates after confirmation with a separate destructive action', async () => {
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    const user = userEvent.setup();
+
+    render(<RouletteApp />);
+
+    const input = screen.getByLabelText('候補名');
+    await user.type(input, '候補A');
+    await user.click(screen.getByRole('button', { name: '追加' }));
+    await user.type(input, '候補B');
+    await user.click(screen.getByRole('button', { name: '追加' }));
+
+    await user.click(screen.getByRole('button', { name: '候補をすべて削除' }));
+
+    expect(screen.getByText('候補リストをすべて削除しました')).toBeInTheDocument();
+    expect(screen.getByText('まだ候補がありません。')).toBeInTheDocument();
+    expect(getSavedState()?.candidates).toEqual([]);
+  });
+
+  it('edits a candidate name while keeping the same item', async () => {
+    const user = userEvent.setup();
+
+    render(<RouletteApp />);
+
+    const input = screen.getByLabelText('候補名');
+    await user.type(input, '変更前');
+    await user.click(screen.getByRole('button', { name: '追加' }));
+
+    await user.click(screen.getByRole('button', { name: '候補 変更前 を編集' }));
+
+    const row = screen.getByDisplayValue('変更前').closest('li');
+    expect(row).not.toBeNull();
+
+    const scoped = within(row!);
+    const editInput = scoped.getByDisplayValue('変更前');
+    await user.clear(editInput);
+    await user.type(editInput, '変更後');
+    await user.click(scoped.getByRole('button', { name: '保存' }));
+
+    expect(screen.getByText('候補名を更新しました')).toBeInTheDocument();
+    expect(screen.getByText('変更後')).toBeInTheDocument();
+    const savedState = getSavedState();
+    expect(savedState?.candidates).toHaveLength(1);
+    expect(savedState?.candidates[0].name).toBe('変更後');
+  });
+
+  it('restores candidates and the exclude setting from localStorage on reload', async () => {
+    const user = userEvent.setup();
+    const { unmount } = render(<RouletteApp />);
+
+    const input = screen.getByLabelText('候補名');
+    await user.type(input, '保存A');
+    await user.click(screen.getByRole('button', { name: '追加' }));
+    await user.type(input, '保存B');
+    await user.click(screen.getByRole('button', { name: '追加' }));
+
+    await user.click(screen.getByRole('checkbox'));
+    expect(screen.getByRole('checkbox')).not.toBeChecked();
+
+    unmount();
+
+    render(<RouletteApp />);
+
+    expect(screen.getByText('保存A')).toBeInTheDocument();
+    expect(screen.getByText('保存B')).toBeInTheDocument();
+    expect(screen.getByRole('checkbox')).not.toBeChecked();
   });
 });
