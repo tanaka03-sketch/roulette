@@ -23,6 +23,8 @@ function getAvailabilityMessage(availability: DrawAvailability): string | null {
   return '抽選には2件以上の候補が必要です';
 }
 
+const DRAW_LOCK_MESSAGE = '抽選中は候補や設定を変更できません';
+
 export function useRouletteApp() {
   const [state, setState] = useState<RouletteState>(() => loadRouletteState());
   const [candidateName, setCandidateName] = useState('');
@@ -59,7 +61,20 @@ export function useRouletteApp() {
     setEditingCandidateName('');
   }
 
+  function guardDuringDraw(): boolean {
+    if (!isDrawing) {
+      return false;
+    }
+
+    setFeedbackMessage(DRAW_LOCK_MESSAGE);
+    return true;
+  }
+
   function handleAddCandidate() {
+    if (guardDuringDraw()) {
+      return;
+    }
+
     const trimmedName = candidateName.trim();
     if (trimmedName.length === 0) {
       setFeedbackMessage('候補を入力してください');
@@ -85,16 +100,28 @@ export function useRouletteApp() {
   }
 
   function handleStartEditingCandidate(candidate: RouletteCandidate) {
+    if (guardDuringDraw()) {
+      return;
+    }
+
     setEditingCandidateId(candidate.id);
     setEditingCandidateName(candidate.name);
     setFeedbackMessage(null);
   }
 
   function handleCancelEditingCandidate() {
+    if (guardDuringDraw()) {
+      return;
+    }
+
     resetEditingState();
   }
 
   function handleSaveCandidateEdit() {
+    if (guardDuringDraw()) {
+      return;
+    }
+
     if (editingCandidateId === null) {
       return;
     }
@@ -136,6 +163,10 @@ export function useRouletteApp() {
   }
 
   function handleDeleteCandidate(candidateId: string) {
+    if (guardDuringDraw()) {
+      return;
+    }
+
     setState((currentState) => ({
       ...currentState,
       candidates: currentState.candidates.filter(
@@ -151,6 +182,10 @@ export function useRouletteApp() {
   }
 
   function handleToggleExcludeDrawnCandidates() {
+    if (guardDuringDraw()) {
+      return;
+    }
+
     setState((currentState) => ({
       ...currentState,
       settings: {
@@ -193,6 +228,10 @@ export function useRouletteApp() {
   }
 
   function handleResetDrawnCandidates() {
+    if (guardDuringDraw()) {
+      return;
+    }
+
     const shouldReset = window.confirm('抽選済み状態をリセットしますか？');
     if (!shouldReset) {
       return;
@@ -212,6 +251,10 @@ export function useRouletteApp() {
   }
 
   function handleClearCandidates() {
+    if (guardDuringDraw()) {
+      return;
+    }
+
     const shouldClear = window.confirm('候補リストをすべて削除しますか？');
     if (!shouldClear) {
       return;
