@@ -275,6 +275,23 @@ h3 {
   color: #87491f;
 }
 
+.candidate-edit-grid {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+}
+
+.candidate-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.candidate-action-row.is-inline {
+  justify-content: flex-start;
+}
+
 .empty-state {
   margin-top: 16px;
   padding: 18px;
@@ -401,6 +418,10 @@ h3 {
   .input-row,
   .candidate-row {
     grid-template-columns: 1fr;
+  }
+
+  .candidate-action-row {
+    justify-content: stretch;
   }
 
   .primary-button,
