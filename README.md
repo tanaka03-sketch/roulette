@@ -39,6 +39,8 @@ npm test
 - [実装タスク分解](docs/implementation-tasks.md)
 - [Phase 1 詳細設計](docs/phase1-foundation-design.md)
 - [Phase 1 Issue ドラフト](docs/issue-drafts-phase1.md)
+- [CI 修正方針ドラフト](docs/requirements/ci-remediation-plan-2026-05-16.md)
+- [CI Issue ドラフト](docs/issue-drafts-ci.md)
 
 ## 初期版の前提
 
