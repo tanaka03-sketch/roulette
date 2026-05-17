@@ -50,6 +50,23 @@ describe('RouletteApp', () => {
     expect(document.querySelector('img')).toBeNull();
   });
 
+  it('shows an error banner when localStorage saves are blocked', async () => {
+    vi.spyOn(window.localStorage, 'setItem').mockImplementation(() => {
+      throw new DOMException('Blocked', 'SecurityError');
+    });
+    const user = userEvent.setup();
+
+    render(<RouletteApp />);
+
+    const input = screen.getByLabelText('候補名');
+    await user.type(input, '保存失敗候補');
+    await user.click(screen.getByRole('button', { name: '追加' }));
+
+    expect(
+      screen.getByText('状態の保存に失敗しました。ブラウザ設定を確認してください'),
+    ).toBeInTheDocument();
+  });
+
   it('draws from eligible candidates and marks the winner as drawn', async () => {
     vi.useFakeTimers();
     vi.spyOn(Math, 'random').mockReturnValue(0);
