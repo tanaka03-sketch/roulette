@@ -1,3 +1,4 @@
+import { CANDIDATE_NAME_MAX_LENGTH } from '../domain/roulette';
 import { useRouletteApp } from './useRouletteApp';
 
 function getAvailabilityHint(canDraw: boolean, eligibleCount: number, totalCount: number) {
@@ -97,7 +98,7 @@ export function RouletteApp() {
                   className="text-input"
                   type="text"
                   value={candidateName}
-                  maxLength={120}
+                  maxLength={CANDIDATE_NAME_MAX_LENGTH}
                   placeholder="例: ランチ / 企画案 / 発表順"
                   disabled={isDrawing}
                   onChange={(event) => setCandidateName(event.target.value)}
@@ -142,7 +143,7 @@ export function RouletteApp() {
                               className="text-input"
                               type="text"
                               value={editingCandidateName}
-                              maxLength={120}
+                              maxLength={CANDIDATE_NAME_MAX_LENGTH}
                               aria-label={`${candidateDisplayLabel}の候補名`}
                               disabled={isDrawing}
                               onChange={(event) =>
