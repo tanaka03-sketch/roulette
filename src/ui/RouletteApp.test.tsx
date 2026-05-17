@@ -236,6 +236,36 @@ describe('RouletteApp', () => {
     expect(savedState?.candidates[0].name).toBe('変更後');
   });
 
+  it('restores drawn candidates from localStorage on reload', async () => {
+    vi.useFakeTimers();
+    vi.spyOn(Math, 'random').mockReturnValue(0);
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    const { unmount } = render(<RouletteApp />);
+
+    const input = screen.getByLabelText('候補名');
+    await user.type(input, '保存A');
+    await user.click(screen.getByRole('button', { name: '追加' }));
+    await user.type(input, '保存B');
+    await user.click(screen.getByRole('button', { name: '追加' }));
+    await user.click(screen.getByRole('button', { name: '抽選開始' }));
+
+    await act(async () => {
+      vi.advanceTimersByTime(900);
+    });
+
+    expect(screen.getByText('1件 / 2件 から抽選できます')).toBeInTheDocument();
+    expect(getSavedState()?.candidates[0].drawn).toBe(true);
+
+    unmount();
+    vi.useRealTimers();
+
+    render(<RouletteApp />);
+
+    expect(screen.getAllByText('抽選済み')).toHaveLength(1);
+    expect(screen.getAllByText('未抽選')).toHaveLength(1);
+    expect(screen.getByText('1件 / 2件 から抽選できます')).toBeInTheDocument();
+  });
+
   it('restores candidates and the exclude setting from localStorage on reload', async () => {
     const user = userEvent.setup();
     const { unmount } = render(<RouletteApp />);
