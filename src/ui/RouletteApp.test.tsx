@@ -31,6 +31,14 @@ describe('RouletteApp', () => {
     await user.click(screen.getByRole('button', { name: '追加' }));
 
     expect(screen.getAllByText('重複候補')).toHaveLength(2);
+    expect(screen.getByText('候補 #1')).toBeInTheDocument();
+    expect(screen.getByText('候補 #2')).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: '候補 #1「重複候補」を編集' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: '候補 #2「重複候補」を削除' }),
+    ).toBeInTheDocument();
 
     const savedState = getSavedState();
     expect(savedState?.candidates).toHaveLength(2);
@@ -110,8 +118,12 @@ describe('RouletteApp', () => {
     expect(screen.getByRole('checkbox')).toBeDisabled();
     expect(screen.getByRole('button', { name: '抽選済み状態をリセット' })).toBeDisabled();
     expect(screen.getByRole('button', { name: '候補をすべて削除' })).toBeDisabled();
-    expect(screen.getByRole('button', { name: '候補 候補A を編集' })).toBeDisabled();
-    expect(screen.getByRole('button', { name: '候補 候補A を削除' })).toBeDisabled();
+    expect(
+      screen.getByRole('button', { name: '候補 #1「候補A」を編集' }),
+    ).toBeDisabled();
+    expect(
+      screen.getByRole('button', { name: '候補 #1「候補A」を削除' }),
+    ).toBeDisabled();
 
     await act(async () => {
       vi.advanceTimersByTime(900);
@@ -174,7 +186,7 @@ describe('RouletteApp', () => {
     await user.type(input, '変更前');
     await user.click(screen.getByRole('button', { name: '追加' }));
 
-    await user.click(screen.getByRole('button', { name: '候補 変更前 を編集' }));
+    await user.click(screen.getByRole('button', { name: '候補 #1「変更前」を編集' }));
 
     const row = screen.getByDisplayValue('変更前').closest('li');
     expect(row).not.toBeNull();
