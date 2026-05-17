@@ -1,4 +1,4 @@
-import { act, render, screen, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { STORAGE_KEYS } from '../domain/roulette';
@@ -43,6 +43,38 @@ describe('RouletteApp', () => {
     const savedState = getSavedState();
     expect(savedState?.candidates).toHaveLength(2);
     expect(savedState?.candidates[0].id).not.toBe(savedState?.candidates[1].id);
+  });
+
+  it('rejects candidate names longer than 120 characters even if the input attribute is bypassed', async () => {
+    const user = userEvent.setup();
+
+    render(<RouletteApp />);
+
+    const input = screen.getByLabelText('候補名');
+    fireEvent.change(input, { target: { value: 'あ'.repeat(121) } });
+    await user.click(screen.getByRole('button', { name: '追加' }));
+
+    expect(screen.getByText('候補名は120文字以内で入力してください')).toBeInTheDocument();
+    expect(screen.getByText('まだ候補がありません。')).toBeInTheDocument();
+    expect(getSavedState()?.candidates).toEqual([]);
+  });
+
+  it('rejects edited candidate names longer than 120 characters even if the input attribute is bypassed', async () => {
+    const user = userEvent.setup();
+
+    render(<RouletteApp />);
+
+    const input = screen.getByLabelText('候補名');
+    await user.type(input, '変更前');
+    await user.click(screen.getByRole('button', { name: '追加' }));
+    await user.click(screen.getByRole('button', { name: '候補 #1「変更前」を編集' }));
+
+    const editInput = screen.getByLabelText('候補 #1の候補名');
+    fireEvent.change(editInput, { target: { value: 'い'.repeat(121) } });
+    await user.click(screen.getByRole('button', { name: '保存' }));
+
+    expect(screen.getByText('候補名は120文字以内で入力してください')).toBeInTheDocument();
+    expect(getSavedState()?.candidates[0].name).toBe('変更前');
   });
 
   it('renders candidate text safely instead of inserting html', async () => {
