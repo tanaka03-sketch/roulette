@@ -1,9 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import {
+  CANDIDATE_NAME_MAX_LENGTH,
+  CANDIDATE_NAME_REQUIRED_MESSAGE,
+  CANDIDATE_NAME_TOO_LONG_MESSAGE,
   getDrawAvailability,
   getEligibleCandidates,
   markCandidateAsDrawn,
   pickRandomCandidate,
+  validateCandidateName,
   type RouletteCandidate,
   type RouletteSettings,
 } from './roulette';
@@ -18,6 +22,33 @@ function createCandidate(overrides: Partial<RouletteCandidate>): RouletteCandida
     ...overrides,
   };
 }
+
+describe('validateCandidateName', () => {
+  it('rejects empty or blank-only values', () => {
+    expect(validateCandidateName('')).toEqual({
+      isValid: false,
+      message: CANDIDATE_NAME_REQUIRED_MESSAGE,
+    });
+    expect(validateCandidateName('   ')).toEqual({
+      isValid: false,
+      message: CANDIDATE_NAME_REQUIRED_MESSAGE,
+    });
+  });
+
+  it('rejects values longer than the configured maximum length', () => {
+    expect(validateCandidateName('あ'.repeat(CANDIDATE_NAME_MAX_LENGTH + 1))).toEqual({
+      isValid: false,
+      message: CANDIDATE_NAME_TOO_LONG_MESSAGE,
+    });
+  });
+
+  it('returns the trimmed candidate name when valid', () => {
+    expect(validateCandidateName('  候補A  ')).toEqual({
+      isValid: true,
+      normalizedName: '候補A',
+    });
+  });
+});
 
 describe('getEligibleCandidates', () => {
   it('excludes drawn candidates when excludeDrawnCandidates is true', () => {
