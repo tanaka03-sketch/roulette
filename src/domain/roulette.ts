@@ -16,6 +16,10 @@ export type RouletteState = {
 };
 
 export const STORAGE_VERSION = 1 as const;
+export const CANDIDATE_NAME_MAX_LENGTH = 120 as const;
+export const CANDIDATE_NAME_REQUIRED_MESSAGE = '候補を入力してください';
+export const CANDIDATE_NAME_TOO_LONG_MESSAGE =
+  `候補名は${CANDIDATE_NAME_MAX_LENGTH}文字以内で入力してください`;
 
 export type RouletteStorageData = {
   version: typeof STORAGE_VERSION;
@@ -30,6 +34,10 @@ export type DrawAvailability =
       eligibleCount: number;
       reason: 'NO_CANDIDATES' | 'NOT_ENOUGH_CANDIDATES' | 'ALL_DRAWN';
     };
+
+export type CandidateNameValidationResult =
+  | { isValid: true; normalizedName: string }
+  | { isValid: false; message: string };
 
 export const STORAGE_KEYS = {
   rouletteState: 'roulette.state.v1',
@@ -52,6 +60,29 @@ export function cloneRouletteState(state: RouletteState): RouletteState {
   return {
     candidates: state.candidates.map(cloneCandidate),
     settings: { ...state.settings },
+  };
+}
+
+export function validateCandidateName(value: string): CandidateNameValidationResult {
+  const normalizedName = value.trim();
+
+  if (normalizedName.length === 0) {
+    return {
+      isValid: false,
+      message: CANDIDATE_NAME_REQUIRED_MESSAGE,
+    };
+  }
+
+  if (normalizedName.length > CANDIDATE_NAME_MAX_LENGTH) {
+    return {
+      isValid: false,
+      message: CANDIDATE_NAME_TOO_LONG_MESSAGE,
+    };
+  }
+
+  return {
+    isValid: true,
+    normalizedName,
   };
 }
 
