@@ -5,15 +5,12 @@ import {
   getEligibleCandidates,
   markCandidateAsDrawn,
   pickRandomCandidate,
+  validateCandidateName,
   type DrawAvailability,
   type RouletteCandidate,
   type RouletteState,
 } from '../domain/roulette';
 import { loadRouletteState, saveRouletteState } from '../storage/rouletteStorage';
-
-const MAX_CANDIDATE_NAME_LENGTH = 120;
-const CANDIDATE_NAME_REQUIRED_MESSAGE = '候補を入力してください';
-const CANDIDATE_NAME_TOO_LONG_MESSAGE = `候補名は${MAX_CANDIDATE_NAME_LENGTH}文字以内で入力してください`;
 
 function getAvailabilityMessage(availability: DrawAvailability): string | null {
   if (availability.canDraw) {
@@ -25,18 +22,6 @@ function getAvailabilityMessage(availability: DrawAvailability): string | null {
   }
 
   return '抽選には2件以上の候補が必要です';
-}
-
-function validateCandidateName(value: string): string | null {
-  if (value.trim().length === 0) {
-    return CANDIDATE_NAME_REQUIRED_MESSAGE;
-  }
-
-  if (value.length > MAX_CANDIDATE_NAME_LENGTH) {
-    return CANDIDATE_NAME_TOO_LONG_MESSAGE;
-  }
-
-  return null;
 }
 
 const DRAW_LOCK_MESSAGE = '抽選中は候補や設定を変更できません';
@@ -91,13 +76,12 @@ export function useRouletteApp() {
       return;
     }
 
-    const validationMessage = validateCandidateName(candidateName);
-    if (validationMessage !== null) {
-      setFeedbackMessage(validationMessage);
+    const validationResult = validateCandidateName(candidateName);
+    if (!validationResult.isValid) {
+      setFeedbackMessage(validationResult.message);
       return;
     }
 
-    const trimmedName = candidateName.trim();
     const now = new Date().toISOString();
     setState((currentState) => ({
       ...currentState,
@@ -105,7 +89,7 @@ export function useRouletteApp() {
         ...currentState.candidates,
         {
           id: createCandidateId(),
-          name: trimmedName,
+          name: validationResult.normalizedName,
           drawn: false,
           createdAt: now,
           updatedAt: now,
@@ -143,13 +127,12 @@ export function useRouletteApp() {
       return;
     }
 
-    const validationMessage = validateCandidateName(editingCandidateName);
-    if (validationMessage !== null) {
-      setFeedbackMessage(validationMessage);
+    const validationResult = validateCandidateName(editingCandidateName);
+    if (!validationResult.isValid) {
+      setFeedbackMessage(validationResult.message);
       return;
     }
 
-    const trimmedName = editingCandidateName.trim();
     const now = new Date().toISOString();
     setState((currentState) => ({
       ...currentState,
@@ -160,7 +143,7 @@ export function useRouletteApp() {
 
         return {
           ...candidate,
-          name: trimmedName,
+          name: validationResult.normalizedName,
           updatedAt: now,
         };
       }),
@@ -171,7 +154,7 @@ export function useRouletteApp() {
           ? null
           : {
               ...currentResult,
-              name: trimmedName,
+              name: validationResult.normalizedName,
               updatedAt: now,
             },
       );
