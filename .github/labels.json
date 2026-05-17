@@ -1,0 +1,81 @@
+{
+  "labels": [
+    {
+      "name": "type/bug",
+      "color": "d73a4a",
+      "description": "不具合修正"
+    },
+    {
+      "name": "type/feature",
+      "color": "0e8a16",
+      "description": "機能追加"
+    },
+    {
+      "name": "type/docs",
+      "color": "1d76db",
+      "description": "ドキュメント整備"
+    },
+    {
+      "name": "type/tech-debt",
+      "color": "6f42c1",
+      "description": "技術的負債の解消"
+    },
+    {
+      "name": "priority/high",
+      "color": "b60205",
+      "description": "高優先度"
+    },
+    {
+      "name": "priority/medium",
+      "color": "fbca04",
+      "description": "中優先度"
+    },
+    {
+      "name": "priority/low",
+      "color": "c2e0c6",
+      "description": "低優先度"
+    },
+    {
+      "name": "area/ui",
+      "color": "bfd4f2",
+      "description": "UI 関連"
+    },
+    {
+      "name": "area/domain",
+      "color": "d4c5f9",
+      "description": "抽選ロジックなどドメイン関連"
+    },
+    {
+      "name": "area/storage",
+      "color": "f9d0c4",
+      "description": "localStorage など保存処理"
+    },
+    {
+      "name": "area/ci",
+      "color": "5319e7",
+      "description": "CI / GitHub Actions 関連"
+    },
+    {
+      "name": "area/docs",
+      "color": "0e8a16",
+      "description": "README や設計資料"
+    },
+    {
+      "name": "security",
+      "color": "b60205",
+      "description": "セキュリティ関連"
+    },
+    {
+      "name": "dependencies",
+      "color": "0366d6",
+      "description": "依存関係更新"
+    }
+  ],
+  "issueLabels": {
+    "20": ["type/tech-debt", "priority/high", "area/ci"],
+    "21": ["type/docs", "priority/medium", "area/docs"],
+    "22": ["type/tech-debt", "priority/medium", "area/docs"],
+    "23": ["type/tech-debt", "priority/medium", "area/ci"],
+    "24": ["type/docs", "priority/medium", "area/docs"]
+  }
+}
