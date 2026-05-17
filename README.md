@@ -67,6 +67,7 @@ npm run build
 - [Contributing Guide](CONTRIBUTING.md)
 - [GitHub Settings Playbook](docs/github-settings-playbook.md)
 - [GitHub Label Specification](docs/github-label-spec.md)
+- [GitHub Admin Checklist](docs/github-admin-checklist.md)
 
 ## 初期版の前提
 
