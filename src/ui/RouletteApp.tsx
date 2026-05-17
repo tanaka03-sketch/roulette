@@ -129,8 +129,10 @@ export function RouletteApp() {
                 <p className="empty-state">まだ候補がありません。</p>
               ) : (
                 <ul className="candidate-list">
-                  {candidates.map((candidate) => {
+                  {candidates.map((candidate, index) => {
                     const isEditing = editingCandidateId === candidate.id;
+                    const candidateDisplayLabel = `候補 #${index + 1}`;
+                    const candidateActionLabel = `${candidateDisplayLabel}「${candidate.name}」`;
 
                     return (
                       <li key={candidate.id} className="candidate-row">
@@ -141,6 +143,7 @@ export function RouletteApp() {
                               type="text"
                               value={editingCandidateName}
                               maxLength={120}
+                              aria-label={`${candidateDisplayLabel}の候補名`}
                               disabled={isDrawing}
                               onChange={(event) =>
                                 setEditingCandidateName(event.target.value)
@@ -175,6 +178,7 @@ export function RouletteApp() {
                           <>
                             <div className="candidate-copy">
                               <span className="candidate-name">{candidate.name}</span>
+                              <span className="candidate-meta">{candidateDisplayLabel}</span>
                               <span
                                 className={
                                   candidate.drawn
@@ -191,7 +195,7 @@ export function RouletteApp() {
                                 type="button"
                                 disabled={isDrawing}
                                 onClick={() => handleStartEditingCandidate(candidate)}
-                                aria-label={`候補 ${candidate.name} を編集`}
+                                aria-label={`${candidateActionLabel}を編集`}
                               >
                                 編集
                               </button>
@@ -200,7 +204,7 @@ export function RouletteApp() {
                                 type="button"
                                 disabled={isDrawing}
                                 onClick={() => handleDeleteCandidate(candidate.id)}
-                                aria-label={`候補 ${candidate.name} を削除`}
+                                aria-label={`${candidateActionLabel}を削除`}
                               >
                                 削除
                               </button>
