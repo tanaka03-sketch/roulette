@@ -64,6 +64,7 @@ npm run build
 - [リポジトリ改善ロードマップ](docs/requirements/repository-improvement-roadmap-2026-05-17.md)
 - [Release Policy](docs/release-policy.md)
 - [Changelog](CHANGELOG.md)
+- [Contributing Guide](CONTRIBUTING.md)
 
 ## 初期版の前提
 
