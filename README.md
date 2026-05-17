@@ -50,6 +50,12 @@ npm run build
 - `package-lock.json` はリポジトリ管理下に置き、ローカル手順と CI の依存関係解決方式をそろえています。
 - CI の整備経緯は `docs/requirements/ci-remediation-plan-2026-05-16.md` と Issue `#13` を参照してください。
 
+## GitHub Operations
+
+- ラベル定義は `.github/labels.json` で管理します。
+- ラベル同期は `Actions` の `Sync GitHub Labels` workflow を手動実行して行います。
+- ブランチ保護や merge 設定は `docs/github-admin-checklist.md` に従って管理画面で設定します。
+
 ## Documents
 
 - [要件定義書](docs/requirements.md)
