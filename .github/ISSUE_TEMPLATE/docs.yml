@@ -1,0 +1,22 @@
+name: Documentation
+description: ドキュメントの追加や修正を提案する
+labels:
+  - documentation
+body:
+  - type: textarea
+    id: current
+    attributes:
+      label: 現状の問題
+    validations:
+      required: true
+  - type: textarea
+    id: update
+    attributes:
+      label: 修正したい内容
+    validations:
+      required: true
+  - type: textarea
+    id: audience
+    attributes:
+      label: 想定読者
+      description: 例: 開発者、利用者、レビュー担当者
