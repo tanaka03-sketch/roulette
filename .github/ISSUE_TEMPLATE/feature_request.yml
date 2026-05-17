@@ -1,0 +1,26 @@
+name: Feature request
+description: 機能追加や改善案を提案する
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: 背景 / 解決したい課題
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 提案内容
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: 対象範囲
+      description: UI、抽選ロジック、保存処理、運用など
+  - type: textarea
+    id: notes
+    attributes:
+      label: 補足
