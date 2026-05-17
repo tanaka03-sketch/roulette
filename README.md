@@ -20,12 +20,20 @@
 
 ## Setup
 
+推奨 Node.js バージョンは `22` です。リポジトリ直下の `.nvmrc` を利用できます。
+
 ```bash
 npm install
 npm run dev
 ```
 
 開発サーバー起動後は、 Vite の表示するローカル URL から利用します。
+
+## Environment
+
+- 現時点では、アプリ起動に必須の環境変数はありません。
+- 将来追加する場合は `.env.example` を更新し、ローカルでは `.env` を使用してください。
+- `.env` と `.env.*` は Git 管理対象外です。
 
 ## Verify
 
