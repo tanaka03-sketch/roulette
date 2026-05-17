@@ -77,6 +77,8 @@ npm run build
 - [リポジトリ監査レポート](docs/requirements/repository-audit-2026-05-17.md)
 - [リポジトリ改善バックログ](docs/requirements/repository-improvement-backlog-2026-05-17.md)
 - [リポジトリ改善ロードマップ](docs/requirements/repository-improvement-roadmap-2026-05-17.md)
+- [コードレビュー結果](docs/requirements/code-review-2026-05-18.md)
+- [コードレビュー後続バックログ](docs/requirements/code-review-followup-backlog-2026-05-18.md)
 - [Release Policy](docs/release-policy.md)
 - [Changelog](CHANGELOG.md)
 - [Contributing Guide](CONTRIBUTING.md)
