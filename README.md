@@ -65,6 +65,8 @@ npm run build
 - [Release Policy](docs/release-policy.md)
 - [Changelog](CHANGELOG.md)
 - [Contributing Guide](CONTRIBUTING.md)
+- [GitHub Settings Playbook](docs/github-settings-playbook.md)
+- [GitHub Label Specification](docs/github-label-spec.md)
 
 ## 初期版の前提
 
