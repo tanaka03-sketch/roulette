@@ -50,6 +50,9 @@ npm run build
 - [CI 修正方針ドラフト](docs/requirements/ci-remediation-plan-2026-05-16.md)
 - [CI Issue ドラフト](docs/issue-drafts-ci.md)
 - [package-lock 受け渡し手順](docs/requirements/package-lock-handoff-2026-05-16.md)
+- [リポジトリ監査レポート](docs/requirements/repository-audit-2026-05-17.md)
+- [リポジトリ改善バックログ](docs/requirements/repository-improvement-backlog-2026-05-17.md)
+- [リポジトリ改善ロードマップ](docs/requirements/repository-improvement-roadmap-2026-05-17.md)
 
 ## 初期版の前提
 
