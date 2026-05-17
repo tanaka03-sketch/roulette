@@ -1,0 +1,31 @@
+name: Tech debt
+description: 技術的負債や運用改善を記録する
+labels:
+  - tech-debt
+body:
+  - type: textarea
+    id: current
+    attributes:
+      label: 現状の問題
+    validations:
+      required: true
+  - type: textarea
+    id: risk
+    attributes:
+      label: 放置した場合のリスク
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: 改善案
+    validations:
+      required: true
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: 緊急度
+      options:
+        - High
+        - Medium
+        - Low
