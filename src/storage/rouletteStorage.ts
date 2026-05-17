@@ -21,6 +21,15 @@ function getLocalStorage(): Storage | null {
   }
 }
 
+function requireLocalStorage(): Storage {
+  const storage = getLocalStorage();
+  if (storage === null) {
+    throw new Error('localStorage is unavailable');
+  }
+
+  return storage;
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
 }
@@ -97,10 +106,7 @@ export function loadRouletteState(): RouletteState {
 }
 
 export function saveRouletteState(state: RouletteState): void {
-  const storage = getLocalStorage();
-  if (storage === null) {
-    return;
-  }
+  const storage = requireLocalStorage();
 
   const payload: RouletteStorageData = {
     version: STORAGE_VERSION,
