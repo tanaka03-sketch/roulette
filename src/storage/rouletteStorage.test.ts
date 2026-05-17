@@ -48,6 +48,16 @@ describe('rouletteStorage', () => {
     expect(loadRouletteState()).toEqual(state);
   });
 
+  it('throws when localStorage is unavailable during save', () => {
+    vi.spyOn(window, 'localStorage', 'get').mockImplementation(() => {
+      throw new DOMException('Blocked', 'SecurityError');
+    });
+
+    expect(() => saveRouletteState(createState())).toThrow(
+      'localStorage is unavailable',
+    );
+  });
+
   it('falls back to the default state when localStorage access is blocked', () => {
     vi.spyOn(window, 'localStorage', 'get').mockImplementation(() => {
       throw new DOMException('Blocked', 'SecurityError');
