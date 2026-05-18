@@ -22,6 +22,7 @@ import {
 import {
   DRAW_DURATION_MS,
   finalizeDraw,
+  type FinalizedDraw,
 } from './rouletteDrawFlow';
 import {
   appendCandidate,
@@ -205,11 +206,21 @@ export function useRouletteApp() {
 
     drawTimerRef.current = window.setTimeout(() => {
       const now = new Date().toISOString();
-      const finalizedDraw = finalizeDraw(state.candidates, winner, now);
-      setState((currentState) => ({
-        ...currentState,
-        candidates: finalizedDraw.candidates,
-      }));
+      let finalizedDraw: FinalizedDraw | null = null;
+
+      setState((currentState) => {
+        finalizedDraw = finalizeDraw(currentState.candidates, winner, now);
+
+        return {
+          ...currentState,
+          candidates: finalizedDraw.candidates,
+        };
+      });
+
+      if (finalizedDraw === null) {
+        return;
+      }
+
       setLastResult(finalizedDraw.lastResult);
       setIsDrawing(false);
       drawTimerRef.current = null;
