@@ -1,6 +1,17 @@
+# Default owner for the whole repository
 * @tanaka03-sketch
+
+# Application code
 /src/domain/ @tanaka03-sketch
 /src/storage/ @tanaka03-sketch
 /src/ui/ @tanaka03-sketch
+/src/test/ @tanaka03-sketch
+
+# Repository operations and workflows
 /.github/ @tanaka03-sketch
+
+# Documentation
 /docs/ @tanaka03-sketch
+/README.md @tanaka03-sketch
+/CHANGELOG.md @tanaka03-sketch
+/CONTRIBUTING.md @tanaka03-sketch
