@@ -2,6 +2,7 @@
 
 - 対象リポジトリ: `tanaka03-sketch/roulette`
 - 作成日: 2026-05-17
+- 最終更新日: 2026-05-18
 - 目的: GitHub 管理画面で必要な最小操作を、上から順にそのまま実施できるようにする
 
 ## 先にやること
@@ -20,7 +21,10 @@
 - Required approvals: `1`
 - Dismiss stale pull request approvals when new commits are pushed: ON
 - Require status checks to pass before merging: ON
-- Required status check: `test`
+- Required status checks:
+  - `typecheck`
+  - `test`
+  - `build`
 - Require conversation resolution before merging: ON
 - Allow force pushes: OFF
 - Allow deletions: OFF
@@ -28,7 +32,7 @@
 終わったら確認すること:
 - `main` へ直接 push できない
 - PR なしでは merge できない
-- CI が成功しないと merge できない
+- CI の 3 ジョブが成功しないと merge できない
 
 ## 2. Merge 設定
 
