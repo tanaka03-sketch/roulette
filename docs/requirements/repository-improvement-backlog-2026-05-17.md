@@ -161,8 +161,8 @@
 
 - 優先度: P3
 - 種別: Architecture
-- 状態: 方針整理完了
-- 対応 Issue: `#37`
+- 状態: 一部完了
+- 対応 Issue: `#37`, `#40`
 - 目的: 将来の機能追加に備える
 - 完了条件:
   - UI 制御、状態更新、文言定義、永続化連携の分割方針が決まっている
@@ -170,12 +170,16 @@
 - 完了内容:
   - `docs/requirements/use-roulette-app-refactor-plan-2026-05-18.md` を追加した
   - 文言定数、候補操作更新、抽選進行制御、永続化連携の分割候補を整理した
-  - すぐやる分割と後回しにする分割を分けた
+  - `src/ui/rouletteMessages.ts` を追加し、`useRouletteApp.ts` から文言定数を切り出した
+- 未完了:
+  - 候補操作の更新関数分離
+  - 抽選進行制御の分離
+  - 永続化連携の境界整理
 
 ## 先行着手のおすすめ順
 
 1. `main` 保護と PR 必須ルール
-2. `useRouletteApp.ts` の責務分割を Step 1 から実装する
+2. `useRouletteApp.ts` の責務分割を Step 2 に進める
 3. 初回 Release を手動で実施する
 4. 文書カタログを前提に README の Documents 節を分類表示へ並べ替える
 
