@@ -68,28 +68,39 @@ npm run build
 
 ## Documents
 
+### 入口と正本
+
 - [文書カタログ](docs/requirements/document-catalog-2026-05-18.md)
 - [要件定義書](docs/requirements.md)
 - [実装タスク分解](docs/implementation-tasks.md)
 - [Phase 1 詳細設計](docs/phase1-foundation-design.md)
-- [Phase 1 Issue ドラフト](docs/issue-drafts-phase1.md)
-- [CI 修正方針ドラフト](docs/requirements/ci-remediation-plan-2026-05-16.md)
-- [CI Issue ドラフト](docs/issue-drafts-ci.md)
+- [Changelog](CHANGELOG.md)
+- [Release Policy](docs/release-policy.md)
+- [Contributing Guide](CONTRIBUTING.md)
+
+### 運用手順
+
+- [GitHub Admin Checklist](docs/github-admin-checklist.md)
+- [GitHub Settings Playbook](docs/github-settings-playbook.md)
+- [GitHub Label Specification](docs/github-label-spec.md)
+- [Release 運用チェックリスト](docs/requirements/release-handoff-2026-05-18.md)
+- [モバイル確認方針](docs/requirements/mobile-verification-plan-2026-05-18.md)
 - [package-lock 受け渡し手順](docs/requirements/package-lock-handoff-2026-05-16.md)
+
+### 改善計画と設計メモ
+
 - [リポジトリ監査レポート](docs/requirements/repository-audit-2026-05-17.md)
 - [リポジトリ改善バックログ](docs/requirements/repository-improvement-backlog-2026-05-17.md)
 - [リポジトリ改善ロードマップ](docs/requirements/repository-improvement-roadmap-2026-05-17.md)
 - [コードレビュー結果](docs/requirements/code-review-2026-05-18.md)
 - [コードレビュー後続バックログ](docs/requirements/code-review-followup-backlog-2026-05-18.md)
-- [モバイル確認方針](docs/requirements/mobile-verification-plan-2026-05-18.md)
 - [useRouletteApp 責務分割方針](docs/requirements/use-roulette-app-refactor-plan-2026-05-18.md)
-- [Release Policy](docs/release-policy.md)
-- [Release 運用チェックリスト](docs/requirements/release-handoff-2026-05-18.md)
-- [Changelog](CHANGELOG.md)
-- [Contributing Guide](CONTRIBUTING.md)
-- [GitHub Settings Playbook](docs/github-settings-playbook.md)
-- [GitHub Label Specification](docs/github-label-spec.md)
-- [GitHub Admin Checklist](docs/github-admin-checklist.md)
+- [CI 修正方針ドラフト](docs/requirements/ci-remediation-plan-2026-05-16.md)
+
+### 作業ドラフト
+
+- [Phase 1 Issue ドラフト](docs/issue-drafts-phase1.md)
+- [CI Issue ドラフト](docs/issue-drafts-ci.md)
 
 ## 初期版の前提
 
