@@ -14,7 +14,7 @@
 | P0 | Secret / env 事故予防 | 誤コミット防止 | 完了 |
 | P1 | CI の安全性と見通し改善 | 品質ゲート強化 | 一部完了 |
 | P1 | 文書とテンプレート整備 | onboarding 改善 | 一部完了 |
-| P2 | Release / versioning 整備 | 変更履歴の明確化 | 未着手 |
+| P2 | Release / versioning 整備 | 変更履歴の明確化 | 一部完了 |
 | P2 | テスト拡張 | 回帰検知強化 | 一部完了 |
 | P3 | アーキテクチャ整理 | 将来拡張のしやすさ向上 | 一部完了 |
 
@@ -114,12 +114,20 @@
 
 - 優先度: P2
 - 種別: Release
-- 状態: 未着手
+- 状態: 方針整理完了
+- 対応 Issue: `#38`
 - 目的: 変更履歴と配布単位を明確にする
 - 完了条件:
   - SemVer ルールが決まっている
   - GitHub Releases の作成ルールが決まっている
   - changelog 生成または運用方法が決まっている
+- 完了内容:
+  - `docs/release-policy.md` で `0.y.z` ベースの運用ルールを整理済み
+  - `CHANGELOG.md` を正本の変更履歴として位置づけ済み
+  - `docs/requirements/release-handoff-2026-05-18.md` で手動 Release 手順を整理した
+- 未完了:
+  - 実際の初回 Release 作成
+  - 必要に応じた自動化検討
 
 ### 10. Node バージョン固定ファイルを追加する
 
@@ -162,8 +170,8 @@
 
 1. `main` 保護と PR 必須ルール
 2. 文書の正本と旧版整理
-3. Release / versioning 運用開始
-4. `useRouletteApp.ts` の責務分割を Step 1 から実装する
+3. `useRouletteApp.ts` の責務分割を Step 1 から実装する
+4. 初回 Release を手動で実施する
 
 ## 備考
 
