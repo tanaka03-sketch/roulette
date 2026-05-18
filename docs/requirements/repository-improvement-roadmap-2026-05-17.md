@@ -83,7 +83,11 @@
 - SemVer 採用
 - GitHub Releases 運用開始
 - changelog の管理方法決定
-- 状態: 未着手
+- 状態: 方針整理完了
+- 進捗メモ:
+  - `docs/release-policy.md` に versioning ルールを定義済み
+  - `docs/requirements/release-handoff-2026-05-18.md` に手動 Release 手順を追加済み
+  - 実運用としての初回 Release は未実施
 
 #### 2-2. ローカル開発の安定化
 
@@ -159,8 +163,8 @@
 
 1. GitHub 設定で `main` を保護する
 2. 文書の正本と旧版をさらに整理する
-3. Release と versioning の整備へ進む
-4. `useRouletteApp.ts` の責務分割を Step 1 から実装する
+3. `useRouletteApp.ts` の責務分割を Step 1 から実装する
+4. 初回 Release を手動で実施する
 
 ## 判断が必要になりやすいポイント
 
