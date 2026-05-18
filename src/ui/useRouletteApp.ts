@@ -3,7 +3,6 @@ import {
   createCandidateId,
   getDrawAvailability,
   getEligibleCandidates,
-  markCandidateAsDrawn,
   pickRandomCandidate,
   validateCandidateName,
   type RouletteCandidate,
@@ -19,8 +18,11 @@ import {
   RESET_DRAWN_CONFIRM_MESSAGE,
   STORAGE_ERROR_MESSAGE,
   getAvailabilityMessage,
-  getDrawResultMessage,
 } from './rouletteMessages';
+import {
+  DRAW_DURATION_MS,
+  finalizeDraw,
+} from './rouletteDrawFlow';
 import {
   appendCandidate,
   createCandidate,
@@ -203,19 +205,16 @@ export function useRouletteApp() {
 
     drawTimerRef.current = window.setTimeout(() => {
       const now = new Date().toISOString();
+      const finalizedDraw = finalizeDraw(state.candidates, winner, now);
       setState((currentState) => ({
         ...currentState,
-        candidates: markCandidateAsDrawn(currentState.candidates, winner.id, now),
+        candidates: finalizedDraw.candidates,
       }));
-      setLastResult({
-        ...winner,
-        drawn: true,
-        updatedAt: now,
-      });
+      setLastResult(finalizedDraw.lastResult);
       setIsDrawing(false);
       drawTimerRef.current = null;
-      setFeedbackMessage(getDrawResultMessage(winner.name));
-    }, 900);
+      setFeedbackMessage(finalizedDraw.feedbackMessage);
+    }, DRAW_DURATION_MS);
   }
 
   function handleResetDrawnCandidates() {
