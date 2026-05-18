@@ -83,6 +83,7 @@ npm run build
 - [モバイル確認方針](docs/requirements/mobile-verification-plan-2026-05-18.md)
 - [useRouletteApp 責務分割方針](docs/requirements/use-roulette-app-refactor-plan-2026-05-18.md)
 - [Release Policy](docs/release-policy.md)
+- [Release 運用チェックリスト](docs/requirements/release-handoff-2026-05-18.md)
 - [Changelog](CHANGELOG.md)
 - [Contributing Guide](CONTRIBUTING.md)
 - [GitHub Settings Playbook](docs/github-settings-playbook.md)
