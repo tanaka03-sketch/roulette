@@ -102,13 +102,19 @@
 
 - 優先度: P1
 - 種別: Documentation
-- 状態: 一部完了
+- 状態: 方針整理完了
+- 対応 Issue: `#39`
 - 目的: 誤参照を防ぐ
 - 完了条件:
   - 旧ドラフト文書の保管先ルールが決まっている
   - README または docs index から正本への導線が明確になっている
-- 対象候補:
-  - `requirements/roulette-requirements-2026-05-13.md`
+- 完了内容:
+  - `docs/requirements/document-catalog-2026-05-18.md` を追加した
+  - 正本、運用手順、改善計画、作業ドラフトの分類を整理した
+  - README から文書カタログへ到達できるようにする準備を進めた
+- 未完了:
+  - 必要なら README の Documents 節を分類表示へ再編する
+  - 実ファイル移動が必要かどうかの再判断
 
 ### 9. Release / versioning 運用を開始する
 
@@ -169,9 +175,9 @@
 ## 先行着手のおすすめ順
 
 1. `main` 保護と PR 必須ルール
-2. 文書の正本と旧版整理
-3. `useRouletteApp.ts` の責務分割を Step 1 から実装する
-4. 初回 Release を手動で実施する
+2. `useRouletteApp.ts` の責務分割を Step 1 から実装する
+3. 初回 Release を手動で実施する
+4. 文書カタログを前提に README の Documents 節を分類表示へ並べ替える
 
 ## 備考
 
