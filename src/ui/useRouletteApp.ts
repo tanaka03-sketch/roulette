@@ -6,9 +6,7 @@ import {
   pickRandomCandidate,
   validateCandidateName,
   type RouletteCandidate,
-  type RouletteState,
 } from '../domain/roulette';
-import { loadRouletteState, saveRouletteState } from '../storage/rouletteStorage';
 import {
   CANDIDATE_UPDATED_MESSAGE,
   CLEAR_CANDIDATES_COMPLETED_MESSAGE,
@@ -16,7 +14,6 @@ import {
   DRAW_LOCK_MESSAGE,
   RESET_DRAWN_COMPLETED_MESSAGE,
   RESET_DRAWN_CONFIRM_MESSAGE,
-  STORAGE_ERROR_MESSAGE,
   getAvailabilityMessage,
 } from './rouletteMessages';
 import {
@@ -24,6 +21,7 @@ import {
   finalizeDraw,
   type FinalizedDraw,
 } from './rouletteDrawFlow';
+import { usePersistedRouletteState } from './usePersistedRouletteState';
 import {
   appendCandidate,
   createCandidate,
@@ -33,27 +31,17 @@ import {
 } from './rouletteStateUpdates';
 
 export function useRouletteApp() {
-  const [state, setState] = useState<RouletteState>(() => loadRouletteState());
+  const { state, setState, storageError } = usePersistedRouletteState();
   const [candidateName, setCandidateName] = useState('');
   const [editingCandidateId, setEditingCandidateId] = useState<string | null>(null);
   const [editingCandidateName, setEditingCandidateName] = useState('');
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
-  const [storageError, setStorageError] = useState<string | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [lastResult, setLastResult] = useState<RouletteCandidate | null>(null);
   const drawTimerRef = useRef<number | null>(null);
 
   const availability = getDrawAvailability(state.candidates, state.settings);
   const eligibleCandidates = getEligibleCandidates(state.candidates, state.settings);
-
-  useEffect(() => {
-    try {
-      saveRouletteState(state);
-      setStorageError(null);
-    } catch {
-      setStorageError(STORAGE_ERROR_MESSAGE);
-    }
-  }, [state]);
 
   useEffect(() => {
     return () => {
