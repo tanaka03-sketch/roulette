@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type Dispatch, type SetStateAction } from 'react';
 import type { RouletteState } from '../domain/roulette';
 import { loadRouletteState, saveRouletteState } from '../storage/rouletteStorage';
 import { STORAGE_ERROR_MESSAGE } from './rouletteMessages';
 
 export function usePersistedRouletteState(): {
   state: RouletteState;
-  setState: React.Dispatch<React.SetStateAction<RouletteState>>;
+  setState: Dispatch<SetStateAction<RouletteState>>;
   storageError: string | null;
 } {
   const [state, setState] = useState<RouletteState>(() => loadRouletteState());
