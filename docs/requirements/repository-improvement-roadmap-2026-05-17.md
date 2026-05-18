@@ -2,6 +2,7 @@
 
 - 対象リポジトリ: `tanaka03-sketch/roulette`
 - 作成日: 2026-05-17
+- 最終更新日: 2026-05-18
 - 参照元:
   - `docs/requirements/repository-audit-2026-05-17.md`
   - `docs/requirements/repository-improvement-backlog-2026-05-17.md`
@@ -28,16 +29,19 @@
 - PR 必須化
 - 最低 1 review approval
 - CI success を merge 条件化
+- 状態: 未着手
 
 #### 0-2. Secret 事故予防
 
 - `.gitignore` に `.env` ルール追加
 - `.env.example` の扱い整理
 - README に env 運用注意を追記
+- 状態: 完了
 
 #### 0-3. レビュー責任の可視化
 
 - `.github/CODEOWNERS` 追加
+- 状態: 完了
 
 ### Phase 1: 近いうちに整備
 
@@ -48,23 +52,27 @@
 - PR テンプレート追加
 - Issue テンプレート追加
 - ラベル体系見直し
+- 状態: 一部完了
 
 #### 1-2. CI の安全性と見通し改善
 
 - workflow に最小権限 `permissions` を追加
 - `concurrency` を設定
 - `typecheck` `test` `build` の責務を整理
+- 状態: 完了
 
 #### 1-3. 依存関係メンテナンス自動化
 
 - Dependabot 導入
 - npm と GitHub Actions を監視対象にする
+- 状態: 完了
 
 #### 1-4. 文書体系の整理
 
 - 正本と旧版の保管ルールを定義
 - 旧ドラフトの保管場所を統一
 - README から正本への導線を整理
+- 状態: 一部完了
 
 ### Phase 2: 中期改善
 
@@ -75,17 +83,20 @@
 - SemVer 採用
 - GitHub Releases 運用開始
 - changelog の管理方法決定
+- 状態: 未着手
 
 #### 2-2. ローカル開発の安定化
 
 - Node バージョン固定ファイル追加
 - README にセットアップ前提を追記
+- 状態: 完了
 
 #### 2-3. テストの守備範囲拡大
 
 - coverage gate 追加
 - 最低限の E2E シナリオ追加
 - a11y テストの導入検討
+- 状態: 一部完了
 
 ### Phase 3: 中長期改善
 
@@ -96,11 +107,13 @@
 - `useRouletteApp.ts` の責務分割
 - 文言定数の分離
 - 永続化連携の責務を明確化
+- 状態: 未着手
 
 #### 3-2. レイヤ整理
 
 - 必要に応じて application 層追加
 - `domain` `ui` `infrastructure` の境界を明文化
+- 状態: 未着手
 
 ## 優先順位の考え方
 
@@ -142,10 +155,9 @@
 ## 着手順のおすすめ
 
 1. GitHub 設定で `main` を保護する
-2. `.gitignore` と README の env 運用を整備する
-3. `.github` 配下の運用ファイルを整備する
-4. CI workflow を強化する
-5. 文書と versioning の整備へ進む
+2. 文書の正本と旧版をさらに整理する
+3. Release と versioning の整備へ進む
+4. `useRouletteApp.ts` の責務分割方針を整理する
 
 ## 判断が必要になりやすいポイント
 
@@ -172,3 +184,7 @@
 - CODEOWNERS は単独運用者を想定した最小構成
 - 依存更新は Dependabot
 - Release はまず手動開始
+
+## 補足
+
+- Playwright を使うモバイル E2E は、ブラウザ取得が `403 Forbidden` で止まる環境制約があるため、別途 `#32` で継続管理する
