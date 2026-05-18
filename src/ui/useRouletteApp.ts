@@ -21,6 +21,13 @@ import {
   getAvailabilityMessage,
   getDrawResultMessage,
 } from './rouletteMessages';
+import {
+  appendCandidate,
+  createCandidate,
+  removeCandidate,
+  renameCandidate,
+  resetDrawnCandidates,
+} from './rouletteStateUpdates';
 
 export function useRouletteApp() {
   const [state, setState] = useState<RouletteState>(() => loadRouletteState());
@@ -81,16 +88,10 @@ export function useRouletteApp() {
     const now = new Date().toISOString();
     setState((currentState) => ({
       ...currentState,
-      candidates: [
-        ...currentState.candidates,
-        {
-          id: createCandidateId(),
-          name: validationResult.normalizedName,
-          drawn: false,
-          createdAt: now,
-          updatedAt: now,
-        },
-      ],
+      candidates: appendCandidate(
+        currentState.candidates,
+        createCandidate(createCandidateId(), validationResult.normalizedName, now),
+      ),
     }));
     setCandidateName('');
     setFeedbackMessage(null);
@@ -132,17 +133,12 @@ export function useRouletteApp() {
     const now = new Date().toISOString();
     setState((currentState) => ({
       ...currentState,
-      candidates: currentState.candidates.map((candidate) => {
-        if (candidate.id !== editingCandidateId) {
-          return candidate;
-        }
-
-        return {
-          ...candidate,
-          name: validationResult.normalizedName,
-          updatedAt: now,
-        };
-      }),
+      candidates: renameCandidate(
+        currentState.candidates,
+        editingCandidateId,
+        validationResult.normalizedName,
+        now,
+      ),
     }));
     if (lastResult?.id === editingCandidateId) {
       setLastResult((currentResult) =>
@@ -166,9 +162,7 @@ export function useRouletteApp() {
 
     setState((currentState) => ({
       ...currentState,
-      candidates: currentState.candidates.filter(
-        (candidate) => candidate.id !== candidateId,
-      ),
+      candidates: removeCandidate(currentState.candidates, candidateId),
     }));
     setLastResult((currentResult) =>
       currentResult?.id === candidateId ? null : currentResult,
@@ -237,11 +231,7 @@ export function useRouletteApp() {
     const now = new Date().toISOString();
     setState((currentState) => ({
       ...currentState,
-      candidates: currentState.candidates.map((candidate) => ({
-        ...candidate,
-        drawn: false,
-        updatedAt: now,
-      })),
+      candidates: resetDrawnCandidates(currentState.candidates, now),
     }));
     setLastResult(null);
     setFeedbackMessage(RESET_DRAWN_COMPLETED_MESSAGE);
