@@ -107,7 +107,10 @@
 - `useRouletteApp.ts` の責務分割
 - 文言定数の分離
 - 永続化連携の責務を明確化
-- 状態: 未着手
+- 状態: 方針整理完了
+- 進捗メモ:
+  - `docs/requirements/use-roulette-app-refactor-plan-2026-05-18.md` を追加済み
+  - 実装は Step 1 の文言定数切り出しから段階着手する想定
 
 #### 3-2. レイヤ整理
 
@@ -157,7 +160,7 @@
 1. GitHub 設定で `main` を保護する
 2. 文書の正本と旧版をさらに整理する
 3. Release と versioning の整備へ進む
-4. `useRouletteApp.ts` の責務分割方針を整理する
+4. `useRouletteApp.ts` の責務分割を Step 1 から実装する
 
 ## 判断が必要になりやすいポイント
 
