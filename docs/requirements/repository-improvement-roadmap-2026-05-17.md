@@ -119,7 +119,8 @@
 - 進捗メモ:
   - `docs/requirements/use-roulette-app-refactor-plan-2026-05-18.md` を追加済み
   - Step 1 として `src/ui/rouletteMessages.ts` を追加し、文言定数を切り出し済み
-  - 次は候補操作の更新関数分離を想定
+  - Step 2 として `src/ui/rouletteStateUpdates.ts` を追加し、候補操作更新を切り出し済み
+  - 次は抽選進行制御の分離を想定
 
 #### 3-2. レイヤ整理
 
@@ -167,7 +168,7 @@
 ## 着手順のおすすめ
 
 1. GitHub 設定で `main` を保護する
-2. `useRouletteApp.ts` の責務分割を Step 2 に進める
+2. `useRouletteApp.ts` の責務分割を Step 3 に進める
 3. 初回 Release を手動で実施する
 4. 文書カタログを前提に README の Documents 節を分類表示へ並べ替える
 
