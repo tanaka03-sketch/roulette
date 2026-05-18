@@ -115,13 +115,13 @@
 - `useRouletteApp.ts` の責務分割
 - 文言定数の分離
 - 永続化連携の責務を明確化
-- 状態: 一部完了
+- 状態: 方針整理と段階実装完了
 - 進捗メモ:
   - `docs/requirements/use-roulette-app-refactor-plan-2026-05-18.md` を追加済み
-  - Step 1 として `src/ui/rouletteMessages.ts` を追加し、文言定数を切り出し済み
-  - Step 2 として `src/ui/rouletteStateUpdates.ts` を追加し、候補操作更新を切り出し済み
-  - Step 3 として `src/ui/rouletteDrawFlow.ts` を追加し、抽選完了時の進行処理を切り出し済み
-  - 次は永続化連携の境界整理を想定
+  - `src/ui/rouletteMessages.ts` で文言定数を分離済み
+  - `src/ui/rouletteStateUpdates.ts` で候補操作更新を分離済み
+  - `src/ui/rouletteDrawFlow.ts` で抽選完了時の進行処理を分離済み
+  - `src/ui/usePersistedRouletteState.ts` で永続化連携を分離済み
 
 #### 3-2. レイヤ整理
 
@@ -169,9 +169,9 @@
 ## 着手順のおすすめ
 
 1. GitHub 設定で `main` を保護する
-2. `useRouletteApp.ts` の責務分割を永続化連携の整理まで進める
-3. 初回 Release を手動で実施する
-4. 文書カタログを前提に README の Documents 節を分類表示へ並べ替える
+2. 初回 Release を手動で実施する
+3. 文書カタログを前提に README の Documents 節を分類表示へ並べ替える
+4. Playwright のブロック解除後に `#32` を再開する
 
 ## 判断が必要になりやすいポイント
 
