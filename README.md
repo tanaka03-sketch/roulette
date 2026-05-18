@@ -55,7 +55,8 @@ npm run build
 ## CI Note
 
 - GitHub Actions の CI は `main` への push と pull request で自動実行されます。
-- CI は `actions/setup-node@v4` の `cache: npm` を有効にしたうえで、`npm ci`、`npm run typecheck`、`npm test`、`npm run build` を順に実行します。
+- CI は `actions/setup-node@v4` の `cache: npm` を有効にしたうえで、`typecheck` `test` `build` の 3 ジョブに分かれて実行されます。
+- 各ジョブでは `npm ci` を実行してから担当するチェックを実行します。
 - `package-lock.json` はリポジトリ管理下に置き、ローカル手順と CI の依存関係解決方式をそろえています。
 - CI の整備経緯は `docs/requirements/ci-remediation-plan-2026-05-16.md` と Issue `#13` を参照してください。
 
