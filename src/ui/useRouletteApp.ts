@@ -6,25 +6,21 @@ import {
   markCandidateAsDrawn,
   pickRandomCandidate,
   validateCandidateName,
-  type DrawAvailability,
   type RouletteCandidate,
   type RouletteState,
 } from '../domain/roulette';
 import { loadRouletteState, saveRouletteState } from '../storage/rouletteStorage';
-
-function getAvailabilityMessage(availability: DrawAvailability): string | null {
-  if (availability.canDraw) {
-    return null;
-  }
-
-  if (availability.reason === 'ALL_DRAWN') {
-    return '抽選可能な候補がありません。リセットしてください';
-  }
-
-  return '抽選には2件以上の候補が必要です';
-}
-
-const DRAW_LOCK_MESSAGE = '抽選中は候補や設定を変更できません';
+import {
+  CANDIDATE_UPDATED_MESSAGE,
+  CLEAR_CANDIDATES_COMPLETED_MESSAGE,
+  CLEAR_CANDIDATES_CONFIRM_MESSAGE,
+  DRAW_LOCK_MESSAGE,
+  RESET_DRAWN_COMPLETED_MESSAGE,
+  RESET_DRAWN_CONFIRM_MESSAGE,
+  STORAGE_ERROR_MESSAGE,
+  getAvailabilityMessage,
+  getDrawResultMessage,
+} from './rouletteMessages';
 
 export function useRouletteApp() {
   const [state, setState] = useState<RouletteState>(() => loadRouletteState());
@@ -45,7 +41,7 @@ export function useRouletteApp() {
       saveRouletteState(state);
       setStorageError(null);
     } catch {
-      setStorageError('状態の保存に失敗しました。ブラウザ設定を確認してください');
+      setStorageError(STORAGE_ERROR_MESSAGE);
     }
   }, [state]);
 
@@ -160,7 +156,7 @@ export function useRouletteApp() {
       );
     }
     resetEditingState();
-    setFeedbackMessage('候補名を更新しました');
+    setFeedbackMessage(CANDIDATE_UPDATED_MESSAGE);
   }
 
   function handleDeleteCandidate(candidateId: string) {
@@ -224,7 +220,7 @@ export function useRouletteApp() {
       });
       setIsDrawing(false);
       drawTimerRef.current = null;
-      setFeedbackMessage(`結果: ${winner.name}`);
+      setFeedbackMessage(getDrawResultMessage(winner.name));
     }, 900);
   }
 
@@ -233,7 +229,7 @@ export function useRouletteApp() {
       return;
     }
 
-    const shouldReset = window.confirm('抽選済み状態をリセットしますか？');
+    const shouldReset = window.confirm(RESET_DRAWN_CONFIRM_MESSAGE);
     if (!shouldReset) {
       return;
     }
@@ -248,7 +244,7 @@ export function useRouletteApp() {
       })),
     }));
     setLastResult(null);
-    setFeedbackMessage('抽選済み状態をリセットしました');
+    setFeedbackMessage(RESET_DRAWN_COMPLETED_MESSAGE);
   }
 
   function handleClearCandidates() {
@@ -256,7 +252,7 @@ export function useRouletteApp() {
       return;
     }
 
-    const shouldClear = window.confirm('候補リストをすべて削除しますか？');
+    const shouldClear = window.confirm(CLEAR_CANDIDATES_CONFIRM_MESSAGE);
     if (!shouldClear) {
       return;
     }
@@ -274,7 +270,7 @@ export function useRouletteApp() {
     setCandidateName('');
     resetEditingState();
     setLastResult(null);
-    setFeedbackMessage('候補リストをすべて削除しました');
+    setFeedbackMessage(CLEAR_CANDIDATES_COMPLETED_MESSAGE);
   }
 
   return {
