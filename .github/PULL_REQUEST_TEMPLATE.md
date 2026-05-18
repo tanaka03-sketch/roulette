@@ -1,29 +1,26 @@
-## Summary
+## 目的
 
 - 
 
-## Changes
+## 変更内容
 
 - 
 
-## How To Verify
+## 確認手順
 
-1. 
+- [ ] `npm run typecheck`
+- [ ] `npm test`
+- [ ] `npm run build`
+- [ ] 必要に応じて画面確認
 
-## Impact
+## 影響範囲
 
-- [ ] UI only
-- [ ] Domain logic
-- [ ] Storage behavior
-- [ ] CI / tooling
-- [ ] Documentation only
+- [ ] UI のみ
+- [ ] ドメインロジック
+- [ ] 保存処理
+- [ ] CI / ツール
+- [ ] ドキュメントのみ
 
-## Screenshots
+## 補足
 
-- N/A / attach if relevant
-
-## Checklist
-
-- [ ] I ran the relevant checks locally
-- [ ] I updated tests when behavior changed
-- [ ] I updated docs when needed
+- 
