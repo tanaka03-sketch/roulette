@@ -160,7 +160,7 @@ export function pickRandomCandidate(
     candidates.length - 1,
   );
 
-  return cloneCandidate(candidates[index]);
+  return cloneCandidate(candidates[index]!);
 }
 
 export function markCandidateAsDrawn(
