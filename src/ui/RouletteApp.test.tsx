@@ -91,7 +91,7 @@ describe('RouletteApp', () => {
   });
 
   it('shows an error banner when localStorage saves are blocked', async () => {
-    vi.spyOn(window.localStorage, 'setItem').mockImplementation(() => {
+    vi.spyOn(window, 'localStorage', 'get').mockImplementation(() => {
       throw new DOMException('Blocked', 'SecurityError');
     });
     const user = userEvent.setup();
@@ -128,7 +128,7 @@ describe('RouletteApp', () => {
     });
 
     expect(screen.getByText('結果: 候補A')).toBeInTheDocument();
-    expect(screen.getByText('1件 / 2件 から抽選できます')).toBeInTheDocument();
+    expect(screen.getByText('抽選には2件以上の候補が必要です')).toBeInTheDocument();
     expect(screen.getAllByText(/抽選済み|未抽選/)).toHaveLength(2);
   });
 
@@ -251,7 +251,7 @@ describe('RouletteApp', () => {
       vi.advanceTimersByTime(900);
     });
 
-    expect(screen.getByText('1件 / 2件 から抽選できます')).toBeInTheDocument();
+    expect(screen.getByText('抽選には2件以上の候補が必要です')).toBeInTheDocument();
     expect(getSavedState()?.candidates[0].drawn).toBe(true);
 
     unmount();
@@ -261,7 +261,7 @@ describe('RouletteApp', () => {
 
     expect(screen.getAllByText('抽選済み')).toHaveLength(1);
     expect(screen.getAllByText('未抽選')).toHaveLength(1);
-    expect(screen.getByText('1件 / 2件 から抽選できます')).toBeInTheDocument();
+    expect(screen.getByText('抽選には2件以上の候補が必要です')).toBeInTheDocument();
   });
 
   it('restores candidates and the exclude setting from localStorage on reload', async () => {
