@@ -194,20 +194,12 @@ export function useRouletteApp() {
 
     drawTimerRef.current = window.setTimeout(() => {
       const now = new Date().toISOString();
-      let finalizedDraw: FinalizedDraw | null = null;
+      const finalizedDraw: FinalizedDraw = finalizeDraw(state.candidates, winner, now);
 
-      setState((currentState) => {
-        finalizedDraw = finalizeDraw(currentState.candidates, winner, now);
-
-        return {
-          ...currentState,
-          candidates: finalizedDraw.candidates,
-        };
-      });
-
-      if (finalizedDraw === null) {
-        return;
-      }
+      setState((currentState) => ({
+        ...currentState,
+        candidates: finalizedDraw.candidates,
+      }));
 
       setLastResult(finalizedDraw.lastResult);
       setIsDrawing(false);
