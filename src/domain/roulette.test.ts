@@ -155,6 +155,6 @@ describe('markCandidateAsDrawn', () => {
         updatedAt: '2026-05-16T01:00:00.000Z',
       }),
     ]);
-    expect(original[1].drawn).toBe(false);
+    expect(original[1]?.drawn).toBe(false);
   });
 });
