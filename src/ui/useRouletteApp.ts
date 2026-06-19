@@ -16,11 +16,7 @@ import {
   RESET_DRAWN_CONFIRM_MESSAGE,
   getAvailabilityMessage,
 } from './rouletteMessages';
-import {
-  DRAW_DURATION_MS,
-  finalizeDraw,
-  type FinalizedDraw,
-} from './rouletteDrawFlow';
+import { DRAW_DURATION_MS, finalizeDraw } from './rouletteDrawFlow';
 import { usePersistedRouletteState } from './usePersistedRouletteState';
 import {
   appendCandidate,
@@ -188,27 +184,19 @@ export function useRouletteApp() {
       return;
     }
 
+    const candidatesAtDrawStart = state.candidates;
     const winner = pickRandomCandidate(eligibleCandidates);
     setIsDrawing(true);
     setFeedbackMessage(null);
 
     drawTimerRef.current = window.setTimeout(() => {
       const now = new Date().toISOString();
-      let finalizedDraw: FinalizedDraw | null = null;
+      const finalizedDraw = finalizeDraw(candidatesAtDrawStart, winner, now);
 
-      setState((currentState) => {
-        finalizedDraw = finalizeDraw(currentState.candidates, winner, now);
-
-        return {
-          ...currentState,
-          candidates: finalizedDraw.candidates,
-        };
-      });
-
-      if (finalizedDraw === null) {
-        return;
-      }
-
+      setState((currentState) => ({
+        ...currentState,
+        candidates: finalizedDraw.candidates,
+      }));
       setLastResult(finalizedDraw.lastResult);
       setIsDrawing(false);
       drawTimerRef.current = null;

@@ -32,8 +32,8 @@ function createState(): RouletteState {
 
 describe('rouletteStorage', () => {
   beforeEach(() => {
-    window.localStorage.clear();
     vi.restoreAllMocks();
+    window.localStorage.clear();
   });
 
   it('returns the default state when storage is empty', () => {
