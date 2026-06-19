@@ -59,37 +59,41 @@
 ## 2026-06-19 導入後 CI ブロッカー対応
 
 - ジョブ種別: 検証 / 実装フォローアップ
-- 対象 PR: `#49`
+- 対象 PR: `#50`
 - 対象ブランチ: `codex/fix-ai-operation-ci`
 
 ### 背景
 
-AI 開発運用導入 PR の merge 後、GitHub Actions の `typecheck`、`test`、`build` が失敗していることを確認しました。導入した文書・テンプレート自体はコード変更を含みませんが、定期検証ジョブを運用するには CI の既存失敗が Open blocker になるため、フォローアップ修正を作成します。
+AI 開発運用導入 PR `#49` の merge 後、GitHub Actions の `typecheck`、`test`、`build` が失敗していることを確認しました。導入した文書・テンプレート自体はコード変更を含みませんが、定期検証ジョブを運用するには CI の既存失敗が Open blocker になるため、フォローアップ修正を作成しました。
 
 ### 確認した失敗
 
 - `npm run typecheck`: `src/domain/roulette.ts`、`src/domain/roulette.test.ts`、`src/ui/useRouletteApp.ts`、`vite.config.ts` の型エラー。
-- `npm test`: `localStorage` ブロック系 mock の後片付け順序と fake timer 利用テストの timeout。
+- `npm test`: `localStorage` ブロック系 mock の後片付け順序、fake timer 利用テストの timeout、UI 文言期待のずれ。
 - `npm run build`: typecheck と同じ型エラー。
 
 ### 実施内容
 
 - `pickRandomCandidate` の空配列チェック後の index 参照を型安全に補強。
 - `roulette.test.ts` の配列 index 参照を型安全に補強。
-- `useRouletteApp.ts` の抽選完了処理で `FinalizedDraw` の型推論を明確化。
+- `useRouletteApp.ts` の抽選完了処理を React state updater の副作用に依存しない形へ修正。
 - `vite.config.ts` を Vitest の `defineConfig` に変更。
 - `rouletteStorage.test.ts` の mock 後片付け順序を修正。
-- `RouletteApp.test.tsx` の storage error 期待を async にし、fake timer を非同期進行へ変更。
+- `RouletteApp.test.tsx` の storage error 期待、抽選完了待ち、候補状態の検証範囲を安定化。
 
 ### 検証
 
-GitHub connector 経由で修正したため、ローカル clone はネットワーク制限で実行できませんでした。PR 作成後に GitHub Actions で `typecheck`、`test`、`build` を確認します。
+GitHub connector 経由で修正したため、ローカル clone はネットワーク制限で実行できませんでした。GitHub Actions run `159` で次を確認しました。
+
+- `npm run typecheck`: 成功
+- `npm test`: 成功
+- `npm run build`: 成功
 
 ### Open Blockers
 
-- GitHub Actions の再実行結果待ち。
+現時点ではありません。
 
 ### 次アクション
 
-- 修正 PR を作成する。
-- CI 結果を確認し、失敗が残る場合は追加で triage する。
+- PR `#50` を merge する。
+- 定期実行結果を見ながら、新しい Open blocker が出た場合は triage ジョブで記録・分類する。
