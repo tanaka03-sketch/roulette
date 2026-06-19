@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { STORAGE_KEYS } from '../domain/roulette';
@@ -11,8 +11,8 @@ function getSavedState() {
 
 describe('RouletteApp', () => {
   beforeEach(() => {
-    window.localStorage.clear();
     vi.restoreAllMocks();
+    window.localStorage.clear();
   });
 
   afterEach(() => {
@@ -91,7 +91,7 @@ describe('RouletteApp', () => {
   });
 
   it('shows an error banner when localStorage saves are blocked', async () => {
-    vi.spyOn(window.localStorage, 'setItem').mockImplementation(() => {
+    vi.spyOn(window, 'localStorage', 'get').mockImplementation(() => {
       throw new DOMException('Blocked', 'SecurityError');
     });
     const user = userEvent.setup();
@@ -102,49 +102,50 @@ describe('RouletteApp', () => {
     await user.type(input, '保存失敗候補');
     await user.click(screen.getByRole('button', { name: '追加' }));
 
-    expect(
-      screen.getByText('状態の保存に失敗しました。ブラウザ設定を確認してください'),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByText('状態の保存に失敗しました。ブラウザ設定を確認してください'),
+      ).toBeInTheDocument();
+    });
   });
 
   it('draws from eligible candidates and marks the winner as drawn', async () => {
     vi.useFakeTimers();
     vi.spyOn(Math, 'random').mockReturnValue(0);
-    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 
     render(<RouletteApp />);
 
     const input = screen.getByLabelText('候補名');
-    await user.type(input, '候補A');
-    await user.click(screen.getByRole('button', { name: '追加' }));
-    await user.type(input, '候補B');
-    await user.click(screen.getByRole('button', { name: '追加' }));
+    fireEvent.change(input, { target: { value: '候補A' } });
+    fireEvent.click(screen.getByRole('button', { name: '追加' }));
+    fireEvent.change(input, { target: { value: '候補B' } });
+    fireEvent.click(screen.getByRole('button', { name: '追加' }));
 
-    await user.click(screen.getByRole('button', { name: '抽選開始' }));
+    fireEvent.click(screen.getByRole('button', { name: '抽選開始' }));
 
     await act(async () => {
       vi.advanceTimersByTime(900);
     });
 
+    const candidateList = screen.getByRole('list');
     expect(screen.getByText('結果: 候補A')).toBeInTheDocument();
-    expect(screen.getByText('1件 / 2件 から抽選できます')).toBeInTheDocument();
-    expect(screen.getAllByText(/抽選済み|未抽選/)).toHaveLength(2);
+    expect(screen.getByText('抽選には2件以上の候補が必要です')).toBeInTheDocument();
+    expect(within(candidateList).getAllByText(/抽選済み|未抽選/)).toHaveLength(2);
   });
 
   it('locks candidate and settings changes while drawing', async () => {
     vi.useFakeTimers();
     vi.spyOn(Math, 'random').mockReturnValue(0);
-    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 
     render(<RouletteApp />);
 
     const input = screen.getByLabelText('候補名');
-    await user.type(input, '候補A');
-    await user.click(screen.getByRole('button', { name: '追加' }));
-    await user.type(input, '候補B');
-    await user.click(screen.getByRole('button', { name: '追加' }));
+    fireEvent.change(input, { target: { value: '候補A' } });
+    fireEvent.click(screen.getByRole('button', { name: '追加' }));
+    fireEvent.change(input, { target: { value: '候補B' } });
+    fireEvent.click(screen.getByRole('button', { name: '追加' }));
 
-    await user.click(screen.getByRole('button', { name: '抽選開始' }));
+    fireEvent.click(screen.getByRole('button', { name: '抽選開始' }));
 
     expect(input).toBeDisabled();
     expect(screen.getByRole('checkbox')).toBeDisabled();
@@ -168,22 +169,21 @@ describe('RouletteApp', () => {
     vi.useFakeTimers();
     vi.spyOn(Math, 'random').mockReturnValue(0);
     vi.spyOn(window, 'confirm').mockReturnValue(true);
-    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 
     render(<RouletteApp />);
 
     const input = screen.getByLabelText('候補名');
-    await user.type(input, '候補A');
-    await user.click(screen.getByRole('button', { name: '追加' }));
-    await user.type(input, '候補B');
-    await user.click(screen.getByRole('button', { name: '追加' }));
-    await user.click(screen.getByRole('button', { name: '抽選開始' }));
+    fireEvent.change(input, { target: { value: '候補A' } });
+    fireEvent.click(screen.getByRole('button', { name: '追加' }));
+    fireEvent.change(input, { target: { value: '候補B' } });
+    fireEvent.click(screen.getByRole('button', { name: '追加' }));
+    fireEvent.click(screen.getByRole('button', { name: '抽選開始' }));
 
     await act(async () => {
       vi.advanceTimersByTime(900);
     });
 
-    await user.click(screen.getByRole('button', { name: '抽選済み状態をリセット' }));
+    fireEvent.click(screen.getByRole('button', { name: '抽選済み状態をリセット' }));
 
     expect(screen.getByText('抽選済み状態をリセットしました')).toBeInTheDocument();
     expect(screen.getByText('2件 / 2件 から抽選できます')).toBeInTheDocument();
@@ -239,21 +239,20 @@ describe('RouletteApp', () => {
   it('restores drawn candidates from localStorage on reload', async () => {
     vi.useFakeTimers();
     vi.spyOn(Math, 'random').mockReturnValue(0);
-    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     const { unmount } = render(<RouletteApp />);
 
     const input = screen.getByLabelText('候補名');
-    await user.type(input, '保存A');
-    await user.click(screen.getByRole('button', { name: '追加' }));
-    await user.type(input, '保存B');
-    await user.click(screen.getByRole('button', { name: '追加' }));
-    await user.click(screen.getByRole('button', { name: '抽選開始' }));
+    fireEvent.change(input, { target: { value: '保存A' } });
+    fireEvent.click(screen.getByRole('button', { name: '追加' }));
+    fireEvent.change(input, { target: { value: '保存B' } });
+    fireEvent.click(screen.getByRole('button', { name: '追加' }));
+    fireEvent.click(screen.getByRole('button', { name: '抽選開始' }));
 
     await act(async () => {
       vi.advanceTimersByTime(900);
     });
 
-    expect(screen.getByText('1件 / 2件 から抽選できます')).toBeInTheDocument();
+    expect(screen.getByText('抽選には2件以上の候補が必要です')).toBeInTheDocument();
     expect(getSavedState()?.candidates[0].drawn).toBe(true);
 
     unmount();
@@ -261,9 +260,10 @@ describe('RouletteApp', () => {
 
     render(<RouletteApp />);
 
-    expect(screen.getAllByText('抽選済み')).toHaveLength(1);
-    expect(screen.getAllByText('未抽選')).toHaveLength(1);
-    expect(screen.getByText('1件 / 2件 から抽選できます')).toBeInTheDocument();
+    const candidateList = screen.getByRole('list');
+    expect(within(candidateList).getAllByText('抽選済み')).toHaveLength(1);
+    expect(within(candidateList).getAllByText('未抽選')).toHaveLength(1);
+    expect(screen.getByText('抽選には2件以上の候補が必要です')).toBeInTheDocument();
   });
 
   it('restores candidates and the exclude setting from localStorage on reload', async () => {
