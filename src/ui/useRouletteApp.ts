@@ -194,7 +194,7 @@ export function useRouletteApp() {
 
     drawTimerRef.current = window.setTimeout(() => {
       const now = new Date().toISOString();
-      let finalizedDraw: FinalizedDraw | null = null;
+      let finalizedDraw: FinalizedDraw | undefined;
 
       setState((currentState) => {
         finalizedDraw = finalizeDraw(currentState.candidates, winner, now);
@@ -205,14 +205,15 @@ export function useRouletteApp() {
         };
       });
 
-      if (finalizedDraw === null) {
+      const completedDraw = finalizedDraw;
+      if (completedDraw === undefined) {
         return;
       }
 
-      setLastResult(finalizedDraw.lastResult);
+      setLastResult(completedDraw.lastResult);
       setIsDrawing(false);
       drawTimerRef.current = null;
-      setFeedbackMessage(finalizedDraw.feedbackMessage);
+      setFeedbackMessage(completedDraw.feedbackMessage);
     }, DRAW_DURATION_MS);
   }
 
