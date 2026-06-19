@@ -127,7 +127,9 @@ describe('RouletteApp', () => {
 
     expect(await findDrawResult('候補A')).toBeInTheDocument();
     expect(screen.getByText('抽選には2件以上の候補が必要です')).toBeInTheDocument();
-    expect(screen.getAllByText(/抽選済み|未抽選/)).toHaveLength(2);
+
+    const candidateList = screen.getByRole('list');
+    expect(within(candidateList).getAllByText(/抽選済み|未抽選/)).toHaveLength(2);
   });
 
   it('locks candidate and settings changes while drawing', async () => {
@@ -248,8 +250,9 @@ describe('RouletteApp', () => {
 
     render(<RouletteApp />);
 
-    expect(screen.getAllByText('抽選済み')).toHaveLength(1);
-    expect(screen.getAllByText('未抽選')).toHaveLength(1);
+    const restoredCandidateList = screen.getByRole('list');
+    expect(within(restoredCandidateList).getAllByText('抽選済み')).toHaveLength(1);
+    expect(within(restoredCandidateList).getAllByText('未抽選')).toHaveLength(1);
     expect(screen.getByText('抽選には2件以上の候補が必要です')).toBeInTheDocument();
   });
 
