@@ -226,3 +226,66 @@ Open Issue のうち、GitHub 管理画面でしか完了確認できない `mai
 
 - 残り Open Issue を、実装済みクローズ候補、追加実装候補、人間判断待ちに再分類する。
 - 次の人間判断が必要な論点は、1 問ずつ番号付きで確認する。
+
+## 2026-06-23 ロック状態の ChatGPT メモリー移行
+
+- ジョブ種別: 運用変更 / スケジュール運用整備
+- 対象リポジトリ: `tanaka03-sketch/roulette`
+- 親リポジトリ: `tanaka03-sketch/ai-development-operations`
+
+### 参照した既存正本
+
+- `README.md`
+- `CONTRIBUTING.md`
+- `docs/requirements.md`
+- `docs/implementation-tasks.md`
+- `docs/requirements/document-catalog-2026-05-18.md`
+- `AGENTS.md`
+- `docs/ai-development/agent-instructions.md`
+- `docs/ai-development/requirements.md`
+- `docs/ai-development/progress.md`
+- `docs/ai-development/automation-lock.md`
+- `docs/ai-development/automation-lock.json`
+- `docs/ai-development/work-log.md`
+
+### 参照した親リポジトリ資料
+
+- `README.md`
+
+次の指定パスは取得できませんでした。見つかった README 方針と対象リポジトリの既存正本を優先しました。
+
+- `adoption/child-repository-contract.md`
+- `adoption/agent-development-procedure-setup.md`
+- `templates/requirements/requirements-definition.md`
+- `templates/ai-development/agent-instructions.md`
+- `templates/ai-development/work-log.md`
+
+### 実施内容
+
+- ChatGPT 側メモリーに `/workspace/memory/locks/roulette-schedule-lock.json` と説明ファイルを追加。
+- `docs/ai-development/automation-lock.md` を、GitHub ファイル疑似ロックから ChatGPT メモリーロックの手順へ更新。
+- `docs/ai-development/automation-lock.json` を非推奨マーカーへ変更し、ライブなロック状態として使わないことを明記。
+- `AGENTS.md` と `docs/ai-development/agent-instructions.md` の必読順序、正本、ロック運用、禁止操作をメモリーロック前提へ更新。
+- `docs/ai-development/progress.md` に今回の移行状況を反映。
+- ChatGPT スケジュールプロンプトを、メモリーロック参照へ更新。
+
+### Open Blockers
+
+現時点ではありません。
+
+### 回答待ち
+
+現時点ではありません。
+
+### 検証
+
+文書・スケジュール運用変更のみのため、コード検証は未実行です。
+
+- `npm run typecheck`: 未実行（コード変更なし）
+- `npm test`: 未実行（コード変更なし）
+- `npm run build`: 未実行（コード変更なし）
+
+### 次アクション
+
+- 次回の有効スケジュール実行で、メモリーロックを読んでから GitHub 変更に進むことを確認する。
+- 古い `automation-lock.json` を完全削除するかどうかは、文書カタログや参照影響を確認したうえで別 Issue または別 PR で判断する。
