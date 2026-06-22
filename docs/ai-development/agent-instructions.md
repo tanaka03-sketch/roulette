@@ -12,18 +12,34 @@
 
 1. `AGENTS.md`
 2. `docs/ai-development/agent-instructions.md`
-3. `docs/requirements.md`
-4. `docs/ai-development/requirements.md`
-5. `docs/ai-development/work-log.md`
-6. `docs/ai-development/job-instructions/{job}.md`
-7. 関連 Issue / PR / handover
+3. `docs/ai-development/goal.md`
+4. `docs/ai-development/progress.md`
+5. `docs/ai-development/automation-lock.md`
+6. `docs/ai-development/automation-lock.json`
+7. `docs/requirements.md`
+8. `docs/ai-development/requirements.md`
+9. `docs/ai-development/work-log.md`
+10. `docs/ai-development/job-instructions/{job}.md`
+11. 関連 Issue / PR / handover
 
 ## 仕様判断の扱い
 
 - 仕様判断の正本は `docs/requirements.md` です。
+- AI 自律開発の最終目標は `docs/ai-development/goal.md` に置きます。
+- 作業進捗、現在地、次アクションは `docs/ai-development/progress.md` に置きます。
 - AI ジョブ運用上の確認、未確定事項、Slack 確認ログは `docs/ai-development/requirements.md` と `docs/ai-development/work-log.md` に集約します。
 - 既存の文書カタログ、README、CONTRIBUTING と矛盾する変更は行いません。
 - 大量の文書移動や削除が必要な場合は、その場で実施せず Issue 候補にします。
+
+## 疑似ロック運用
+
+定期実行ジョブは、作業前に `docs/ai-development/automation-lock.md` の手順に従って `docs/ai-development/automation-lock.json` を確認します。
+
+- 先行ジョブのロックが有効で期限内の場合、後続ジョブは実行せず停止します。
+- ロックが空いている、または期限切れの場合だけ、GitHub ファイル更新の SHA 競合を利用してロック取得を試みます。
+- ロック取得に失敗した場合は、同時実行競合として停止します。
+- 作業終了時は `progress.md` と `work-log.md` を必要に応じて更新してからロックを解放します。
+- ロックを安全に取得できない場合、GitHub 上の変更は行いません。
 
 ## ジョブ共通停止条件
 
@@ -45,6 +61,12 @@
 - Slack 投稿環境がない場合は、質問文案を `docs/ai-development/work-log.md`、関連 Issue、必要に応じて `docs/ai-development/requirements.md` に `回答待ち` として記録します。
 - 回答後は、実装より先に該当する requirements / design / instruction / handover / work-log を更新します。
 
+## 外部情報収集
+
+インターネット検索は、AI 自律開発の改善、GitHub の公開仕様、一般的なレビュー・検証観点の確認に使います。対象リポジトリと親リポジトリで確認できる内容の代用にはしません。
+
+外部情報を採用する場合は、根拠 URL と採用判断を `docs/ai-development/goal.md`、`docs/ai-development/progress.md`、または `docs/ai-development/work-log.md` に残します。
+
 ## 検証
 
 基本検証コマンド:
@@ -60,6 +82,8 @@ npm run build
 ## スケジュール運用
 
 定期実行は `Asia/Tokyo` で 12 本登録します。レビュー系は候補 Finding を出し、Issue の作成や優先順位付けは Issue / Finding Triage が担当します。
+
+各スケジュールは、開始時に目的、進捗、ロック、正本、ジョブ別指示を読み込み、ロック取得に成功した場合だけ作業します。対象がない場合は、対象なしの理由と次に待つ状態を出力して終了します。
 
 | 分 | ジョブ | 指示ファイル |
 | --- | --- | --- |
