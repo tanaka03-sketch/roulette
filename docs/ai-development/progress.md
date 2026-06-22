@@ -20,7 +20,7 @@
 | 最終目標ファイル | 完了。`docs/ai-development/goal.md` |
 | 進捗ファイル | 完了。この文書 |
 | 疑似ロック運用 | 完了。`docs/ai-development/automation-lock.md` と `docs/ai-development/automation-lock.json` |
-| ChatGPT スケジュール | 未登録から登録作業中。登録結果は作業完了時に報告する |
+| ChatGPT スケジュール | 完了。`Asia/Tokyo` で毎時 00/05/10/15/20/25/30/35/40/45/50/55 分の 12 本を登録済み |
 
 ## 2026-06-22 に実施した作業
 
@@ -31,13 +31,15 @@
 - 自律開発運用の目的を `docs/ai-development/goal.md` に追加した。
 - 進捗確認用のこの文書を追加した。
 - GitHub ファイルを使った疑似ロック方式を `docs/ai-development/automation-lock.md` に追加し、状態ファイル `docs/ai-development/automation-lock.json` を用意した。
+- `AGENTS.md` と `docs/ai-development/agent-instructions.md` に、目的、進捗、疑似ロックの読み込み順と運用ルールを反映した。
+- ChatGPT スケジュール 12 本を `Asia/Tokyo` で登録した。
 
 ## 次にやる作業
 
-1. `AGENTS.md` と `docs/ai-development/agent-instructions.md` に、`goal.md`、`progress.md`、`automation-lock.md` / `automation-lock.json` を必読として追加する。
-2. 12 本のスケジュールを `Asia/Tokyo` で登録し、各プロンプトに疑似ロック取得、目的・進捗読み込み、停止条件、報告形式を含める。
-3. 初回の定期実行結果を見て、ロック運用が長すぎる作業を適切にスキップできているか確認する。
-4. 外部情報を追加で採用する場合は、根拠 URL と採用判断を `goal.md` または `work-log.md` に残す。
+1. 初回の定期実行結果を確認し、疑似ロックにより後続ジョブが安全に停止または実行できているかを見る。
+2. 定期実行の出力が長すぎる、Issue 化が過剰、またはロック期限 45 分が合わない場合は、`docs/ai-development/automation-lock.md` と各スケジュールプロンプトを調整する。
+3. 外部情報を追加で採用する場合は、根拠 URL と採用判断を `goal.md` または `work-log.md` に残す。
+4. 実装ジョブが対象 Issue を見つけた場合でも、停止条件を満たさない限り実装しない運用が守られているか確認する。
 
 ## Open Blockers
 
