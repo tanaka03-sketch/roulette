@@ -97,3 +97,93 @@ GitHub connector 経由で修正したため、ローカル clone はネット�
 
 - PR `#50` を merge する。
 - 定期実行結果を見ながら、新しい Open blocker が出た場合は triage ジョブで記録・分類する。
+
+## 2026-06-22 自律開発の目的・進捗・疑似ロック導入
+
+- ジョブ種別: 導入 / スケジュール運用整備 / 外部情報確認
+- 対象リポジトリ: `tanaka03-sketch/roulette`
+- 親リポジトリ: `tanaka03-sketch/ai-development-operations`
+
+### 参照した既存正本
+
+- `README.md`
+- `CONTRIBUTING.md`
+- `docs/requirements.md`
+- `docs/implementation-tasks.md`
+- `docs/requirements/document-catalog-2026-05-18.md`
+- `AGENTS.md`
+- `.github/PULL_REQUEST_TEMPLATE.md`
+- `docs/ai-development/agent-instructions.md`
+- `docs/ai-development/requirements.md`
+- `docs/ai-development/work-log.md`
+- `docs/ai-development/job-instructions/implementation.md`
+- `docs/ai-development/job-instructions/verification.md`
+
+### 参照した親リポジトリ資料
+
+- `README.md`
+
+次の指定パスは今回も取得できませんでした。見つかった README 方針と対象リポジトリの既存正本を優先しました。
+
+- `adoption/child-repository-contract.md`
+- `adoption/agent-development-procedure-setup.md`
+- `templates/requirements/requirements-definition.md`
+- `templates/ai-development/agent-instructions.md`
+- `templates/ai-development/work-log.md`
+- `templates/ai-development/job-instructions/implementation.md`
+
+### 外部情報確認
+
+- OpenAI Agents SDK tracing: https://openai.github.io/openai-agents-python/tracing/
+- OpenAI Agents orchestration: https://developers.openai.com/api/docs/guides/agents/orchestration
+- Anthropic Building Effective Agents: https://www.anthropic.com/research/building-effective-agents
+- Anthropic agent evals: https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents
+- GitHub Actions concurrency: https://docs.github.com/en/actions/concepts/workflows-and-actions/concurrency
+
+採用判断: 複雑な自動化を増やすより、目的、進捗、停止条件、疑似ロック、評価・検証結果を明文化して、定期実行が小さく安全に進む運用へ反映しました。
+
+### 実施内容
+
+- `docs/ai-development/goal.md` を追加し、自律開発の最終目標、外部情報収集方針、成功条件を定義。
+- `docs/ai-development/progress.md` を追加し、実施済み作業、現在地、次アクションを整理。
+- `docs/ai-development/automation-lock.md` を追加し、GitHub ファイルを使った疑似ロック取得・解放・期限切れ処理を定義。
+- `docs/ai-development/automation-lock.json` を追加し、初期状態を unlocked として保存。
+- `AGENTS.md` と `docs/ai-development/agent-instructions.md` を更新し、目的、進捗、疑似ロックを必読順序とスケジュール運用へ追加。
+- ChatGPT スケジュール 12 本を `Asia/Tokyo` で登録。
+
+### 登録したスケジュール
+
+- 毎時 00 分: 文書体系レビュー
+- 毎時 05 分: Issue 分解・作業管理レビュー
+- 毎時 10 分: 設計・実装方針レビュー
+- 毎時 15 分: テスト観点レビュー
+- 毎時 20 分: セキュリティ・権限レビュー
+- 毎時 25 分: CAB / 変更審査レビュー
+- 毎時 30 分: 本番運用 readiness レビュー
+- 毎時 35 分: 統合レビュー
+- 毎時 40 分: Issue / Finding Triage
+- 毎時 45 分: 要件・設計修正
+- 毎時 50 分: 実装
+- 毎時 55 分: 検証
+
+### Open Blockers
+
+現時点ではありません。
+
+### 回答待ち
+
+現時点ではありません。
+
+### 検証
+
+文書・スケジュール運用整備のみのため、コード検証は未実行です。
+
+- `npm run typecheck`: 未実行（コード変更なし）
+- `npm test`: 未実行（コード変更なし）
+- `npm run build`: 未実行（コード変更なし）
+
+### 次アクション
+
+- 初回の定期実行結果を確認し、疑似ロックが後続ジョブを安全に停止または通過させるか確認する。
+- スケジュール出力が過剰な場合は、各プロンプトを短く調整する。
+- ロック期限 45 分が長すぎる、または短すぎる場合は `docs/ai-development/automation-lock.md` を更新する。
