@@ -11,7 +11,7 @@ Before starting work, read these in order:
 3. `docs/ai-development/goal.md`
 4. `docs/ai-development/progress.md`
 5. `docs/ai-development/automation-lock.md`
-6. `docs/ai-development/automation-lock.json`
+6. ChatGPT memory lock: `/workspace/memory/locks/roulette-schedule-lock.json`
 7. `docs/requirements.md`
 8. `docs/ai-development/requirements.md`
 9. `docs/ai-development/work-log.md`
@@ -25,7 +25,9 @@ Before starting work, read these in order:
 - AI operation notes, open questions, Slack confirmation logs, and job-specific clarifications: `docs/ai-development/requirements.md`
 - AI autonomous development goal: `docs/ai-development/goal.md`
 - Current progress and next actions: `docs/ai-development/progress.md`
-- Schedule pseudo-lock procedure and state: `docs/ai-development/automation-lock.md` and `docs/ai-development/automation-lock.json`
+- Schedule lock procedure: `docs/ai-development/automation-lock.md`
+- Active schedule lock state: ChatGPT memory `/workspace/memory/locks/roulette-schedule-lock.json`
+- Deprecated GitHub lock marker: `docs/ai-development/automation-lock.json`; do not use it as live lock state.
 - Do not duplicate product requirements. If a product requirement changes, update `docs/requirements.md` first or record the required human confirmation.
 
 ## Repository Assumptions
@@ -37,13 +39,13 @@ Before starting work, read these in order:
 
 ## Scheduled Job Lock Rule
 
-Every scheduled job must check `docs/ai-development/automation-lock.json` before doing work.
+Every scheduled job must check ChatGPT memory `/workspace/memory/locks/roulette-schedule-lock.json` before doing work.
 
-- If the lock is active and not expired, stop the job and report that a previous job is still running.
-- If the lock is free or expired, acquire it by updating the lock file with the current blob SHA.
-- If the update conflicts, treat another job as the lock owner and stop.
-- Release the lock only after updating the relevant progress or work-log notes.
-- If a job cannot safely update the lock, it must not proceed with GitHub changes.
+- If the memory lock is active and not expired, stop the job and report that a previous job is still running.
+- If the memory lock is free or expired, acquire it by updating and saving the memory lock file.
+- If the memory lock cannot be read, updated, or saved safely, stop and do not make GitHub changes.
+- Release the memory lock only after updating the relevant progress or work-log notes.
+- `docs/ai-development/automation-lock.json` is not a live lock and must not be updated for lock acquisition or release.
 
 ## Start Conditions
 
@@ -91,6 +93,7 @@ Human approval is required for production deployment, destructive migration, dat
 - Do not guess unclear design, implementation, or verification decisions.
 - Do not expand the initial scope into authentication, external APIs, or server persistence without explicit requirements.
 - Do not edit the parent repository `tanaka03-sketch/ai-development-operations`; it is read-only reference material.
+- Do not use GitHub-side `docs/ai-development/automation-lock.json` as live schedule lock state.
 
 ## Verification
 
@@ -106,4 +109,4 @@ For mobile UI changes, also follow README `Mobile verification` checks around 39
 
 ## End Of Work
 
-At the end of each work session, update `docs/ai-development/progress.md` when the current state or next action changes, and update `docs/ai-development/work-log.md` with the job type, references, changes, verification, blockers, human-confirmation items, and next actions.
+At the end of each work session, update `docs/ai-development/progress.md` when the current state or next action changes, update `docs/ai-development/work-log.md` with the job type, references, changes, verification, blockers, human-confirmation items, and next actions, then release the ChatGPT memory lock when one was acquired.
