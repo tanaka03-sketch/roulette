@@ -2,7 +2,7 @@
 
 - 対象リポジトリ: `tanaka03-sketch/roulette`
 - 作成日: 2026-06-22
-- 最終更新日: 2026-06-22
+- 最終更新日: 2026-06-23
 - ステータス: Active
 
 ## 目的
@@ -19,8 +19,9 @@
 | ジョブ別指示 | 完了。`docs/ai-development/job-instructions/` |
 | 最終目標ファイル | 完了。`docs/ai-development/goal.md` |
 | 進捗ファイル | 完了。この文書 |
-| 疑似ロック運用 | 完了。`docs/ai-development/automation-lock.md` と `docs/ai-development/automation-lock.json` |
-| ChatGPT スケジュール | 完了。`Asia/Tokyo` で毎時 00/05/10/15/20/25/30/35/40/45/50/55 分の 12 本を登録済み |
+| ロック運用 | 完了。手順は `docs/ai-development/automation-lock.md`、状態の正本は ChatGPT 側メモリー `/workspace/memory/locks/roulette-schedule-lock.json` |
+| GitHub 側旧ロック状態ファイル | 非推奨。`docs/ai-development/automation-lock.json` はマーカーのみで、ライブなロック状態として使わない |
+| ChatGPT スケジュール | 15 分ごとの統合ジョブが有効。12 本の毎時ジョブは登録済みだが現在は無効 |
 
 ## 2026-06-22 に実施した作業
 
@@ -34,12 +35,19 @@
 - `AGENTS.md` と `docs/ai-development/agent-instructions.md` に、目的、進捗、疑似ロックの読み込み順と運用ルールを反映した。
 - ChatGPT スケジュール 12 本を `Asia/Tokyo` で登録した。
 
+## 2026-06-23 に実施した作業
+
+- ロック状態の正本を GitHub 側 `docs/ai-development/automation-lock.json` から ChatGPT 側メモリー `/workspace/memory/locks/roulette-schedule-lock.json` へ切り替える方針に更新した。
+- `docs/ai-development/automation-lock.md` を、メモリーロック取得・解放手順へ更新した。
+- `docs/ai-development/automation-lock.json` を非推奨マーカーへ変更し、ライブなロック状態として使わないことを明記した。
+- `AGENTS.md` と `docs/ai-development/agent-instructions.md` の必読順序、正本、ロック運用、禁止操作をメモリーロック前提へ更新した。
+- ChatGPT スケジュールのプロンプトを、メモリーロック参照へ更新した。
+
 ## 次にやる作業
 
-1. 初回の定期実行結果を確認し、疑似ロックにより後続ジョブが安全に停止または実行できているかを見る。
-2. 定期実行の出力が長すぎる、Issue 化が過剰、またはロック期限 45 分が合わない場合は、`docs/ai-development/automation-lock.md` と各スケジュールプロンプトを調整する。
-3. 外部情報を追加で採用する場合は、根拠 URL と採用判断を `goal.md` または `work-log.md` に残す。
-4. 実装ジョブが対象 Issue を見つけた場合でも、停止条件を満たさない限り実装しない運用が守られているか確認する。
+1. 次回の有効スケジュール実行で、メモリーロックを読んでから GitHub 変更に進むことを確認する。
+2. 古い `automation-lock.json` を完全削除する必要があるかは、文書カタログや既存リンクへの影響を見て別 Issue または別 PR で判断する。
+3. 実装ジョブが対象 Issue を見つけた場合でも、停止条件を満たさない限り実装しない運用が守られているか確認する。
 
 ## Open Blockers
 
@@ -56,7 +64,7 @@
 3. `docs/ai-development/goal.md`
 4. `docs/ai-development/progress.md`
 5. `docs/ai-development/automation-lock.md`
-6. `docs/ai-development/automation-lock.json`
+6. ChatGPT memory lock: `/workspace/memory/locks/roulette-schedule-lock.json`
 7. `docs/requirements.md`
 8. `docs/ai-development/requirements.md`
 9. `docs/ai-development/work-log.md`
@@ -65,6 +73,7 @@
 
 ## 更新ルール
 
+- 各ジョブは、作業開始前に ChatGPT 側メモリーのロックを確認する。
 - 各ジョブは、作業終了時にこの文書の「現在地」「次にやる作業」を必要に応じて更新する。
 - 詳細な作業履歴、停止理由、検証結果は `docs/ai-development/work-log.md` に記録する。
 - 仕様判断はこの文書に確定事項として書かず、`docs/requirements.md` または `docs/ai-development/requirements.md` のどちらが適切か判断する。
