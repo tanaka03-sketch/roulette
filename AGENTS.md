@@ -8,17 +8,24 @@ Before starting work, read these in order:
 
 1. `AGENTS.md`
 2. `docs/ai-development/agent-instructions.md`
-3. `docs/requirements.md`
-4. `docs/ai-development/requirements.md`
-5. `docs/ai-development/work-log.md`
-6. `docs/ai-development/job-instructions/{job}.md`
-7. Related Issue, PR, handover, or design notes
+3. `docs/ai-development/goal.md`
+4. `docs/ai-development/progress.md`
+5. `docs/ai-development/automation-lock.md`
+6. `docs/ai-development/automation-lock.json`
+7. `docs/requirements.md`
+8. `docs/ai-development/requirements.md`
+9. `docs/ai-development/work-log.md`
+10. `docs/ai-development/job-instructions/{job}.md`
+11. Related Issue, PR, handover, or design notes
 
 ## Source Of Truth
 
 - Product requirements source of truth: `docs/requirements.md`
 - AI development operations files: `docs/ai-development/`
 - AI operation notes, open questions, Slack confirmation logs, and job-specific clarifications: `docs/ai-development/requirements.md`
+- AI autonomous development goal: `docs/ai-development/goal.md`
+- Current progress and next actions: `docs/ai-development/progress.md`
+- Schedule pseudo-lock procedure and state: `docs/ai-development/automation-lock.md` and `docs/ai-development/automation-lock.json`
 - Do not duplicate product requirements. If a product requirement changes, update `docs/requirements.md` first or record the required human confirmation.
 
 ## Repository Assumptions
@@ -27,6 +34,16 @@ Before starting work, read these in order:
 - Initial version has no authentication, no server-side persistence, no external API integration, and is for a single user.
 - State persistence uses `localStorage`.
 - Node.js follows `.nvmrc` and README guidance. Current recommended major version is Node.js 22.
+
+## Scheduled Job Lock Rule
+
+Every scheduled job must check `docs/ai-development/automation-lock.json` before doing work.
+
+- If the lock is active and not expired, stop the job and report that a previous job is still running.
+- If the lock is free or expired, acquire it by updating the lock file with the current blob SHA.
+- If the update conflicts, treat another job as the lock owner and stop.
+- Release the lock only after updating the relevant progress or work-log notes.
+- If a job cannot safely update the lock, it must not proceed with GitHub changes.
 
 ## Start Conditions
 
@@ -89,4 +106,4 @@ For mobile UI changes, also follow README `Mobile verification` checks around 39
 
 ## End Of Work
 
-At the end of each work session, update `docs/ai-development/work-log.md` with the job type, references, changes, verification, blockers, human-confirmation items, and next actions.
+At the end of each work session, update `docs/ai-development/progress.md` when the current state or next action changes, and update `docs/ai-development/work-log.md` with the job type, references, changes, verification, blockers, human-confirmation items, and next actions.
