@@ -2,6 +2,7 @@
 
 - 対象リポジトリ: `tanaka03-sketch/roulette`
 - 作成日: 2026-06-22
+- 最終更新日: 2026-06-23
 - ステータス: Active
 
 ## 目的
@@ -32,7 +33,8 @@
 目指す状態:
 
 - すべてのジョブが `AGENTS.md`、この文書、`docs/ai-development/progress.md`、`docs/ai-development/work-log.md` を読んでから動く。
-- 作業中のジョブがある場合、後続ジョブは疑似ロックを見て安全に停止する。
+- 作業中のジョブがある場合、後続ジョブは ChatGPT 側メモリー `/workspace/memory/locks/roulette-schedule-lock.json` を見て安全に停止する。
+- GitHub 側 `docs/ai-development/automation-lock.json` は非推奨マーカーとしてのみ扱い、ライブなロック状態として使わない。
 - 実装ジョブは、設計確定済み、未確定事項なし、Open ブロッカーなし、小さく分解済み、検証方法明確な Issue だけを扱う。
 - 外部情報の検索結果は、根拠 URL と採用判断を残してから運用改善へ反映する。
 - `docs/requirements.md` と AI 運用文書の役割分担を崩さない。
@@ -54,11 +56,11 @@
 - OpenAI Agents orchestration は、役割分担と handoff / tools の考え方として参照: https://developers.openai.com/api/docs/guides/agents/orchestration
 - Anthropic の Building Effective Agents は、単純で組み合わせ可能なワークフロー、評価ループ、段階的な自律化の考え方として参照: https://www.anthropic.com/research/building-effective-agents
 - Anthropic の evals 解説は、エージェント運用を継続改善する評価観点として参照: https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents
-- GitHub Actions concurrency は、同時実行制御の公式仕様として参照。ただし ChatGPT スケジュール側では GitHub ファイルの疑似ロックも併用する: https://docs.github.com/en/actions/concepts/workflows-and-actions/concurrency
+- GitHub Actions concurrency は、同時実行制御の公式仕様として参照。ただし ChatGPT スケジュール側では ChatGPT 側メモリーのロックを優先する: https://docs.github.com/en/actions/concepts/workflows-and-actions/concurrency
 
 ## 成功条件
 
-- 定期実行が、目的、進捗、ロック状態、正本、ジョブ別指示を毎回読み込む。
+- 定期実行が、目的、進捗、ChatGPT 側メモリーロック、正本、ジョブ別指示を毎回読み込む。
 - 作業結果が `docs/ai-development/progress.md` と `docs/ai-development/work-log.md` に蓄積される。
 - Open ブロッカー、回答待ち、高リスク判断がある場合に実装が止まる。
 - 改善提案が Issue / PR / 文書更新に変換され、検証結果まで追える。
