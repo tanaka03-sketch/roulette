@@ -1,10 +1,8 @@
 {
+  "deprecated": true,
   "locked": false,
-  "owner": null,
-  "job": null,
-  "runId": null,
-  "startedAt": null,
-  "expiresAt": null,
-  "updatedAt": "2026-06-22T02:45:00Z",
-  "note": "Initial unlocked state."
+  "status": "deprecated-marker-only",
+  "activeLockState": "ChatGPT memory: /workspace/memory/locks/roulette-schedule-lock.json",
+  "updatedAt": "2026-06-22T23:08:00Z",
+  "note": "Do not use this GitHub file as live lock state. Scheduled jobs must read and update the ChatGPT memory lock instead."
 }
