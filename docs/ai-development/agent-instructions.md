@@ -103,7 +103,7 @@ Gate:
 
 - 頻度: 1 時間ごと。
 - 対象: 人間承認事項、Slack 確認、回答待ち、回答反映、Issue Intake / Scheduled Maintenance / Spec Gate / Storage Conflict Guard の確認作業。
-- Slack はこの文書の Slack 不明点確認ループを使う。投稿可能な場合は `C0BCAL9FFSP` に 1 投稿 1 質問で投稿し、投稿不可または投稿失敗の場合は `回答待ち` として記録する。
+- Slack はこの文書の Slack 不明点確認ループを使う。投稿可能な場合は `C0BCAL9FFSP` に日本語で 1 投稿 1 質問を投稿し、質問には選択肢を添える。投稿不可または投稿失敗の場合は `回答待ち` として記録する。
 - CAB / production readiness の最終判断、本番操作、破壊的変更、権限変更、認証・認可・secret・個人情報に関わる変更は勝手に判断しない。
 
 ### 共通手順
@@ -143,7 +143,8 @@ Gate:
 不明点が実装判断、設計判断、検証判断に影響する場合は推測しません。
 
 - Slack 確認先は `https://app.slack.com/client/T0B0KABNVNX/C0BCAL9FFSP`（`channel_id: C0BCAL9FFSP`）です。
-- Slack 投稿環境がある場合は、`C0BCAL9FFSP` に 1 回につき 1 問だけ投稿します。
+- Slack 投稿環境がある場合は、`C0BCAL9FFSP` に日本語で 1 回につき 1 問だけ投稿します。
+- Slack の質問には、相手が選択肢で回答できるように、簡潔な番号付きまたはラベル付きの選択肢を必ず添えます。選択肢だけで判断を覆いきれない場合は、自由記述 / その他の選択肢も含めます。
 - Slack 投稿環境がない場合、または投稿に失敗した場合は、質問文案を `docs/ai-development/work-log.md`、関連 Issue、必要に応じて `docs/ai-development/requirements.md` に `回答待ち` として記録します。
 - 回答後は、実装より先に該当する requirements / design / instruction / handover / work-log を更新します。
 
