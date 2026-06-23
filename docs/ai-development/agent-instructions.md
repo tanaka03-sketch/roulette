@@ -80,20 +80,33 @@ Gate:
 - Spec Gate
 - Storage Conflict Guard
 
-レビュー、triage、設計修正、実装、検証は、別々の定期実行ではなく、選ばれた 1 タスクの中で上記フロー、ループ、gate として扱います。
+レビュー、triage、設計修正、実装、検証は、親フロー、GitHub Development Loop、gate の中で扱います。旧 12 本の個別スケジュール名を開発サイクルとして復活させません。
 
 ## スケジュール運用
 
-親方針に合わせ、登録する scheduled run はタスク処理用の 1 本だけです。旧 12 本の個別スケジュールは開発サイクルとして扱いません。
+ユーザー承認済みの ChatGPT scheduled run は、実装を進める短周期サイクルと、レビュー・人間確認を行う 1 時間サイクルの 2 本です。どちらも親リポジトリに存在する loop / gate だけを使い、旧 12 本の個別スケジュールは開発サイクルとして扱いません。
 
-単一サイクル:
+### 実装短周期サイクル
+
+- 頻度: ChatGPT スケジュールで利用できる最短間隔。現時点では 15 分ごと。
+- 対象: Implementation PR / CI Failure / Spec Gate / Storage Conflict Guard。
+- 実装は、設計確定済み、未確定事項なし、Open ブロッカーなし、小さく分解済み、検証方法明確、レビュー指摘 triage 済みの場合だけ進める。
+
+### レビュー・人間確認 1 時間サイクル
+
+- 頻度: 1 時間ごと。
+- 対象: Review Triage / Scheduled Maintenance / Issue Intake / Spec Gate / Storage Conflict Guard。
+- 人間確認が必要な事項、Slack 回答待ち、CAB / production readiness の最終判断は、実装へ流さず記録して止める。
+
+### 共通手順
 
 1. ChatGPT 側メモリーのロックを確認する。
-2. ロック取得後、`docs/ai-development/progress.md` の「次にやる作業」から最優先タスクを 1 件だけ選ぶ。
-3. 親 playbook に沿って、Issue Intake、Spec Gate、Storage Conflict Guard、Implementation PR、Review Triage、CI Failure、Scheduled Maintenance のいずれかに分類する。
-4. そのループで許可された最小単位だけ実行する。
-5. 結果、停止理由、検証、次アクションを `progress.md` と `work-log.md` に残す。
-6. ロックを解放する。
+2. ロック取得後、`docs/ai-development/progress.md` の「次にやる作業」から、そのサイクルで扱える最優先タスクを 1 件だけ選ぶ。
+3. 親 playbook に沿って、許可された loop / gate のいずれかに分類する。
+4. その loop / gate で許可された最小単位だけ実行する。
+5. 不明点が設計、実装、検証に影響する場合は、この文書の Slack 不明点確認ループを使う。
+6. 結果、停止理由、検証、次アクションを `progress.md` と `work-log.md` に残す。
+7. ロックを解放する。
 
 ## ロック運用
 
@@ -101,7 +114,7 @@ Gate:
 
 推奨ロック: `/workspace/memory/locks/roulette-schedule-lock.json`
 
-ロック取得、進捗更新、ロック解放のいずれかに失敗した場合は追加変更を行いません。
+2 本の active schedule は同じロックを共有します。ロック取得、進捗更新、ロック解放のいずれかに失敗した場合は追加変更を行いません。
 
 ## 停止条件
 
