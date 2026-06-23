@@ -377,3 +377,56 @@ Open Issue のうち、GitHub 管理画面でしか完了確認できない `mai
 ### 次アクション
 
 - 次回の人間確認 / Slack 1 時間サイクルで、Slack 質問が日本語かつ選択肢付きで作成されるか確認する。
+
+## 2026-06-24 人間確認 / Slack 1 時間サイクル初回確認
+
+- ジョブ種別: 人間確認 / Slack 確認 / Scheduled Maintenance / Spec Gate / Storage Conflict Guard
+- 対象リポジトリ: `tanaka03-sketch/roulette`
+- 対象事項: PR #52 `docs: switch schedule lock to ChatGPT memory`
+- Slack 確認先: `https://app.slack.com/client/T0B0KABNVNX/C0BCAL9FFSP` / `channel_id: C0BCAL9FFSP`
+
+### 確認した事項
+
+- ChatGPT 側メモリーロック `/workspace/memory/locks/roulette-schedule-lock.json` が unlocked であることを確認し、ロック取得後に作業した。
+- `AGENTS.md`、`docs/ai-development/agent-instructions.md`、`docs/ai-development/goal.md`、`docs/ai-development/progress.md`、`docs/ai-development/work-log.md`、`docs/requirements.md`、`docs/ai-development/requirements.md` を確認した。
+- `docs/requirements.md` と `docs/ai-development/requirements.md` には、今回新たに製品仕様へ反映すべき回答済み事項は見つからなかった。
+- 最優先事項は PR #52 の扱いに関する回答待ち 1 件のみと判断した。複数の質問は扱っていない。
+- 指定 Slack チャンネルの直近メッセージを確認し、PR #52 の扱いに対する回答や同一質問の既存投稿は見つからなかった。
+
+### Slack 投稿
+
+Slack 投稿を実施した。
+
+理由: PR #52 は current `main` と差分がずれており、このまま merge すると古いスケジュール記述や旧ロックファイル扱いが戻る可能性がある。close / rebase / other のどれで扱うかは運用判断であり、人間回答なしでは次の処理へ進めないため。
+
+投稿内容: 日本語、1 投稿 1 質問、番号付き選択肢付き。
+
+投稿リンク: https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782258456427199
+
+### 回答待ち
+
+- PR #52 を `close` / `rebase` / `other` のどれで扱うか。Slack 投稿への返信を待つ。
+
+### 更新したファイル / Issue / PR
+
+- `docs/ai-development/progress.md`: PR #52 の Slack 投稿と回答待ち状態を記録。
+- `docs/ai-development/work-log.md`: この実行ログを追記。
+- Issue / PR への追加コメントは未実施。今回は Slack 投稿と文書記録に限定した。
+
+### Open Blockers
+
+- PR #52 は merge as-is blocked。回答待ちが残るため、PR #52 の処理と関連実装は進めない。
+
+### 検証
+
+文書更新と Slack 投稿のみのため、コード検証は未実行です。
+
+- `npm run typecheck`: 未実行（コード変更なし）
+- `npm test`: 未実行（コード変更なし）
+- `npm run build`: 未実行（コード変更なし）
+
+### 次アクション
+
+- Slack 投稿への回答を確認し、PR #52 を close / rebase / other の決定に従って処理する。
+- 回答が得られた場合は、実装より先に `docs/ai-development/progress.md`、`docs/ai-development/work-log.md`、必要に応じて `docs/ai-development/requirements.md` または関連 Issue / PR へ反映する。
+- 回答待ちが続く場合は、通常報告や既知事項の再通知を Slack へ繰り返さず、ChatGPT 内報告と記録に留める。
