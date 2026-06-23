@@ -29,6 +29,7 @@
 | Slack 返信権限 | チャンネル内で回答できる人全員に方向性回答権限がある前提。権限境界は Slack チャンネル側で担保 |
 | レビュー 1 時間サイクル初回確認 | 完了。PR #52 を Review Triage / Spec Gate / Storage Conflict Guard で分類し、merge as-is blocked として記録済み |
 | 実装短周期サイクル初回確認 | 完了。Open blocker / 回答待ちにより実装停止。コード変更なし |
+| 人間確認 / Slack 1 時間サイクル初回確認 | 完了。PR #52 の扱いを 1 問に絞って Slack 投稿し、回答待ちとして記録済み |
 
 ## 2026-06-22 に実施した作業
 
@@ -77,12 +78,16 @@
 - 選択対象は PR #52 の扱いに関する回答待ち状態のみ。Open blocker / 回答待ちが残るため、Implementation PR / CI Failure の実装には進まなかった。
 - `docs/requirements.md` と `docs/ai-development/requirements.md` には製品実装を新たに止める Open blocker は見つからなかったが、`progress.md` の PR #52 blocker が実装停止条件に該当することを確認した。
 - Slack 投稿は行っていない。新しい判断材料ではなく、既に人間確認 / Slack サイクルへ渡されている PR #52 の回答待ちを再確認しただけのため。
+- 人間確認 / Slack 1 時間サイクルで、指定チャンネル `C0BCAL9FFSP` の直近メッセージを確認し、PR #52 の扱いに関する回答や同一質問の既存投稿がないことを確認した。
+- PR #52 はこのまま merge すると旧スケジュール記述や旧ロックファイル扱いが戻る可能性があり、運用判断を進めるための新しい人間回答が必要なため、Slack 投稿条件を満たすと判断した。
+- Slack に日本語で 1 投稿 1 質問、番号付き選択肢付きで投稿した。投稿リンク: https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782258456427199
+- 今回は回答反映は未実施。回答待ちが残るため、PR #52 の処理と実装は引き続き停止する。
 
 ## 次にやる作業
 
-1. 人間確認 / Slack 1 時間サイクルで、PR #52 を `close` / `rebase` / `other` のどれで扱うか確認する。これは新しい判断材料が必要なため Slack 投稿対象になり得る。
+1. Slack 投稿への回答を待ち、PR #52 を `close` / `rebase` / `other` のどれで扱うかを確定する。
 2. 人間回答後、PR #52 を close / rebase / other の決定に従って処理し、回答待ちと Open blocker を解消する。
-3. 初回の人間確認 / Slack 1 時間サイクルで、Slack 投稿条件を満たす新しい判断材料がある場合だけ `C0BCAL9FFSP` へ投稿し、それ以外は ChatGPT 内報告と記録に留められるか確認する。
+3. 回答が得られた場合は、実装より先に `docs/ai-development/progress.md`、`docs/ai-development/work-log.md`、必要に応じて `docs/ai-development/requirements.md` または関連 Issue / PR へ反映する。
 4. 親リポジトリに adoption / templates パスが追加または移動された場合、`roulette` 側の文書とテンプレートを再確認する。
 5. 旧 12 ジョブ名が active schedule や開発サイクルとして復活していないか、定期的に検索して確認する。
 6. 実装ジョブが対象 Issue を見つけた場合でも、Spec Gate と Storage Conflict Guard を満たさない限り実装しない運用が守られているか確認する。
@@ -93,7 +98,7 @@ PR #52 は current `main` と差分がずれており、このまま merge す�
 
 ## 回答待ち
 
-- PR #52 を close / rebase / other のどれで扱うか。人間確認 / Slack サイクルで確認する。Slack で回答する場合、チャンネル内で回答できる人全員に方向性回答権限がある前提で扱う。
+- PR #52 を close / rebase / other のどれで扱うか。Slack に確認を投稿済み: https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782258456427199。チャンネル内で回答できる人全員に方向性回答権限がある前提で扱う。
 
 ## 読み込み順
 
