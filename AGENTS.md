@@ -80,16 +80,17 @@ Gates used by the cycle:
 - Spec Gate
 - Storage Conflict Guard
 
-Do not restore or use the old 12-job scheduled cycle. Review, triage, design update, implementation, and verification are handled as work inside the parent flow and loop types above, not as separate development-cycle definitions.
+Do not restore or use the old 12-job scheduled cycle. Review, triage, design update, implementation, verification, human check, and Slack handling are handled as work inside the parent flow and loop types above, not as separate development-cycle definitions.
 
 ## Scheduled Run Policy
 
-The active ChatGPT schedules are split into two user-approved cycles while still using only the parent repository loop and gate definitions.
+The active ChatGPT schedules are split into three user-approved cycles while still using only the parent repository loop and gate definitions.
 
 1. Implementation fast cycle: run at the shortest available interval supported by ChatGPT schedules, currently every 15 minutes. This cycle may only handle Implementation PR, CI Failure, Spec Gate, and Storage Conflict Guard work.
-2. Review and human-check cycle: run once per hour. This cycle may only handle Review Triage, Scheduled Maintenance, Issue Intake, Spec Gate, and Storage Conflict Guard work.
+2. Review cycle: run once per hour. This cycle may handle Code Review, Review Triage, Spec Gate, and Storage Conflict Guard work. It records human-check or Slack questions for the human-check/Slack cycle instead of guessing or sending them directly into implementation.
+3. Human-check and Slack cycle: run once per hour. This cycle handles human approval items, Slack questions, answer-waiting records, and applying received answers to requirements, AI-operation notes, work logs, or handover before implementation.
 
-Both schedules must:
+All active schedules must:
 
 1. Check the ChatGPT-side memory lock described in `docs/ai-development/automation-lock.md`.
 2. Read `docs/ai-development/progress.md` and select exactly one highest-priority task for that cycle.
@@ -134,7 +135,7 @@ Stop and record the reason in `docs/ai-development/work-log.md` when any of thes
 If an unknown affects implementation, design, or verification, do not guess.
 
 - If Slack posting is available, ask exactly one question per post.
-- If Slack posting is unavailable, record the proposed question as `回答待ち` in `docs/ai-development/work-log.md`, the related Issue, and when relevant `docs/ai-development/requirements.md`.
+- If Slack posting is unavailable or the Slack destination is not known, record the proposed question as `回答待ち` in `docs/ai-development/work-log.md`, the related Issue, and when relevant `docs/ai-development/requirements.md`.
 - When an answer arrives, update the applicable requirements, design, instruction, handover, or work-log document before implementation.
 
 ## Human Approval Required
