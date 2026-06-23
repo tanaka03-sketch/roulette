@@ -311,3 +311,37 @@ Open Issue のうち、GitHub 管理画面でしか完了確認できない `mai
 
 - 初回のレビュー 1 時間サイクルで、レビュー指摘が分類・記録され、人間確認 / Slack 事項が分離されるか確認する。
 - 初回の人間確認 / Slack 1 時間サイクルで、Slack 投稿または `回答待ち` 記録、回答反映、ロック解放が通るか確認する。
+
+## 2026-06-23 Slack 確認先チャンネル固定
+
+- ジョブ種別: スケジュール運用変更 / Slack 確認先設定
+- 対象リポジトリ: `tanaka03-sketch/roulette`
+- Slack 確認先: `https://app.slack.com/client/T0B0KABNVNX/C0BCAL9FFSP` / `channel_id: C0BCAL9FFSP`
+
+### 実施内容
+
+- 人間確認 / Slack 1 時間サイクルのプロンプトに、Slack 確認先 `C0BCAL9FFSP` を明記。
+- レビュー 1 時間サイクルのプロンプトに、Slack 確認が必要な事項は `C0BCAL9FFSP` へ渡す質問として記録することを明記。
+- 実装短周期サイクルのプロンプトに、未確定事項は推測せず `C0BCAL9FFSP` へ確認する質問として記録することを明記。
+- `AGENTS.md` と `docs/ai-development/agent-instructions.md` の Slack 不明点確認ループに、固定チャンネルと `channel_id` を追加。
+- `docs/ai-development/progress.md` に Slack 確認先を記録。
+
+### Open Blockers
+
+現時点ではありません。
+
+### 回答待ち
+
+現時点ではありません。
+
+### 検証
+
+文書・スケジュールプロンプト更新のみのため、コード検証は未実行です。
+
+- `npm run typecheck`: 未実行（コード変更なし）
+- `npm test`: 未実行（コード変更なし）
+- `npm run build`: 未実行（コード変更なし）
+
+### 次アクション
+
+- 次回の人間確認 / Slack 1 時間サイクルで、Slack connector が使える場合に `C0BCAL9FFSP` へ 1 投稿 1 質問で投稿できるか確認する。
