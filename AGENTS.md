@@ -12,39 +12,36 @@ Before starting work, read these in order:
 2. `docs/ai-development/agent-instructions.md`
 3. `docs/requirements.md`
 4. `docs/ai-development/requirements.md`
-5. `docs/ai-development/work-log.md`
-6. `docs/ai-development/job-instructions/{job}.md`
-7. Related Issue, PR, handover, or design notes
+5. `docs/ai-development/progress.md`
+6. `docs/ai-development/work-log.md`
+7. Related Issue, PR, handover, design notes, and the parent playbook needed for the selected loop
 
-For operations review or future scheduled-job preparation, also read:
-
-- `docs/ai-development/goal.md`
-- `docs/ai-development/progress.md`
-- `docs/ai-development/automation-lock.md`
+For scheduled maintenance or automation work, also read `docs/ai-development/goal.md` and `docs/ai-development/automation-lock.md`.
 
 ## Source Of Truth
 
 - Product requirements source of truth: `docs/requirements.md`
 - AI development operations files: `docs/ai-development/`
-- AI operation notes, open questions, Slack confirmation logs, and job-specific clarifications: `docs/ai-development/requirements.md`
-- Current operation progress and next actions: `docs/ai-development/progress.md`
+- AI operation notes, open questions, Slack confirmation logs, and job clarifications: `docs/ai-development/requirements.md`
+- Current operation progress and next prioritized work: `docs/ai-development/progress.md`
 - Do not duplicate product requirements. If a product requirement changes, update `docs/requirements.md` first or record the required human confirmation.
 
 ## Parent Playbook References
 
-Use the parent repository as read-only reference material. Prefer the files that actually exist in the parent repository:
+Use the parent repository as read-only reference material. Current parent cycle references are:
 
 - `README.md`
 - `playbooks/automated-development-flow.md`
 - `playbooks/github-development-loop.md`
 - `playbooks/review-finding-triage.md`
-- `playbooks/github-automation-setup.md`
+- `playbooks/spec-gate.md`
+- `playbooks/storage-conflict-guard.md`
 - `operations/scheduled-run-lock.md`
 - `templates/github-issue/ai-development-task.md`
 - `templates/github-issue/review-finding.md`
 - `templates/github-pr/pull-request-template.md`
 
-If an older adoption or template path is missing, record that fact and do not invent a replacement rule.
+If an adoption or template path is missing in the parent repository, record that fact and do not invent a replacement rule.
 
 ## Repository Assumptions
 
@@ -53,19 +50,50 @@ If an older adoption or template path is missing, record that fact and do not in
 - State persistence uses `localStorage`.
 - Node.js follows `.nvmrc` and README guidance. Current recommended major version is Node.js 22.
 
-## Operation Scope
+## Development Cycle
 
-Follow the parent repository policy: do not treat the 12 scheduled jobs as currently active automation unless the user explicitly approves registration or re-enablement.
+Follow only the development cycle that exists in the parent repository.
 
-Initial and maintenance work should stay within safe operations:
+Parent flow:
 
-- Issue triage
-- Issue comments
-- label review or label updates when appropriate
-- README / `docs/ai-development/` procedure updates
-- handover and work-log updates
+1. Issue
+2. Orchestrator
+3. Research
+4. Design Review
+5. Implementation
+6. Code Review
+7. Review Triage
+8. Fix Implementation
+9. Test & Quality
+10. Handover
 
-Do not create PRs, perform product-code changes, run production operations, make destructive changes, change permissions, or make final production-readiness decisions from scheduled automation unless the user explicitly approves that scope.
+GitHub Development Loop types:
+
+- Issue Intake
+- Implementation PR
+- Review Triage
+- CI Failure
+- Scheduled Maintenance
+
+Gates used by the cycle:
+
+- Spec Gate
+- Storage Conflict Guard
+
+Do not restore or use the old 12-job scheduled cycle. Review, triage, design update, implementation, and verification are handled as work inside the parent flow and loop types above, not as separate scheduled runs.
+
+## Scheduled Run Policy
+
+The parent repository currently allows one task-processing scheduled run only. That run must:
+
+1. Check the ChatGPT-side memory lock described in `docs/ai-development/automation-lock.md`.
+2. Read `docs/ai-development/progress.md` and select exactly one highest-priority task.
+3. Classify that task into one parent loop or gate.
+4. Execute only the smallest safe unit allowed by that loop.
+5. Record the result, stopped reason, verification, and next task in `docs/ai-development/progress.md` and `docs/ai-development/work-log.md`.
+6. Release the memory lock.
+
+GitHub-side lock JSON files are not lock sources.
 
 ## Start Conditions
 
@@ -78,7 +106,7 @@ Before implementation, confirm:
 - Security, permission, personal information, and input validation impacts are understood.
 - Review findings have been triaged before implementation.
 
-Implementation jobs may only work on Issues that are design-confirmed, unblocked, small, and have clear verification.
+Implementation may only work on Issues that are design-confirmed, unblocked, small, and have clear verification.
 
 ## Stop Conditions
 
@@ -92,6 +120,8 @@ Stop and record the reason in `docs/ai-development/work-log.md` when any of thes
 - Security, permissions, personal information, or input validation decisions are undecided.
 - Review feedback has not been triaged.
 - The work requires unapproved schedule registration, PR creation, product-code change, production operation, destructive change, data migration, or permission change.
+- The memory lock cannot be acquired or released.
+- A write target has a stale snapshot or duplicate-operation risk.
 
 ## Slack Question Loop
 
@@ -108,13 +138,13 @@ Human approval is required for schedule registration or re-enablement, productio
 ## Prohibited Operations
 
 - Do not delete or replace `docs/requirements.md` as the requirements source of truth.
-- Do not move or delete many existing documents in one change.
+- Do not move or delete many existing product documents in one change.
 - Do not implement while open blockers or undecided issues remain.
 - Do not send untriaged review findings directly into implementation.
 - Do not guess unclear design, implementation, or verification decisions.
 - Do not expand the initial scope into authentication, external APIs, or server persistence without explicit requirements.
 - Do not edit the parent repository `tanaka03-sketch/ai-development-operations`; it is read-only reference material.
-- Do not register or re-enable scheduled jobs without explicit user approval.
+- Do not restore the old 12-job scheduled cycle.
 
 ## Verification
 
@@ -130,4 +160,4 @@ For mobile UI changes, also follow README `Mobile verification` checks around 39
 
 ## End Of Work
 
-At the end of each work session, update `docs/ai-development/progress.md` when the current state or next action changes, and update `docs/ai-development/work-log.md` with the job type, references, changes, verification, blockers, human-confirmation items, and next actions.
+At the end of each work session, update `docs/ai-development/progress.md` when the current state or next action changes, and update `docs/ai-development/work-log.md` with the loop type, references, changes, verification, blockers, human-confirmation items, and next actions.
