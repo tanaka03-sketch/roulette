@@ -2,99 +2,90 @@
 
 - 対象リポジトリ: `tanaka03-sketch/roulette`
 - 作成日: 2026-06-22
+- 最終更新日: 2026-06-23
 - ステータス: Active
-- 状態ファイル: `docs/ai-development/automation-lock.json`
+- 親参照: `tanaka03-sketch/ai-development-operations:operations/scheduled-run-lock.md`
 
 ## 目的
 
-ChatGPT スケジュールが 5 分おきに複数ジョブを実行する場合、前のジョブがまだ作業中のまま後続ジョブが走ると、Issue、PR、進捗ファイル、作業ログが競合する可能性があります。
+将来 ChatGPT スケジュールを有効化する場合、前のジョブが作業中のまま後続ジョブが走ると、Issue、PR、進捗ファイル、作業ログが競合する可能性があります。
 
-そのため、GitHub 上の `docs/ai-development/automation-lock.json` を疑似ロックとして使い、先行ジョブが作業中のときは後続ジョブを停止します。
+親リポジトリの方針に合わせ、ロック本体は GitHub ファイルではなく ChatGPT 側メモリーに置きます。
 
-## 基本方針
+## 現在の扱い
 
-- すべてのスケジュールジョブは、作業前にロック状態を読む。
-- `locked` が `true` で、`expiresAt` が現在時刻より未来の場合は作業しない。
-- `locked` が `false`、または `expiresAt` を過ぎている場合だけロック取得を試みる。
-- ロック取得は GitHub contents API の現在 SHA を指定した更新で行う。
-- 更新時に SHA 競合が起きた場合は、他ジョブが先に取得したものとして停止する。
-- 作業終了時は、`progress.md` と `work-log.md` を更新してからロックを解放する。
+現時点では、親 README の方針に合わせて 12 本のスケジュールを有効運用しません。この文書は将来有効化する場合の手順メモです。
 
-## ロック状態ファイル
+`docs/ai-development/automation-lock.json` は過去の互換用ファイルとして残る場合がありますが、現在のロック判定元として使いません。
 
-`docs/ai-development/automation-lock.json` は次の構造を使います。
+## ロックの考え方
 
-```json
-{
-  "locked": false,
-  "owner": null,
-  "job": null,
-  "runId": null,
-  "startedAt": null,
-  "expiresAt": null,
-  "updatedAt": "2026-06-22T02:45:00Z",
-  "note": "Initial unlocked state."
-}
-```
+| 場所 | 用途 |
+| --- | --- |
+| ChatGPT 側メモリー `roulette-schedule-lock.json` | 現在作業中のスケジュールがあるかを判定するロック本体 |
+| `docs/ai-development/progress.md` | 前回までの作業、現在地、次アクションを確認・更新する |
+| `docs/ai-development/work-log.md` または `docs/ai-development/logs/` | 実行結果、停止理由、未確定事項を記録する |
+| `docs/ai-development/automation-lock.json` | 後方互換の参照ファイル。ロック判定には使わない |
 
-## 取得手順
+## 標準手順
 
-1. `docs/ai-development/automation-lock.json` を取得し、内容と blob SHA を確認する。
-2. `locked` が `true` で `expiresAt` が未来なら、後続ジョブは実行しない。
-3. 停止した場合は、可能なら `docs/ai-development/work-log.md` に「ロック中のためスキップ」と記録する。ただし記録更新も競合しそうな場合は、チャット出力のみでよい。
-4. ロック取得可能なら、次の内容へ更新する。
+### 1. 作業開始前に読む
+
+将来スケジュールを有効化した場合、定期実行エージェントは次を読む。
+
+1. `AGENTS.md`
+2. `docs/ai-development/agent-instructions.md`
+3. `docs/ai-development/goal.md`
+4. `docs/ai-development/progress.md`
+5. `docs/ai-development/automation-lock.md`
+6. ChatGPT 側メモリー `roulette-schedule-lock.json`
+
+### 2. ロック取得を判断する
+
+- メモリー側ロックが `locked: false` の場合だけ、作業開始前にロック取得を試みる。
+- メモリー側ロックが `locked: true` で `expires_at` が未来の場合は、先行スケジュールが作業中と判断し、作業を開始しない。
+- メモリー側ロックが `locked: true` で `expires_at` が過去の場合は、stale lock として扱い、直近の進捗と作業ログを確認してから判断する。
+- GitHub 側 `docs/ai-development/automation-lock.json` はロック判定に使わない。
+
+### 3. ロック取得時に書く内容
 
 ```json
 {
   "locked": true,
-  "owner": "ChatGPT schedule",
-  "job": "実行するジョブ名",
-  "runId": "スケジュール実行を識別できる値。なければ開始時刻",
-  "startedAt": "ISO-8601 UTC",
-  "expiresAt": "ISO-8601 UTC。原則 startedAt から 45 分後",
-  "updatedAt": "ISO-8601 UTC",
-  "note": "Working."
+  "owner": "schedule-name-or-run-id",
+  "purpose": "今回実行する作業の概要",
+  "started_at": "YYYY-MM-DDTHH:mm:ss+09:00",
+  "expires_at": "YYYY-MM-DDTHH:mm:ss+09:00",
+  "heartbeat_at": "YYYY-MM-DDTHH:mm:ss+09:00",
+  "progress_file": "tanaka03-sketch/roulette:docs/ai-development/progress.md",
+  "notes": "作業中",
+  "lock_source": "chatgpt-memory",
+  "updated_at": "YYYY-MM-DDTHH:mm:ss+09:00"
 }
 ```
 
-5. 更新が成功した場合だけ作業を進める。
-6. 更新が失敗した場合は、同時実行競合として停止する。
+### 4. 作業終了時
 
-## 解放手順
+作業が完了、失敗、中断のいずれであっても、まず `docs/ai-development/progress.md`、`docs/ai-development/work-log.md`、または `docs/ai-development/logs/` に結果を残します。
 
-作業終了時、または停止条件により終了する時は、`progress.md` と `work-log.md` を更新したあと、`automation-lock.json` を次の状態へ戻します。
+記録する内容:
 
-```json
-{
-  "locked": false,
-  "owner": null,
-  "job": null,
-  "runId": null,
-  "startedAt": null,
-  "expiresAt": null,
-  "updatedAt": "ISO-8601 UTC",
-  "note": "Released by the last completed job."
-}
-```
+- 実行したジョブ
+- 取得したメモリー側ロック
+- やった作業
+- 更新したファイル / Issue / PR
+- どこまでやったか
+- 次にやる作業
+- 停止理由または未確定事項
 
-## 期限切れロックの扱い
+その後、メモリー側ロックを `locked: false` に戻します。
 
-`expiresAt` を過ぎたロックは、前回ジョブが異常終了した可能性があるため、次のジョブが引き継いでよいです。ただし、作業前に `work-log.md` と直近 Issue / PR を確認し、前回の中途半端な更新がないかを確認します。
+## 失敗時の扱い
 
-期限切れロックを上書きした場合は、`work-log.md` に次を記録します。
-
-- 期限切れだったロックの `job`
-- `startedAt`
-- `expiresAt`
-- 引き継いだジョブ
-- 確認したファイル / Issue / PR
-
-## 人間による解除
-
-明らかにロックが残り続けている場合、人間が `automation-lock.json` を `locked: false` に戻してよいです。その場合も `work-log.md` に理由を残します。
+ロック取得、進捗更新、ロック解放のいずれかに失敗した場合は、追加の GitHub 変更を行わず、失敗内容と人間が確認すべき点を出力します。
 
 ## 注意点
 
-この方式は GitHub ファイル更新の SHA 競合を使った疑似ロックです。完全な分散ロックではありませんが、ChatGPT スケジュールの順次運用では、同時書き込みと後続ジョブの暴走を避けるための実用的な安全策として扱います。
-
-GitHub Actions 上のワークフローには、必要に応じて GitHub Actions の `concurrency` も併用します。ChatGPT スケジュール側の排他は、このファイルロックを優先します。
+- ChatGPT メモリーによる疑似ロックは、厳密な分散ロックではありません。
+- 重要な本番操作、データ移行、権限変更では、人間承認と別の排他制御を使います。
+- スケジュール登録または再有効化は、人間承認または追加方針が出てから行います。
