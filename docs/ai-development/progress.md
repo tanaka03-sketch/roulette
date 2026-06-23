@@ -2,7 +2,7 @@
 
 - 対象リポジトリ: `tanaka03-sketch/roulette`
 - 作成日: 2026-06-22
-- 最終更新日: 2026-06-23
+- 最終更新日: 2026-06-24
 - ステータス: Active
 
 ## 目的
@@ -25,6 +25,7 @@
 | GitHub ファイルロック JSON | 廃止。`docs/ai-development/automation-lock.json` は削除済み |
 | ChatGPT スケジュール | 旧 12 本は disabled / prompt なし。実装短周期 15 分、レビュー 1 時間、人間確認 / Slack 1 時間の 3 本を有効化済み |
 | Slack 確認先 | `https://app.slack.com/client/T0B0KABNVNX/C0BCAL9FFSP` / `channel_id: C0BCAL9FFSP` |
+| レビュー 1 時間サイクル初回確認 | 完了。PR #52 を Review Triage / Spec Gate / Storage Conflict Guard で分類し、merge as-is blocked として記録済み |
 
 ## 2026-06-22 に実施した作業
 
@@ -57,10 +58,18 @@
 - Slack 不明点確認は `AGENTS.md` と `docs/ai-development/agent-instructions.md` のルールを使い、Slack 投稿可能時は 1 投稿 1 質問、不可または送信先不明の場合は `回答待ち` として記録する方針を明記した。
 - Slack 確認先を `https://app.slack.com/client/T0B0KABNVNX/C0BCAL9FFSP` / `channel_id: C0BCAL9FFSP` に固定し、3 本の active schedule と運用指示へ反映した。
 
+## 2026-06-24 に実施した作業
+
+- レビュー 1 時間サイクルで、メモリーロック取得、1 タスク選択、Review Triage / Spec Gate / Storage Conflict Guard 分類、記録、ロック解放の流れを確認した。
+- 選択対象は PR #52 `docs: switch schedule lock to ChatGPT memory` のみ。複数タスクは扱っていない。
+- PR #52 は current `main` より古い運用記述を含み、merge as-is は `blocked` と分類した。
+- PR #52 に append-only コメントで operation ID と finding fingerprint 付きのレビュー分類を記録した。
+- 人間確認 / Slack サイクルへ、PR #52 を close / rebase / other のどれで扱うかという質問案を渡した。レビューサイクルでは Slack 送信していない。
+
 ## 次にやる作業
 
-1. 初回の実装短周期サイクルで、メモリーロック取得、1 タスク選択、progress / work-log 更新、ロック解放が通るか確認する。
-2. 初回のレビュー 1 時間サイクルで、レビュー指摘が実装へ直行せず分類・記録されるか確認する。
+1. 人間確認 / Slack 1 時間サイクルで、PR #52 を `close` / `rebase` / `other` のどれで扱うか確認する。
+2. 初回の実装短周期サイクルで、メモリーロック取得、1 タスク選択、progress / work-log 更新、ロック解放が通るか確認する。
 3. 初回の人間確認 / Slack 1 時間サイクルで、`C0BCAL9FFSP` への Slack 投稿または `回答待ち` 記録、回答反映、ロック解放が通るか確認する。
 4. 親リポジトリに adoption / templates パスが追加または移動された場合、`roulette` 側の文書とテンプレートを再確認する。
 5. 旧 12 ジョブ名が active schedule や開発サイクルとして復活していないか、定期的に検索して確認する。
@@ -68,11 +77,11 @@
 
 ## Open Blockers
 
-現時点で、この運用整備に対する Open ブロッカーはありません。
+PR #52 は current `main` と差分がずれており、このまま merge すると古いスケジュール記述や旧ロックファイル扱いが戻る可能性があるため、merge as-is は blocked とする。
 
 ## 回答待ち
 
-現時点の回答待ちはありません。
+- PR #52 を close / rebase / other のどれで扱うか。人間確認 / Slack サイクルで確認する。
 
 ## 読み込み順
 
