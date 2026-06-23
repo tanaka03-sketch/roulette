@@ -25,6 +25,8 @@
 | GitHub ファイルロック JSON | 廃止。`docs/ai-development/automation-lock.json` は削除済み |
 | ChatGPT スケジュール | 旧 12 本は disabled / prompt なし。実装短周期 15 分、レビュー 1 時間、人間確認 / Slack 1 時間の 3 本を有効化済み |
 | Slack 確認先 | `https://app.slack.com/client/T0B0KABNVNX/C0BCAL9FFSP` / `channel_id: C0BCAL9FFSP` |
+| Slack 投稿方針 | 新しい判断材料があり人間回答が必要な時だけ投稿。毎時サイクルは通常 ChatGPT 内報告と記録中心 |
+| Slack 返信権限 | チャンネル内で回答できる人全員に方向性回答権限がある前提。権限境界は Slack チャンネル側で担保 |
 | レビュー 1 時間サイクル初回確認 | 完了。PR #52 を Review Triage / Spec Gate / Storage Conflict Guard で分類し、merge as-is blocked として記録済み |
 
 ## 2026-06-22 に実施した作業
@@ -65,12 +67,17 @@
 - PR #52 は current `main` より古い運用記述を含み、merge as-is は `blocked` と分類した。
 - PR #52 に append-only コメントで operation ID と finding fingerprint 付きのレビュー分類を記録した。
 - 人間確認 / Slack サイクルへ、PR #52 を close / rebase / other のどれで扱うかという質問案を渡した。レビューサイクルでは Slack 送信していない。
+- ユーザー指示により、Slack 投稿を「新しい判断材料があり、人間回答なしでは設計・実装・検証・運用判断を進められない時だけ」に限定した。
+- 毎時サイクルの通常報告、進捗確認、既知事項の再通知、単なる問題なし報告は Slack ではなく ChatGPT 内報告と `progress` / `work-log` 記録中心にする方針へ変更した。
+- Slack で方向性を決める返信権限は、チャンネル側の参加・投稿権限で担保されるものとして扱い、チャンネル内で回答できる人全員にある前提へ変更した。
+- 実装短周期、レビュー、人間確認 / Slack の 3 本の active schedule prompt をこの方針へ更新した。
+- `AGENTS.md`、`docs/ai-development/agent-instructions.md`、`docs/ai-development/requirements.md` に同じ方針を反映した。
 
 ## 次にやる作業
 
-1. 人間確認 / Slack 1 時間サイクルで、PR #52 を `close` / `rebase` / `other` のどれで扱うか確認する。
+1. 人間確認 / Slack 1 時間サイクルで、PR #52 を `close` / `rebase` / `other` のどれで扱うか確認する。これは新しい判断材料が必要なため Slack 投稿対象になり得る。
 2. 初回の実装短周期サイクルで、メモリーロック取得、1 タスク選択、progress / work-log 更新、ロック解放が通るか確認する。
-3. 初回の人間確認 / Slack 1 時間サイクルで、`C0BCAL9FFSP` への Slack 投稿または `回答待ち` 記録、回答反映、ロック解放が通るか確認する。
+3. 初回の人間確認 / Slack 1 時間サイクルで、Slack 投稿条件を満たす新しい判断材料がある場合だけ `C0BCAL9FFSP` へ投稿し、それ以外は ChatGPT 内報告と記録に留められるか確認する。
 4. 親リポジトリに adoption / templates パスが追加または移動された場合、`roulette` 側の文書とテンプレートを再確認する。
 5. 旧 12 ジョブ名が active schedule や開発サイクルとして復活していないか、定期的に検索して確認する。
 6. 実装ジョブが対象 Issue を見つけた場合でも、Spec Gate と Storage Conflict Guard を満たさない限り実装しない運用が守られているか確認する。
@@ -81,7 +88,7 @@ PR #52 は current `main` と差分がずれており、このまま merge す�
 
 ## 回答待ち
 
-- PR #52 を close / rebase / other のどれで扱うか。人間確認 / Slack サイクルで確認する。
+- PR #52 を close / rebase / other のどれで扱うか。人間確認 / Slack サイクルで確認する。Slack で回答する場合、チャンネル内で回答できる人全員に方向性回答権限がある前提で扱う。
 
 ## 読み込み順
 
