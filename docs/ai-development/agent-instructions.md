@@ -4,42 +4,68 @@
 
 親リポジトリ `tanaka03-sketch/ai-development-operations` の README と playbook 方針を参照します。親リポジトリは読み取り専用で扱い、Issue 作成、PR 作成、ブランチ作成、ファイル更新は行いません。
 
+優先して参照する親リポジトリ資料:
+
+- `README.md`
+- `playbooks/automated-development-flow.md`
+- `playbooks/github-development-loop.md`
+- `playbooks/review-finding-triage.md`
+- `playbooks/github-automation-setup.md`
+- `operations/scheduled-run-lock.md`
+- `templates/github-issue/ai-development-task.md`
+- `templates/github-issue/review-finding.md`
+- `templates/github-pr/pull-request-template.md`
+
+指定された古い adoption / template パスが見つからない場合は、不足として `work-log` に記録し、見つかった親資料と `roulette` の既存正本を優先します。親リポジトリにない運用仕様は、`roulette` 側の独自ルールとして追加しません。
+
 ## 作業対象
 
 開発対象は `tanaka03-sketch/roulette` です。ユーザーが明示的に別リポジトリを指定しない限り、このリポジトリを対象にします。
 
 ## 必読順序
 
+通常作業では次の順で読みます。
+
 1. `AGENTS.md`
 2. `docs/ai-development/agent-instructions.md`
-3. `docs/ai-development/goal.md`
-4. `docs/ai-development/progress.md`
-5. `docs/ai-development/automation-lock.md`
-6. `docs/ai-development/automation-lock.json`
-7. `docs/requirements.md`
-8. `docs/ai-development/requirements.md`
-9. `docs/ai-development/work-log.md`
-10. `docs/ai-development/job-instructions/{job}.md`
-11. 関連 Issue / PR / handover
+3. `docs/requirements.md`
+4. `docs/ai-development/requirements.md`
+5. `docs/ai-development/work-log.md`
+6. `docs/ai-development/job-instructions/{job}.md`
+7. 関連 Issue / PR / handover
+
+運用レビューや将来のスケジュール準備では、作業選択の前に次も読みます。
+
+- `docs/ai-development/goal.md`
+- `docs/ai-development/progress.md`
+- `docs/ai-development/automation-lock.md`
 
 ## 仕様判断の扱い
 
 - 仕様判断の正本は `docs/requirements.md` です。
-- AI 自律開発の最終目標は `docs/ai-development/goal.md` に置きます。
+- AI 開発運用の目的は `docs/ai-development/goal.md` に置きます。
 - 作業進捗、現在地、次アクションは `docs/ai-development/progress.md` に置きます。
 - AI ジョブ運用上の確認、未確定事項、Slack 確認ログは `docs/ai-development/requirements.md` と `docs/ai-development/work-log.md` に集約します。
 - 既存の文書カタログ、README、CONTRIBUTING と矛盾する変更は行いません。
 - 大量の文書移動や削除が必要な場合は、その場で実施せず Issue 候補にします。
 
-## 疑似ロック運用
+## 親方針に合わせた運用範囲
 
-定期実行ジョブは、作業前に `docs/ai-development/automation-lock.md` の手順に従って `docs/ai-development/automation-lock.json` を確認します。
+親 README の方針に従い、現時点では 12 本のスケジュールを有効運用しません。実スケジュール登録、再有効化、PR 作成、プロダクトコード変更は、人間承認または追加方針が出てから行います。
 
-- 先行ジョブのロックが有効で期限内の場合、後続ジョブは実行せず停止します。
-- ロックが空いている、または期限切れの場合だけ、GitHub ファイル更新の SHA 競合を利用してロック取得を試みます。
-- ロック取得に失敗した場合は、同時実行競合として停止します。
-- 作業終了時は `progress.md` と `work-log.md` を必要に応じて更新してからロックを解放します。
-- ロックを安全に取得できない場合、GitHub 上の変更は行いません。
+初期段階で許可する更新は次に限定します。
+
+- Issue triage
+- Issue コメント
+- ラベル確認または必要最小限のラベル更新
+- README / `docs/ai-development/` の手順ドキュメント更新
+- handover / work-log / progress の更新
+
+## ロック運用
+
+親リポジトリの `operations/scheduled-run-lock.md` に合わせ、ロック本体は ChatGPT 側メモリーに置く方針とします。GitHub 側の `docs/ai-development/automation-lock.json` は、現時点ではロック判定元として使いません。
+
+将来スケジュールを有効化する場合は、作業前に ChatGPT 側メモリーのロックを確認し、ロック取得、進捗更新、ロック解放のいずれかに失敗した場合は追加変更を行いません。
 
 ## ジョブ共通停止条件
 
@@ -52,6 +78,7 @@
 - 検証方法が不明確。
 - セキュリティ、権限、個人情報、入力検証の判断が未確定。
 - レビュー指摘が triage されていない。
+- 未承認のスケジュール登録、PR 作成、プロダクトコード変更、本番操作、破壊的変更、権限変更、データ移行が必要。
 
 ## Slack 不明点確認ループ
 
@@ -63,9 +90,7 @@
 
 ## 外部情報収集
 
-インターネット検索は、AI 自律開発の改善、GitHub の公開仕様、一般的なレビュー・検証観点の確認に使います。対象リポジトリと親リポジトリで確認できる内容の代用にはしません。
-
-外部情報を採用する場合は、根拠 URL と採用判断を `docs/ai-development/goal.md`、`docs/ai-development/progress.md`、または `docs/ai-development/work-log.md` に残します。
+対象リポジトリと親リポジトリで確認できる内容の代用として外部検索を使いません。公開仕様の確認が必要な場合だけ利用し、採用する場合は根拠と採用判断を記録します。
 
 ## 検証
 
@@ -81,9 +106,9 @@ npm run build
 
 ## スケジュール運用
 
-定期実行は `Asia/Tokyo` で 12 本登録します。レビュー系は候補 Finding を出し、Issue の作成や優先順位付けは Issue / Finding Triage が担当します。
+12 本のスケジュールは親リポジトリでは将来導入候補です。`roulette` でも現時点では候補として扱い、有効化しません。
 
-各スケジュールは、開始時に目的、進捗、ロック、正本、ジョブ別指示を読み込み、ロック取得に成功した場合だけ作業します。対象がない場合は、対象なしの理由と次に待つ状態を出力して終了します。
+候補一覧:
 
 | 分 | ジョブ | 指示ファイル |
 | --- | --- | --- |
@@ -106,7 +131,7 @@ npm run build
 
 1. 作成・更新ファイル
 2. 既存ファイルとの関係
-3. 導入または確認したスケジュール
+3. 導入、無効化、または候補扱いにしたスケジュール
 4. 未対応事項
 5. 人間確認事項
 6. 次アクション
