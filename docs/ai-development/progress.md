@@ -16,11 +16,14 @@
 | AI 開発運用の基本導入 | 完了 |
 | 既存要件正本の確認 | 完了。正本は `docs/requirements.md` |
 | AI 運用入口 | 完了。`docs/ai-development/requirements.md` |
-| ジョブ別指示 | 完了。`docs/ai-development/job-instructions/` |
+| 親フロー導入 | 完了。Issue -> Orchestrator -> Research -> Design Review -> Implementation -> Code Review -> Review Triage -> Fix Implementation -> Test & Quality -> Handover |
+| GitHub Development Loop 導入 | 完了。Issue Intake / Implementation PR / Review Triage / CI Failure / Scheduled Maintenance |
+| Gate 導入 | 完了。Spec Gate / Storage Conflict Guard |
 | 目的ファイル | 完了。`docs/ai-development/goal.md` |
 | 進捗ファイル | 完了。この文書 |
-| 疑似ロック手順 | 親方針へ修正済み。ロック本体は ChatGPT 側メモリーを使う想定 |
-| ChatGPT スケジュール | 12 本は将来候補。2026-06-23 に親方針へ合わせて無効化済み |
+| メモリーロック手順 | 完了。ロック本体は ChatGPT 側メモリーを使う |
+| GitHub ファイルロック JSON | 廃止。`docs/ai-development/automation-lock.json` は削除対象 |
+| ChatGPT スケジュール | 旧 12 本は無効化済み。親方針上、使う場合は単一タスク処理スケジュールのみ |
 
 ## 2026-06-22 に実施した作業
 
@@ -33,18 +36,19 @@
 
 ## 2026-06-23 に実施した作業
 
-- 更新後の親 README を確認し、親方針にない `roulette` 側の独自運用を撤廃した。
-- 12 本の ChatGPT スケジュールを無効化した。
-- `AGENTS.md`、`docs/ai-development/agent-instructions.md`、`docs/ai-development/goal.md`、この文書、`docs/ai-development/automation-lock.md` を親方針に合わせた。
-- 外部情報を採用済み前提とする記述を撤廃した。
+- 更新後の親 README、`playbooks/automated-development-flow.md`、`playbooks/github-development-loop.md`、`playbooks/review-finding-triage.md`、`playbooks/spec-gate.md`、`playbooks/storage-conflict-guard.md`、`operations/scheduled-run-lock.md`、GitHub Issue / PR テンプレートを確認した。
+- 指定されていた adoption / `templates/ai-development/` / `templates/requirements/` 配下は 404 のため、現行の親 README / playbooks / operations / GitHub templates を優先した。
+- `AGENTS.md`、`docs/ai-development/agent-instructions.md`、`docs/ai-development/goal.md`、`docs/ai-development/automation-lock.md` を親方針に合わせた。
+- 旧 12 本の ChatGPT スケジュールは無効化し、プロンプトを削除済み。
 - GitHub ファイルロックをロック本体とする記述を撤廃し、ChatGPT 側メモリーロックを使う親方針へ合わせた。
+- 開発サイクルに親リポジトリにない要素が混じらないかを再チェックし、開発サイクルとして残すものを親フロー、5 つの GitHub Development Loop、Spec Gate、Storage Conflict Guard に限定した。
 
 ## 次にやる作業
 
-1. 親リポジトリの adoption / templates パスが追加または移動された場合、`roulette` 側の文書とテンプレートを再確認する。
-2. 手順整備または Issue triage を小さく進める。
-3. スケジュールを再有効化する場合は、人間承認または追加方針を得てから行う。
-4. 実装ジョブが対象 Issue を見つけた場合でも、停止条件を満たさない限り実装しない運用が守られているか確認する。
+1. 親リポジトリに adoption / templates パスが追加または移動された場合、`roulette` 側の文書とテンプレートを再確認する。
+2. 旧 12 ジョブ名が運用文書に残っていないか、定期的に検索して確認する。
+3. スケジュールを登録する場合は、旧 12 本ではなく単一タスク処理スケジュールだけを登録する。
+4. 実装ジョブが対象 Issue を見つけた場合でも、Spec Gate と Storage Conflict Guard を満たさない限り実装しない運用が守られているか確認する。
 
 ## Open Blockers
 
@@ -60,18 +64,18 @@
 2. `docs/ai-development/agent-instructions.md`
 3. `docs/requirements.md`
 4. `docs/ai-development/requirements.md`
-5. `docs/ai-development/work-log.md`
-6. `docs/ai-development/job-instructions/{job}.md`
+5. `docs/ai-development/progress.md`
+6. `docs/ai-development/work-log.md`
 7. 関連 Issue / PR / handover
+8. 選んだ作業に対応する親 playbook
 
-運用レビューや将来のスケジュール準備では、必要に応じて次も読む。
+運用レビューやスケジュール準備では、必要に応じて次も読む。
 
 - `docs/ai-development/goal.md`
-- `docs/ai-development/progress.md`
 - `docs/ai-development/automation-lock.md`
 
 ## 更新ルール
 
-- 各ジョブは、作業終了時にこの文書の「現在地」「次にやる作業」を必要に応じて更新する。
+- 各サイクルは、作業終了時にこの文書の「現在地」「次にやる作業」を必要に応じて更新する。
 - 詳細な作業履歴、停止理由、検証結果は `docs/ai-development/work-log.md` または `docs/ai-development/logs/` に記録する。
 - 仕様判断はこの文書に確定事項として書かず、`docs/requirements.md` または `docs/ai-development/requirements.md` のどちらが適切か判断する。
