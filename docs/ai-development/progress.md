@@ -24,6 +24,7 @@
 | メモリーロック手順 | 完了。ロック本体は ChatGPT 側メモリーを使う |
 | GitHub ファイルロック JSON | 廃止。`docs/ai-development/automation-lock.json` は削除済み |
 | ChatGPT スケジュール | 旧 12 本は disabled / prompt なし。実装短周期 15 分、レビュー 1 時間、人間確認 / Slack 1 時間の 3 本を有効化済み |
+| Slack 確認先 | `https://app.slack.com/client/T0B0KABNVNX/C0BCAL9FFSP` / `channel_id: C0BCAL9FFSP` |
 
 ## 2026-06-22 に実施した作業
 
@@ -54,12 +55,13 @@
 - 人間確認 / Slack サイクルは 1 時間ごとに有効化し、人間承認事項、Slack 確認、回答待ち、回答反映を扱う運用へ追加した。
 - 3 本の active schedule は同じメモリーロック `/workspace/memory/locks/roulette-schedule-lock.json` を共有する運用へ整理した。
 - Slack 不明点確認は `AGENTS.md` と `docs/ai-development/agent-instructions.md` のルールを使い、Slack 投稿可能時は 1 投稿 1 質問、不可または送信先不明の場合は `回答待ち` として記録する方針を明記した。
+- Slack 確認先を `https://app.slack.com/client/T0B0KABNVNX/C0BCAL9FFSP` / `channel_id: C0BCAL9FFSP` に固定し、3 本の active schedule と運用指示へ反映した。
 
 ## 次にやる作業
 
 1. 初回の実装短周期サイクルで、メモリーロック取得、1 タスク選択、progress / work-log 更新、ロック解放が通るか確認する。
 2. 初回のレビュー 1 時間サイクルで、レビュー指摘が実装へ直行せず分類・記録されるか確認する。
-3. 初回の人間確認 / Slack 1 時間サイクルで、Slack 投稿または `回答待ち` 記録、回答反映、ロック解放が通るか確認する。
+3. 初回の人間確認 / Slack 1 時間サイクルで、`C0BCAL9FFSP` への Slack 投稿または `回答待ち` 記録、回答反映、ロック解放が通るか確認する。
 4. 親リポジトリに adoption / templates パスが追加または移動された場合、`roulette` 側の文書とテンプレートを再確認する。
 5. 旧 12 ジョブ名が active schedule や開発サイクルとして復活していないか、定期的に検索して確認する。
 6. 実装ジョブが対象 Issue を見つけた場合でも、Spec Gate と Storage Conflict Guard を満たさない限り実装しない運用が守られているか確認する。
