@@ -10,13 +10,14 @@
 - `playbooks/automated-development-flow.md`
 - `playbooks/github-development-loop.md`
 - `playbooks/review-finding-triage.md`
-- `playbooks/github-automation-setup.md`
+- `playbooks/spec-gate.md`
+- `playbooks/storage-conflict-guard.md`
 - `operations/scheduled-run-lock.md`
 - `templates/github-issue/ai-development-task.md`
 - `templates/github-issue/review-finding.md`
 - `templates/github-pr/pull-request-template.md`
 
-指定された古い adoption / template パスが見つからない場合は、不足として `work-log` に記録し、見つかった親資料と `roulette` の既存正本を優先します。親リポジトリにない運用仕様は、`roulette` 側の独自ルールとして追加しません。
+指定された adoption / template パスが見つからない場合は、不足として `work-log` に記録し、見つかった親資料と `roulette` の既存正本を優先します。親リポジトリにない運用仕様は、`roulette` 側の開発サイクルへ追加しません。
 
 ## 作業対象
 
@@ -30,14 +31,14 @@
 2. `docs/ai-development/agent-instructions.md`
 3. `docs/requirements.md`
 4. `docs/ai-development/requirements.md`
-5. `docs/ai-development/work-log.md`
-6. `docs/ai-development/job-instructions/{job}.md`
-7. 関連 Issue / PR / handover
+5. `docs/ai-development/progress.md`
+6. `docs/ai-development/work-log.md`
+7. 関連 Issue / PR / handover / design notes
+8. 選んだ作業に対応する親 playbook
 
-運用レビューや将来のスケジュール準備では、作業選択の前に次も読みます。
+スケジュールまたは自動運用では、必要に応じて次も読みます。
 
 - `docs/ai-development/goal.md`
-- `docs/ai-development/progress.md`
 - `docs/ai-development/automation-lock.md`
 
 ## 仕様判断の扱い
@@ -49,25 +50,60 @@
 - 既存の文書カタログ、README、CONTRIBUTING と矛盾する変更は行いません。
 - 大量の文書移動や削除が必要な場合は、その場で実施せず Issue 候補にします。
 
-## 親方針に合わせた運用範囲
+## 親方針に合わせた開発サイクル
 
-親 README の方針に従い、現時点では 12 本のスケジュールを有効運用しません。実スケジュール登録、再有効化、PR 作成、プロダクトコード変更は、人間承認または追加方針が出てから行います。
+親 README、`playbooks/automated-development-flow.md`、`playbooks/github-development-loop.md`、`operations/scheduled-run-lock.md` に合わせ、開発サイクルは次だけを使います。
 
-初期段階で許可する更新は次に限定します。
+親フロー:
 
-- Issue triage
-- Issue コメント
-- ラベル確認または必要最小限のラベル更新
-- README / `docs/ai-development/` の手順ドキュメント更新
-- handover / work-log / progress の更新
+1. Issue
+2. Orchestrator
+3. Research
+4. Design Review
+5. Implementation
+6. Code Review
+7. Review Triage
+8. Fix Implementation
+9. Test & Quality
+10. Handover
+
+GitHub Development Loop:
+
+- Issue Intake
+- Implementation PR
+- Review Triage
+- CI Failure
+- Scheduled Maintenance
+
+Gate:
+
+- Spec Gate
+- Storage Conflict Guard
+
+レビュー、triage、設計修正、実装、検証は、別々の定期実行ではなく、選ばれた 1 タスクの中で上記フロー、ループ、gate として扱います。
+
+## スケジュール運用
+
+親方針に合わせ、登録する scheduled run はタスク処理用の 1 本だけです。旧 12 本の個別スケジュールは開発サイクルとして扱いません。
+
+単一サイクル:
+
+1. ChatGPT 側メモリーのロックを確認する。
+2. ロック取得後、`docs/ai-development/progress.md` の「次にやる作業」から最優先タスクを 1 件だけ選ぶ。
+3. 親 playbook に沿って、Issue Intake、Spec Gate、Storage Conflict Guard、Implementation PR、Review Triage、CI Failure、Scheduled Maintenance のいずれかに分類する。
+4. そのループで許可された最小単位だけ実行する。
+5. 結果、停止理由、検証、次アクションを `progress.md` と `work-log.md` に残す。
+6. ロックを解放する。
 
 ## ロック運用
 
-親リポジトリの `operations/scheduled-run-lock.md` に合わせ、ロック本体は ChatGPT 側メモリーに置く方針とします。GitHub 側の `docs/ai-development/automation-lock.json` は、現時点ではロック判定元として使いません。
+親リポジトリの `operations/scheduled-run-lock.md` に合わせ、ロック本体は ChatGPT 側メモリーに置きます。GitHub 側ファイルをロック判定元にしません。
 
-将来スケジュールを有効化する場合は、作業前に ChatGPT 側メモリーのロックを確認し、ロック取得、進捗更新、ロック解放のいずれかに失敗した場合は追加変更を行いません。
+推奨ロック: `/workspace/memory/locks/roulette-schedule-lock.json`
 
-## ジョブ共通停止条件
+ロック取得、進捗更新、ロック解放のいずれかに失敗した場合は追加変更を行いません。
+
+## 停止条件
 
 次の条件では変更を進めず、停止理由と次アクションを `docs/ai-development/work-log.md` に記録します。
 
@@ -79,6 +115,7 @@
 - セキュリティ、権限、個人情報、入力検証の判断が未確定。
 - レビュー指摘が triage されていない。
 - 未承認のスケジュール登録、PR 作成、プロダクトコード変更、本番操作、破壊的変更、権限変更、データ移行が必要。
+- stale snapshot または duplicate operation の疑いがある。
 
 ## Slack 不明点確認ループ
 
@@ -104,34 +141,13 @@ npm run build
 
 モバイル UI 変更時は README の `Mobile verification` 観点も確認します。
 
-## スケジュール運用
-
-12 本のスケジュールは親リポジトリでは将来導入候補です。`roulette` でも現時点では候補として扱い、有効化しません。
-
-候補一覧:
-
-| 分 | ジョブ | 指示ファイル |
-| --- | --- | --- |
-| 00 | 文書体系レビュー | `review.md` |
-| 05 | Issue 分解・作業管理レビュー | `triage.md` |
-| 10 | 設計・実装方針レビュー | `design-update.md` |
-| 15 | テスト観点レビュー | `verification.md` |
-| 20 | セキュリティ・権限レビュー | `review.md` |
-| 25 | CAB / 変更審査レビュー | `review.md` |
-| 30 | 本番運用 readiness レビュー | `review.md` |
-| 35 | 統合レビュー | `review.md` |
-| 40 | Issue / Finding Triage | `triage.md` |
-| 45 | 要件・設計修正 | `design-update.md` |
-| 50 | 実装 | `implementation.md` |
-| 55 | 検証 | `verification.md` |
-
 ## 報告形式
 
 作業後は次を報告します。
 
-1. 作成・更新ファイル
+1. 作成・更新・削除ファイル
 2. 既存ファイルとの関係
-3. 導入、無効化、または候補扱いにしたスケジュール
+3. 導入、無効化、または未登録のスケジュール
 4. 未対応事項
 5. 人間確認事項
 6. 次アクション
