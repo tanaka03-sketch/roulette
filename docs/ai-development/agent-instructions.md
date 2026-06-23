@@ -80,11 +80,11 @@ Gate:
 - Spec Gate
 - Storage Conflict Guard
 
-レビュー、triage、設計修正、実装、検証は、親フロー、GitHub Development Loop、gate の中で扱います。旧 12 本の個別スケジュール名を開発サイクルとして復活させません。
+レビュー、triage、設計修正、実装、検証、人間確認、Slack 対応は、親フロー、GitHub Development Loop、gate の中で扱います。旧 12 本の個別スケジュール名を開発サイクルとして復活させません。
 
 ## スケジュール運用
 
-ユーザー承認済みの ChatGPT scheduled run は、実装を進める短周期サイクルと、レビュー・人間確認を行う 1 時間サイクルの 2 本です。どちらも親リポジトリに存在する loop / gate だけを使い、旧 12 本の個別スケジュールは開発サイクルとして扱いません。
+ユーザー承認済みの ChatGPT scheduled run は、実装を進める短周期サイクル、レビューを行う 1 時間サイクル、人間確認と Slack を扱う 1 時間サイクルの 3 本です。どれも親リポジトリに存在する loop / gate だけを使い、旧 12 本の個別スケジュールは開発サイクルとして扱いません。
 
 ### 実装短周期サイクル
 
@@ -92,11 +92,19 @@ Gate:
 - 対象: Implementation PR / CI Failure / Spec Gate / Storage Conflict Guard。
 - 実装は、設計確定済み、未確定事項なし、Open ブロッカーなし、小さく分解済み、検証方法明確、レビュー指摘 triage 済みの場合だけ進める。
 
-### レビュー・人間確認 1 時間サイクル
+### レビュー 1 時間サイクル
 
 - 頻度: 1 時間ごと。
-- 対象: Review Triage / Scheduled Maintenance / Issue Intake / Spec Gate / Storage Conflict Guard。
-- 人間確認が必要な事項、Slack 回答待ち、CAB / production readiness の最終判断は、実装へ流さず記録して止める。
+- 対象: Code Review / Review Triage / Spec Gate / Storage Conflict Guard。
+- レビュー指摘は must fix / should fix / question / out of scope / test only などへ分類し、そのまま実装へ流さない。
+- 人間確認や Slack 確認が必要な事項は、人間確認 / Slack 1 時間サイクルへ渡す事項として記録する。
+
+### 人間確認 / Slack 1 時間サイクル
+
+- 頻度: 1 時間ごと。
+- 対象: 人間承認事項、Slack 確認、回答待ち、回答反映、Issue Intake / Scheduled Maintenance / Spec Gate / Storage Conflict Guard の確認作業。
+- Slack はこの文書の Slack 不明点確認ループを使う。投稿可能な場合は 1 投稿 1 質問、投稿不可または送信先不明の場合は `回答待ち` として記録する。
+- CAB / production readiness の最終判断、本番操作、破壊的変更、権限変更、認証・認可・secret・個人情報に関わる変更は勝手に判断しない。
 
 ### 共通手順
 
@@ -114,7 +122,7 @@ Gate:
 
 推奨ロック: `/workspace/memory/locks/roulette-schedule-lock.json`
 
-2 本の active schedule は同じロックを共有します。ロック取得、進捗更新、ロック解放のいずれかに失敗した場合は追加変更を行いません。
+3 本の active schedule は同じロックを共有します。ロック取得、進捗更新、ロック解放のいずれかに失敗した場合は追加変更を行いません。
 
 ## 停止条件
 
@@ -135,7 +143,7 @@ Gate:
 不明点が実装判断、設計判断、検証判断に影響する場合は推測しません。
 
 - Slack 投稿環境がある場合は、1 回につき 1 問だけ投稿します。
-- Slack 投稿環境がない場合は、質問文案を `docs/ai-development/work-log.md`、関連 Issue、必要に応じて `docs/ai-development/requirements.md` に `回答待ち` として記録します。
+- Slack 投稿環境がない場合、または送信先が特定できない場合は、質問文案を `docs/ai-development/work-log.md`、関連 Issue、必要に応じて `docs/ai-development/requirements.md` に `回答待ち` として記録します。
 - 回答後は、実装より先に該当する requirements / design / instruction / handover / work-log を更新します。
 
 ## 外部情報収集
