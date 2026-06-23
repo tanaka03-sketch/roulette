@@ -12,6 +12,7 @@
 - [ ] `docs/implementation-tasks.md`
 - [ ] `docs/requirements/document-catalog-2026-05-18.md`
 - [ ] `docs/ai-development/requirements.md`
+- [ ] `docs/ai-development/progress.md`
 - [ ] `docs/ai-development/work-log.md`
 - [ ] 関連 Issue / PR:
 
@@ -23,6 +24,7 @@
 - [ ] レビュー指摘は triage 済み
 - [ ] 人間承認が必要な操作を含まない、または承認待ちとして明記した
 - [ ] 初期版のクライアント完結、単一ユーザー、`localStorage` 前提から外れていない
+- [ ] 親リポジトリに存在しない開発サイクルを追加していない
 
 ## Spec Gate Result
 
@@ -55,13 +57,14 @@
 
 ## Development Loop Result
 
+親リポジトリに存在する loop だけを選択します。
+
 ### Loop Type
 
 - [ ] Implementation PR
 - [ ] Review Triage
 - [ ] CI Failure
 - [ ] Scheduled Maintenance
-- [ ] Documentation only
 
 ### Iterations
 
