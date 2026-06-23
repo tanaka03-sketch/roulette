@@ -268,3 +268,46 @@ Open Issue のうち、GitHub 管理画面でしか完了確認できない `mai
 
 - 初回の実装短周期サイクルで、ロック取得、1 タスク選択、停止条件、progress / work-log 更新、ロック解放が通るか確認する。
 - 初回のレビュー・人間確認サイクルで、Slack / 人間確認事項が実装へ流れず記録されるか確認する。
+
+## 2026-06-23 レビューと人間確認 / Slack サイクル分離
+
+- ジョブ種別: スケジュール運用変更 / 文書更新
+- 対象リポジトリ: `tanaka03-sketch/roulette`
+- 親リポジトリ: `tanaka03-sketch/ai-development-operations`
+
+### 実施内容
+
+- 既存のレビュー・人間確認 1 時間サイクルを、レビュー専用の 1 時間サイクルへ変更。
+- 人間確認と Slack を扱う 1 時間サイクルを新規追加。
+- 実装短周期サイクルは、ChatGPT スケジュールで利用できる最短間隔の 15 分ごとのまま維持。
+- 3 本の active schedule が同じ ChatGPT 側メモリーロック `/workspace/memory/locks/roulette-schedule-lock.json` を共有するように文書化。
+- Slack は `AGENTS.md` と `docs/ai-development/agent-instructions.md` に明記された Slack 不明点確認ループを使用する方針を維持。Slack 投稿環境がある場合は 1 投稿 1 質問、投稿不可または送信先不明の場合は `回答待ち` として記録する。
+- `AGENTS.md`、`docs/ai-development/agent-instructions.md`、`docs/ai-development/progress.md`、`docs/ai-development/automation-lock.md`、メモリー側ロック説明を 3 本運用に更新。
+
+### 登録状態
+
+- 有効: 実装短周期サイクル、15 分ごと、`Asia/Tokyo`。
+- 有効: レビュー 1 時間サイクル、1 時間ごと、`Asia/Tokyo`。
+- 有効: 人間確認 / Slack 1 時間サイクル、1 時間ごと、`Asia/Tokyo`。
+- 無効: 旧 12 本スケジュール、すべて disabled / prompt なし。
+
+### Open Blockers
+
+現時点ではありません。
+
+### 回答待ち
+
+現時点ではありません。
+
+### 検証
+
+文書・スケジュール運用変更のみのため、コード検証は未実行です。
+
+- `npm run typecheck`: 未実行（コード変更なし）
+- `npm test`: 未実行（コード変更なし）
+- `npm run build`: 未実行（コード変更なし）
+
+### 次アクション
+
+- 初回のレビュー 1 時間サイクルで、レビュー指摘が分類・記録され、人間確認 / Slack 事項が分離されるか確認する。
+- 初回の人間確認 / Slack 1 時間サイクルで、Slack 投稿または `回答待ち` 記録、回答反映、ロック解放が通るか確認する。
