@@ -80,20 +80,26 @@ Gates used by the cycle:
 - Spec Gate
 - Storage Conflict Guard
 
-Do not restore or use the old 12-job scheduled cycle. Review, triage, design update, implementation, and verification are handled as work inside the parent flow and loop types above, not as separate scheduled runs.
+Do not restore or use the old 12-job scheduled cycle. Review, triage, design update, implementation, and verification are handled as work inside the parent flow and loop types above, not as separate development-cycle definitions.
 
 ## Scheduled Run Policy
 
-The parent repository currently allows one task-processing scheduled run only. That run must:
+The active ChatGPT schedules are split into two user-approved cycles while still using only the parent repository loop and gate definitions.
+
+1. Implementation fast cycle: run at the shortest available interval supported by ChatGPT schedules, currently every 15 minutes. This cycle may only handle Implementation PR, CI Failure, Spec Gate, and Storage Conflict Guard work.
+2. Review and human-check cycle: run once per hour. This cycle may only handle Review Triage, Scheduled Maintenance, Issue Intake, Spec Gate, and Storage Conflict Guard work.
+
+Both schedules must:
 
 1. Check the ChatGPT-side memory lock described in `docs/ai-development/automation-lock.md`.
-2. Read `docs/ai-development/progress.md` and select exactly one highest-priority task.
+2. Read `docs/ai-development/progress.md` and select exactly one highest-priority task for that cycle.
 3. Classify that task into one parent loop or gate.
 4. Execute only the smallest safe unit allowed by that loop.
-5. Record the result, stopped reason, verification, and next task in `docs/ai-development/progress.md` and `docs/ai-development/work-log.md`.
-6. Release the memory lock.
+5. Use the Slack question loop in this file and `docs/ai-development/agent-instructions.md` when a design, implementation, or verification decision is unclear.
+6. Record the result, stopped reason, verification, and next task in `docs/ai-development/progress.md` and `docs/ai-development/work-log.md`.
+7. Release the memory lock.
 
-GitHub-side lock JSON files are not lock sources.
+GitHub-side lock JSON files are not lock sources. The old 12-job scheduled cycle must remain disabled and must not be used as the development cycle.
 
 ## Start Conditions
 
