@@ -1,6 +1,6 @@
 ---
 name: AI development task
-about: AI 開発運用で扱う実装・設計・検証タスク
+about: AI 開発運用で扱うタスク
 title: "[AI Dev] "
 labels: ["ai-development", "needs-triage"]
 assignees: []
@@ -30,35 +30,27 @@ assignees: []
 - [ ] `docs/implementation-tasks.md`
 - [ ] `docs/requirements/document-catalog-2026-05-18.md`
 - [ ] `docs/ai-development/requirements.md`
+- [ ] `docs/ai-development/progress.md`
 - [ ] `docs/ai-development/work-log.md`
 - [ ] 関連 Issue / PR:
 
-## 作業種別
-
-- [ ] 文書体系レビュー
-- [ ] Issue 分解・作業管理レビュー
-- [ ] 設計・実装方針レビュー
-- [ ] テスト観点レビュー
-- [ ] セキュリティ・権限レビュー
-- [ ] CAB / 変更審査レビュー
-- [ ] 本番運用 readiness レビュー
-- [ ] 統合レビュー
-- [ ] Issue / Finding Triage
-- [ ] 要件・設計修正
-- [ ] 実装
-- [ ] 検証
-
 ## GitHub Development Loop
+
+親リポジトリに存在する loop / gate だけを使います。
 
 ### Loop Type
 
 - [ ] Issue Intake
-- [ ] Spec Gate
-- [ ] Storage Conflict Guard
 - [ ] Implementation PR
 - [ ] Review Triage
 - [ ] CI Failure
 - [ ] Scheduled Maintenance
+
+### Gate
+
+- [ ] Spec Gate
+- [ ] Storage Conflict Guard
+- [ ] Not applicable
 
 ### Success Criteria
 
@@ -81,30 +73,30 @@ assignees: []
 - max iterations:
 - current iteration:
 
-## 着手条件
+## Stop Condition
 
-- [ ] 設計確定済み
-- [ ] 未確定事項なし
-- [ ] Open ブロッカーなし
-- [ ] 小さく分解済み
-- [ ] 検証方法明確
-- [ ] セキュリティ、権限、個人情報、入力検証の判断が未確定ではない
-- [ ] レビュー指摘が triage 済み
+- [ ] iteration 上限に達したら停止する
+- [ ] 同じ失敗が3回続いたら停止する
+- [ ] 仕様判断が必要になったら停止する
+- [ ] 権限、データ移行、破壊的変更が必要になったら停止する
+- [ ] rollback 方針が説明できなければ停止する
+- [ ] 検証 gate が確認不能になったら停止する
+- [ ] Issue / PR の目的を超える修正が必要になったら停止する
+- [ ] ロック取得できなければ write しない
+- [ ] stale snapshot の場合は write しない
+- [ ] human approval が必要な場合は実装しない
 
-## 停止条件確認
+## Loop State
 
-該当する場合は実装せず、停止理由を記録してください。
-
-- [ ] Open ブロッカーあり
-- [ ] Issue が大きすぎる
-- [ ] 設計未確定
-- [ ] Slack / 人間回答待ちあり
-- [ ] 検証方法不明
-- [ ] 高リスク判断未承認
-- [ ] レビュー指摘未 triage
-- [ ] stale snapshot または重複 write リスクあり
+- tried:
+- passed:
+- failed:
+- next:
+- stopped because:
 
 ## Spec Gate
+
+実装または write operation に進む前に確認します。
 
 ### 判定
 
@@ -116,7 +108,7 @@ assignees: []
 - [ ] blocked
 - [ ] human-approval-required
 
-### 確認表
+### 仕様化状況
 
 | 観点 | 判定 | 理由 | 次アクション |
 | --- | --- | --- | --- |
@@ -165,6 +157,16 @@ Issue / PR / comment / label / branch / file を保存・更新する場合に�
 - [ ] stale snapshot なし
 - [ ] path-level write conflict なし
 - [ ] human approval が必要な write なし
+
+## AI 作業単位チェック
+
+- [ ] 1つの PR で完了できる
+- [ ] 変更対象の主要領域が1つに絞られている
+- [ ] 完了条件がテストまたは確認手順で判定できる
+- [ ] 未確定仕様を実装者が判断しなくてよい
+- [ ] ロールバックまたは取り消し方針がある
+- [ ] Spec Gate を通過している
+- [ ] 保存・更新を伴う場合は Storage Conflict Guard を通過している
 
 ## 完了条件
 
