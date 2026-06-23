@@ -28,6 +28,7 @@
 | Slack 投稿方針 | 新しい判断材料があり人間回答が必要な時だけ投稿。毎時サイクルは通常 ChatGPT 内報告と記録中心 |
 | Slack 返信権限 | チャンネル内で回答できる人全員に方向性回答権限がある前提。権限境界は Slack チャンネル側で担保 |
 | レビュー 1 時間サイクル初回確認 | 完了。PR #52 を Review Triage / Spec Gate / Storage Conflict Guard で分類し、merge as-is blocked として記録済み |
+| 実装短周期サイクル初回確認 | 完了。Open blocker / 回答待ちにより実装停止。コード変更なし |
 
 ## 2026-06-22 に実施した作業
 
@@ -72,11 +73,15 @@
 - Slack で方向性を決める返信権限は、チャンネル側の参加・投稿権限で担保されるものとして扱い、チャンネル内で回答できる人全員にある前提へ変更した。
 - 実装短周期、レビュー、人間確認 / Slack の 3 本の active schedule prompt をこの方針へ更新した。
 - `AGENTS.md`、`docs/ai-development/agent-instructions.md`、`docs/ai-development/requirements.md` に同じ方針を反映した。
+- 実装短周期サイクルで、メモリーロック取得、必読ファイルと親 playbook の必要箇所確認、1 タスク選択、停止条件判定、progress 更新、ロック解放の流れを確認した。
+- 選択対象は PR #52 の扱いに関する回答待ち状態のみ。Open blocker / 回答待ちが残るため、Implementation PR / CI Failure の実装には進まなかった。
+- `docs/requirements.md` と `docs/ai-development/requirements.md` には製品実装を新たに止める Open blocker は見つからなかったが、`progress.md` の PR #52 blocker が実装停止条件に該当することを確認した。
+- Slack 投稿は行っていない。新しい判断材料ではなく、既に人間確認 / Slack サイクルへ渡されている PR #52 の回答待ちを再確認しただけのため。
 
 ## 次にやる作業
 
 1. 人間確認 / Slack 1 時間サイクルで、PR #52 を `close` / `rebase` / `other` のどれで扱うか確認する。これは新しい判断材料が必要なため Slack 投稿対象になり得る。
-2. 初回の実装短周期サイクルで、メモリーロック取得、1 タスク選択、progress / work-log 更新、ロック解放が通るか確認する。
+2. 人間回答後、PR #52 を close / rebase / other の決定に従って処理し、回答待ちと Open blocker を解消する。
 3. 初回の人間確認 / Slack 1 時間サイクルで、Slack 投稿条件を満たす新しい判断材料がある場合だけ `C0BCAL9FFSP` へ投稿し、それ以外は ChatGPT 内報告と記録に留められるか確認する。
 4. 親リポジトリに adoption / templates パスが追加または移動された場合、`roulette` 側の文書とテンプレートを再確認する。
 5. 旧 12 ジョブ名が active schedule や開発サイクルとして復活していないか、定期的に検索して確認する。
