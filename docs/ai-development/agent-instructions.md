@@ -91,6 +91,7 @@ Gate:
 - 頻度: ChatGPT スケジュールで利用できる最短間隔。現時点では 15 分ごと。
 - 対象: Implementation PR / CI Failure / Spec Gate / Storage Conflict Guard。
 - 実装は、設計確定済み、未確定事項なし、Open ブロッカーなし、小さく分解済み、検証方法明確、レビュー指摘 triage 済みの場合だけ進める。
+- Slack 投稿は、新しい判断材料があり人間回答なしでは進められない場合だけ行う。通常報告は ChatGPT 内報告と `progress` / `work-log` 記録に留める。
 
 ### レビュー 1 時間サイクル
 
@@ -98,12 +99,15 @@ Gate:
 - 対象: Code Review / Review Triage / Spec Gate / Storage Conflict Guard。
 - レビュー指摘は must fix / should fix / question / out of scope / test only などへ分類し、そのまま実装へ流さない。
 - 人間確認や Slack 確認が必要な事項は、人間確認 / Slack 1 時間サイクルへ渡す事項として記録する。
+- Slack 投稿は、新しい判断材料があり人間回答なしでは進められない場合だけ行う。通常のレビュー結果や問題なし報告は ChatGPT 内報告と記録に留める。
 
 ### 人間確認 / Slack 1 時間サイクル
 
 - 頻度: 1 時間ごと。
 - 対象: 人間承認事項、Slack 確認、回答待ち、回答反映、Issue Intake / Scheduled Maintenance / Spec Gate / Storage Conflict Guard の確認作業。
-- Slack はこの文書の Slack 不明点確認ループを使う。投稿可能な場合は `C0BCAL9FFSP` に日本語で 1 投稿 1 質問を投稿し、質問には選択肢を添える。投稿不可または投稿失敗の場合は `回答待ち` として記録する。
+- Slack はこの文書の Slack 不明点確認ループを使う。投稿可能かつ投稿条件を満たす場合は `C0BCAL9FFSP` に日本語で 1 投稿 1 質問を投稿し、質問には選択肢を添える。投稿不可、投稿失敗、または投稿条件未達の場合は `回答待ち` または `ChatGPT 内確認事項` として記録する。
+- 毎時サイクルの通常報告、既知事項の再通知、単なる問題なし報告は Slack に投稿しない。
+- Slack で方向性を決める返信権限はチャンネル側の参加・投稿権限で担保される。チャンネル内で回答できる人全員にある前提で扱い、特定個人だけの回答を必須にしない。
 - CAB / production readiness の最終判断、本番操作、破壊的変更、権限変更、認証・認可・secret・個人情報に関わる変更は勝手に判断しない。
 
 ### 共通手順
@@ -143,9 +147,12 @@ Gate:
 不明点が実装判断、設計判断、検証判断に影響する場合は推測しません。
 
 - Slack 確認先は `https://app.slack.com/client/T0B0KABNVNX/C0BCAL9FFSP`（`channel_id: C0BCAL9FFSP`）です。
-- Slack 投稿環境がある場合は、`C0BCAL9FFSP` に日本語で 1 回につき 1 問だけ投稿します。
+- Slack 投稿は、新しい判断材料があり、設計・実装・検証・運用判断を進めるために人間回答が必要な時だけ行います。
+- 毎時サイクルの通常報告、進捗確認、既知事項の再通知、単なる問題なし報告は Slack に投稿せず、ChatGPT 内報告と `docs/ai-development/progress.md` / `docs/ai-development/work-log.md` の記録を中心にします。
+- Slack 投稿環境があり、かつ投稿条件を満たす場合は、`C0BCAL9FFSP` に日本語で 1 回につき 1 問だけ投稿します。
 - Slack の質問には、相手が選択肢で回答できるように、簡潔な番号付きまたはラベル付きの選択肢を必ず添えます。選択肢だけで判断を覆いきれない場合は、自由記述 / その他の選択肢も含めます。
-- Slack 投稿環境がない場合、または投稿に失敗した場合は、質問文案を `docs/ai-development/work-log.md`、関連 Issue、必要に応じて `docs/ai-development/requirements.md` に `回答待ち` として記録します。
+- Slack で方向性を決める返信権限はチャンネル側の参加・投稿権限で担保されます。チャンネル内で回答できる人全員にある前提で扱い、特定個人だけの回答を必須にしません。
+- Slack 投稿環境がない場合、投稿に失敗した場合、または投稿条件を満たさない場合は、質問文案や判断候補を `docs/ai-development/work-log.md`、関連 Issue、必要に応じて `docs/ai-development/requirements.md` に `回答待ち` または `ChatGPT 内確認事項` として記録します。
 - 回答後は、実装より先に該当する requirements / design / instruction / handover / work-log を更新します。
 
 ## 外部情報収集
