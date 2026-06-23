@@ -22,8 +22,8 @@
 | 目的ファイル | 完了。`docs/ai-development/goal.md` |
 | 進捗ファイル | 完了。この文書 |
 | メモリーロック手順 | 完了。ロック本体は ChatGPT 側メモリーを使う |
-| GitHub ファイルロック JSON | 廃止。`docs/ai-development/automation-lock.json` は削除対象 |
-| ChatGPT スケジュール | 旧 12 本は無効化済み。親方針上、使う場合は単一タスク処理スケジュールのみ |
+| GitHub ファイルロック JSON | 廃止。`docs/ai-development/automation-lock.json` は削除済み |
+| ChatGPT スケジュール | 旧 12 本は無効化済み。単一タスク処理スケジュールを登録済み |
 
 ## 2026-06-22 に実施した作業
 
@@ -42,12 +42,16 @@
 - 旧 12 本の ChatGPT スケジュールは無効化し、プロンプトを削除済み。
 - GitHub ファイルロックをロック本体とする記述を撤廃し、ChatGPT 側メモリーロックを使う親方針へ合わせた。
 - 開発サイクルに親リポジトリにない要素が混じらないかを再チェックし、開発サイクルとして残すものを親フロー、5 つの GitHub Development Loop、Spec Gate、Storage Conflict Guard に限定した。
+- `/workspace/memory/locks/roulette-schedule-lock.json` を単一タスク処理サイクル用の unlocked 状態へ更新した。
+- `docs/ai-development/automation-lock.json` を削除した。
+- 単一タスク処理スケジュールを `Asia/Tokyo`、毎時 00 分で登録し、有効化した。
+- スケジュール一覧で旧 12 本が disabled / prompt なし、新しい 1 本だけが enabled であることを確認した。
 
 ## 次にやる作業
 
-1. 親リポジトリに adoption / templates パスが追加または移動された場合、`roulette` 側の文書とテンプレートを再確認する。
-2. 旧 12 ジョブ名が運用文書に残っていないか、定期的に検索して確認する。
-3. スケジュールを登録する場合は、旧 12 本ではなく単一タスク処理スケジュールだけを登録する。
+1. 初回の単一スケジュール実行で、メモリーロック取得、1 タスク選択、progress / work-log 更新、ロック解放が通るか確認する。
+2. 親リポジトリに adoption / templates パスが追加または移動された場合、`roulette` 側の文書とテンプレートを再確認する。
+3. 旧 12 ジョブ名が運用文書やスケジュールに復活していないか、定期的に検索して確認する。
 4. 実装ジョブが対象 Issue を見つけた場合でも、Spec Gate と Storage Conflict Guard を満たさない限り実装しない運用が守られているか確認する。
 
 ## Open Blockers
