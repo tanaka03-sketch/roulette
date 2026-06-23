@@ -23,7 +23,7 @@
 | 進捗ファイル | 完了。この文書 |
 | メモリーロック手順 | 完了。ロック本体は ChatGPT 側メモリーを使う |
 | GitHub ファイルロック JSON | 廃止。`docs/ai-development/automation-lock.json` は削除済み |
-| ChatGPT スケジュール | 旧 12 本は disabled / prompt なし。実装短周期 15 分サイクルとレビュー・人間確認 1 時間サイクルの 2 本を有効化済み |
+| ChatGPT スケジュール | 旧 12 本は disabled / prompt なし。実装短周期 15 分、レビュー 1 時間、人間確認 / Slack 1 時間の 3 本を有効化済み |
 
 ## 2026-06-22 に実施した作業
 
@@ -49,16 +49,20 @@
 - ユーザー指示により、単一タスク処理スケジュールを 2 本へ分離した。
 - 実装を進めるサイクルは、ChatGPT スケジュールの最短許容間隔である 15 分ごとに有効化した。
 - レビューと人間確認のサイクルは、1 時間ごとに有効化した。
-- 2 本の active schedule は同じメモリーロック `/workspace/memory/locks/roulette-schedule-lock.json` を共有する運用へ整理した。
-- Slack 不明点確認は `AGENTS.md` と `docs/ai-development/agent-instructions.md` のルールを使い、Slack 投稿可能時は 1 投稿 1 質問、不可の場合は `回答待ち` として記録する方針を明記した。
+- ユーザー指示により、レビューと人間確認 / Slack をさらに分離し、active schedule を 3 本にした。
+- レビューサイクルは 1 時間ごとに有効化し、レビュー分類と記録に集中する運用へ変更した。
+- 人間確認 / Slack サイクルは 1 時間ごとに有効化し、人間承認事項、Slack 確認、回答待ち、回答反映を扱う運用へ追加した。
+- 3 本の active schedule は同じメモリーロック `/workspace/memory/locks/roulette-schedule-lock.json` を共有する運用へ整理した。
+- Slack 不明点確認は `AGENTS.md` と `docs/ai-development/agent-instructions.md` のルールを使い、Slack 投稿可能時は 1 投稿 1 質問、不可または送信先不明の場合は `回答待ち` として記録する方針を明記した。
 
 ## 次にやる作業
 
 1. 初回の実装短周期サイクルで、メモリーロック取得、1 タスク選択、progress / work-log 更新、ロック解放が通るか確認する。
-2. 初回のレビュー・人間確認 1 時間サイクルで、未 triage 指摘、回答待ち、人間確認事項が実装へ流れず記録されるか確認する。
-3. 親リポジトリに adoption / templates パスが追加または移動された場合、`roulette` 側の文書とテンプレートを再確認する。
-4. 旧 12 ジョブ名が active schedule や開発サイクルとして復活していないか、定期的に検索して確認する。
-5. 実装ジョブが対象 Issue を見つけた場合でも、Spec Gate と Storage Conflict Guard を満たさない限り実装しない運用が守られているか確認する。
+2. 初回のレビュー 1 時間サイクルで、レビュー指摘が実装へ直行せず分類・記録されるか確認する。
+3. 初回の人間確認 / Slack 1 時間サイクルで、Slack 投稿または `回答待ち` 記録、回答反映、ロック解放が通るか確認する。
+4. 親リポジトリに adoption / templates パスが追加または移動された場合、`roulette` 側の文書とテンプレートを再確認する。
+5. 旧 12 ジョブ名が active schedule や開発サイクルとして復活していないか、定期的に検索して確認する。
+6. 実装ジョブが対象 Issue を見つけた場合でも、Spec Gate と Storage Conflict Guard を満たさない限り実装しない運用が守られているか確認する。
 
 ## Open Blockers
 
