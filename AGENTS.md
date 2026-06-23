@@ -134,8 +134,9 @@ Stop and record the reason in `docs/ai-development/work-log.md` when any of thes
 
 If an unknown affects implementation, design, or verification, do not guess.
 
-- If Slack posting is available, ask exactly one question per post.
-- If Slack posting is unavailable or the Slack destination is not known, record the proposed question as `回答待ち` in `docs/ai-development/work-log.md`, the related Issue, and when relevant `docs/ai-development/requirements.md`.
+- Slack confirmation destination: `https://app.slack.com/client/T0B0KABNVNX/C0BCAL9FFSP` (`channel_id: C0BCAL9FFSP`).
+- If Slack posting is available, post to `C0BCAL9FFSP` and ask exactly one question per post.
+- If Slack posting is unavailable or posting fails, record the proposed question as `回答待ち` in `docs/ai-development/work-log.md`, the related Issue, and when relevant `docs/ai-development/requirements.md`.
 - When an answer arrives, update the applicable requirements, design, instruction, handover, or work-log document before implementation.
 
 ## Human Approval Required
