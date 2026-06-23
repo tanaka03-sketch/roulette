@@ -345,3 +345,35 @@ Open Issue のうち、GitHub 管理画面でしか完了確認できない `mai
 ### 次アクション
 
 - 次回の人間確認 / Slack 1 時間サイクルで、Slack connector が使える場合に `C0BCAL9FFSP` へ 1 投稿 1 質問で投稿できるか確認する。
+
+## 2026-06-23 Slack 質問形式ルール追加
+
+- ジョブ種別: スケジュール運用変更 / Slack 確認ルール更新
+- 対象リポジトリ: `tanaka03-sketch/roulette`
+- ユーザー依頼: Slack へ日本語で送ること、選択肢を提供することを運用ルールとして明記する。
+
+### 実施内容
+
+- `AGENTS.md` の Slack Question Loop に、Slack 投稿は日本語で行うことを追加。
+- `AGENTS.md` の Slack Question Loop に、質問ごとに番号付きまたはラベル付きの選択肢を添え、必要に応じて自由記述 / その他を含めることを追加。
+- `docs/ai-development/agent-instructions.md` の人間確認 / Slack 1 時間サイクルと Slack 不明点確認ループに同じルールを追加。
+
+### Open Blockers
+
+現時点ではありません。
+
+### 回答待ち
+
+現時点ではありません。
+
+### 検証
+
+文書更新のみのため、コード検証は未実行です。
+
+- `npm run typecheck`: 未実行（コード変更なし）
+- `npm test`: 未実行（コード変更なし）
+- `npm run build`: 未実行（コード変更なし）
+
+### 次アクション
+
+- 次回の人間確認 / Slack 1 時間サイクルで、Slack 質問が日本語かつ選択肢付きで作成されるか確認する。
