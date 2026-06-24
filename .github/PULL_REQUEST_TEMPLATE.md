@@ -12,6 +12,8 @@
 - [ ] `docs/implementation-tasks.md`
 - [ ] `docs/requirements/document-catalog-2026-05-18.md`
 - [ ] `docs/ai-development/requirements.md`
+- [ ] `docs/ai-development/goal.md`
+- [ ] `docs/ai-development/completion-scorecard.md`
 - [ ] `docs/ai-development/progress.md`
 - [ ] `docs/ai-development/work-log.md`
 - [ ] 関連 Issue / PR:
@@ -19,12 +21,52 @@
 ## AI 開発運用チェック
 
 - [ ] 仕様判断は `docs/requirements.md` と矛盾していない
-- [ ] AI 運用上の未確定事項は `docs/ai-development/requirements.md` または work-log に記録した
+- [ ] AI 運用上の未確定事項は `docs/ai-development/requirements.md` または work-log / logs に記録した
 - [ ] Open ブロッカーはない、または停止理由を記録した
 - [ ] レビュー指摘は triage 済み
 - [ ] 人間承認が必要な操作を含まない、または承認待ちとして明記した
 - [ ] 初期版のクライアント完結、単一ユーザー、`localStorage` 前提から外れていない
 - [ ] 親リポジトリに存在しない開発サイクルを追加していない
+- [ ] Completion score または scoring blocker を記録した
+
+## Completion Scorecard
+
+目的に対して 100 点満点で記録します。採点基準は `docs/ai-development/completion-scorecard.md` を参照します。
+
+### 総合点
+
+- 点数:
+- 判定:
+
+### 公開可否
+
+- [ ] 公開候補として問題なし
+- [ ] 条件付き公開候補
+- [ ] 公開候補ではない
+- [ ] 人間判断待ち
+
+理由:
+
+-
+
+### 運用適性
+
+- [ ] 現在の AI 開発運用に適している
+- [ ] 条件付きで運用可能
+- [ ] 運用に適していない
+- [ ] 人間判断待ち
+
+理由:
+
+-
+
+### 100 点に足りない理由
+
+-
+
+### 次に 1 つだけ進める改善
+
+-
 
 ## Spec Gate Result
 
@@ -68,9 +110,9 @@
 
 ### Iterations
 
-| Iteration | 対象 | 変更内容 | Verify 結果 | 次アクション |
-| --- | --- | --- | --- | --- |
-| 1 |  |  |  |  |
+| Iteration | 対象 | 変更内容 | Verify 結果 | Completion score | 次アクション |
+| --- | --- | --- | --- | ---: | --- |
+| 1 |  |  |  |  |  |
 
 ## 確認手順
 
