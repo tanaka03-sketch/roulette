@@ -58,7 +58,11 @@ Slack 投稿は、新しい判断材料があり、設計・実装・検証・�
 
 ## 回答待ち
 
-- PR #52 `docs: switch schedule lock to ChatGPT memory` を `close` / `rebase` / `other` のどれで扱うか。Slack 投稿済み: https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782258456427199。2026-06-24 10:45 JST の人間確認 / Slack サイクルではスレッド返信なし。既存質問への回答待ち継続であり、新しい判断材料や追加質問はないため Slack 追加投稿なし。
+現時点ではありません。
+
+## 回答済みの確認ログ
+
+- 2026-06-24 12:36 JST: Slack 投稿 `https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782258456427199` への返信 `1` を確認。選択肢 1 の `close` として、PR #52 `docs: switch schedule lock to ChatGPT memory` は古い内容として閉じ、current `main` を正とする方針で処理する。
 
 不明点が実装判断、設計判断、検証判断に影響する場合は推測で進めず、Slack 投稿または質問文案の記録を行ってください。
 
