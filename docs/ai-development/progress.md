@@ -32,8 +32,26 @@
 | PR #52 処理 | 完了。2026-06-24 12:42 JST に superseded として closed |
 | GitHub Actions major update 方針 | 完了。ユーザー依頼により `まとめて方針化して進める` を採用し、回答待ちを解除済み |
 | PR #51 `actions/checkout` major update | CI 成功、mergeable true。レビューサイクルで must fix なし / should fix は人間レビュー待ちと分類済み。merge は人間判断へ委譲 |
+| PR #14 `actions/setup-node` major update | 実装短周期で確認済み。差分は `setup-node@v4` -> `v6` のみ。古い CI は既知ブロッカー由来で failure、`setup-node@v6` と `npm ci` は成功。fresh CI 待ち / 人間レビュー待ち |
 
 ## 直近の実施内容
+
+### 2026-06-24 13:37 JST 実装短周期サイクル
+
+- ChatGPT 側メモリーロックを取得して作業した。
+- `AGENTS.md`、`docs/ai-development/agent-instructions.md`、`docs/ai-development/goal.md`、`docs/ai-development/progress.md`、`docs/ai-development/work-log.md`、`docs/requirements.md`、`docs/ai-development/requirements.md` を確認した。
+- 親リポジトリは read-only として、`README.md`、`playbooks/automated-development-flow.md`、`playbooks/github-development-loop.md`、`playbooks/spec-gate.md`、`playbooks/storage-conflict-guard.md` を必要範囲で確認した。
+- `docs/ai-development/requirements.md` とこの文書に Open Blockers / 回答待ちがないことを確認した。
+- 実装可能な最優先タスクを 1 件だけ選び、PR #14 `chore(deps): bump actions/setup-node from 4 to 6` を対象にした。
+- PR #14 の差分は `.github/workflows/ci.yml` の `actions/setup-node@v4` -> `actions/setup-node@v6` のみに限定されていることを確認した。
+- README / `.nvmrc` / 要件との整合として、Node.js 22、`npm ci`、`cache: npm`、`typecheck` / `test` / `build` の方針が維持されていることを確認した。
+- GitHub Actions run `26015533067` は failure だが、`actions/setup-node@v6` と `npm ci` は成功し、失敗は既知の古い typecheck / test / build ブロッカーに一致すると分類した。
+- PR #14 は re-read 時点で open / mergeable true、head `40a41ed9a93086b45c1dc47993cef1c13698881c`、requested reviewer あり。
+- PR #14 に AI 実装サイクル確認コメントを追加した。コメント ID: `4785935107`。
+- merge、re-run、rebase、recreate は行っていない。理由: reviewer request が残っており、fresh CI を得るための rebase / recreate / re-run は次回以降の 1 件処理または人間レビューで扱うため。
+- Slack 投稿は行っていない。理由: 新しい設計・実装・検証・運用判断の質問ではなく、通常の PR 状態分類と次アクション記録で足りるため。
+- プロダクトコード、親リポジトリ、スケジュールは変更していない。
+- 詳細ログ: `docs/ai-development/logs/2026-06-24-1337-implementation-cycle.md`
 
 ### 2026-06-24 13:30 JST レビュー 1 時間サイクル
 
@@ -75,51 +93,18 @@
 - 専用ログ `docs/ai-development/logs/2026-06-24-1320-blocker-resolution.md` を追加した。
 - Slack へ解決方針をアナウンスする。
 
-### 2026-06-24 13:07 JST 実装短周期サイクル
-
-- ChatGPT 側メモリーロックを取得して作業した。
-- `AGENTS.md`、`docs/ai-development/agent-instructions.md`、`docs/ai-development/goal.md`、`docs/ai-development/progress.md`、`docs/ai-development/work-log.md`、`docs/requirements.md`、`docs/ai-development/requirements.md` を確認した。
-- 親リポジトリは read-only として、`README.md`、`playbooks/automated-development-flow.md`、`playbooks/github-development-loop.md`、`playbooks/spec-gate.md`、`playbooks/storage-conflict-guard.md` を必要範囲で確認した。
-- Slack 投稿 `https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782272893984959` のスレッドを確認し、GitHub Actions major update 方針への返信がまだないことを確認した。
-- `docs/ai-development/requirements.md` とこの文書に、GitHub Actions major update 方針の回答待ちが Open Blocker として残っていることを確認した。
-- 今回の実装短周期サイクルは、実装条件の「未確定事項なし」「Open ブロッカーなし」「Spec Gate 通過済み」を満たさないため停止した。
-- Slack 投稿は行っていない。理由: 既に投稿済みの GitHub Actions major update 方針質問への回答待ちであり、新しい判断材料や追加質問がなかったため。
-- プロダクトコード、親リポジトリ、Issue、PR、スケジュールは変更していない。
-- 詳細ログ: `docs/ai-development/logs/2026-06-24-1307-implementation-cycle.md`
-
-### 2026-06-24 12:52 JST 実装短周期サイクル
-
-- ChatGPT 側メモリーロックを取得して作業した。
-- `AGENTS.md`、`docs/ai-development/agent-instructions.md`、`docs/ai-development/goal.md`、`docs/ai-development/progress.md`、`docs/ai-development/work-log.md`、`docs/requirements.md`、`docs/ai-development/requirements.md` を確認した。
-- `docs/ai-development/requirements.md` とこの文書に、GitHub Actions major update 方針の回答待ちが Open Blocker として残っていることを確認した。
-- 今回の実装短周期サイクルは、実装条件の「未確定事項なし」「Open ブロッカーなし」「Spec Gate 通過済み」を満たさないため停止した。
-- Slack 投稿は行っていない。理由: 既に投稿済みの GitHub Actions major update 方針質問への回答待ちであり、新しい判断材料や追加質問がなかったため。
-- プロダクトコード、親リポジトリ、Issue、PR、スケジュールは変更していない。
-
-### 2026-06-24 12:45 JST 人間確認 / Slack 1 時間サイクル
-
-- ChatGPT 側メモリーロックを取得して作業した。
-- `AGENTS.md`、`docs/ai-development/agent-instructions.md`、`docs/ai-development/goal.md`、`docs/ai-development/progress.md`、`docs/ai-development/work-log.md`、`docs/requirements.md`、`docs/ai-development/requirements.md` を確認した。
-- `docs/requirements.md` の FUTURE-008「Node.js / GitHub Actions アクション更新方針」が要決定であり、open PR に GitHub Actions major update が複数あることを確認した。
-- 今回の最優先確認事項を GitHub Actions major update 方針 1 件に絞った。複数質問は扱っていない。
-- Slack チャンネル `#roulette-開発運用導入エージェント` / `C0BCAL9FFSP` を確認し、同一方針の重複質問がないことを確認した。
-- Slack に日本語、1 投稿 1 質問、番号付き選択肢付きで投稿した。
-- 投稿リンク: https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782272893984959
-- `docs/ai-development/requirements.md` に回答待ちとして記録した。
-- 専用ログ `docs/ai-development/logs/2026-06-24-1245-human-slack-cycle.md` を追加した。
-- プロダクトコード、親リポジトリ、Issue、PR、スケジュールは変更していない。
-
 ## 次にやる作業
 
 1. 人間レビュー / merge 判断で PR #51 `actions/checkout` major update を確認する。CI は成功済み、レビューサイクルでは must fix なし / should fix は人間レビュー待ちとして分類済み。
-2. 次回の実装短周期サイクルでは、PR #51 が未処理なら状態を確認し、merge 済みなら次の最優先 Implementation PR / CI Failure 候補を 1 件だけ選ぶ。
-3. 次回候補は Dependabot の GitHub Actions major update PR から 1 件に絞り、`actions/setup-node` または `actions/github-script` を PR ごとに互換性、CI 結果、README / 要件 / GitHub 運用文書との整合で確認する。
-4. merge / close / recreate は一括で機械的に行わず、PR ごとの確認結果に基づいて判断する。
-5. 選んだ候補について、Spec Gate と Storage Conflict Guard を確認する。
-6. 設計確定済み、未確定事項なし、Open ブロッカーなし、小さく分解済み、検証方法明確、セキュリティ・権限・個人情報・入力検証の判断確定済み、レビュー指摘 triage 済みを満たす場合だけ実装へ進む。
-7. 条件未達の場合は実装せず、停止理由と次に必要な判断を `docs/ai-development/work-log.md` または `docs/ai-development/logs/` に残す。
-8. 親リポジトリに adoption / templates パスが追加または移動された場合、`roulette` 側の文書とテンプレートを再確認する。
-9. 旧 12 ジョブ名が active schedule や開発サイクルとして復活していないか、定期的に検索して確認する。
+2. PR #14 `actions/setup-node` major update は current `main` に rebase / recreate するか fresh CI を取得する。fresh CI で `typecheck`、`test`、`build` が成功したら、人間レビュー / merge 判断へ渡す。
+3. 次回の実装短周期サイクルでは、PR #51 が未処理なら状態確認だけに留め、実装として扱う場合は PR #14 または PR #26 のどちらか 1 件だけを選ぶ。
+4. PR #26 `actions/github-script` は v9 の breaking changes と `.github/workflows/sync-labels.yml` の script 互換性を確認してから扱う。
+5. merge / close / recreate は一括で機械的に行わず、PR ごとの確認結果に基づいて判断する。
+6. 選んだ候補について、Spec Gate と Storage Conflict Guard を確認する。
+7. 設計確定済み、未確定事項なし、Open ブロッカーなし、小さく分解済み、検証方法明確、セキュリティ・権限・個人情報・入力検証の判断確定済み、レビュー指摘 triage 済みを満たす場合だけ実装へ進む。
+8. 条件未達の場合は実装せず、停止理由と次に必要な判断を `docs/ai-development/work-log.md` または `docs/ai-development/logs/` に残す。
+9. 親リポジトリに adoption / templates パスが追加または移動された場合、`roulette` 側の文書とテンプレートを再確認する。
+10. 旧 12 ジョブ名が active schedule や開発サイクルとして復活していないか、定期的に検索して確認する。
 
 ## Open Blockers
 
