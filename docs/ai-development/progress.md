@@ -16,9 +16,11 @@
 | AI 開発運用の基本導入 | 完了 |
 | 既存要件正本 | `docs/requirements.md` が正本 |
 | AI 運用入口 | `docs/ai-development/requirements.md` |
+| AI 運用目的 | `docs/ai-development/goal.md` |
+| Completion Scorecard | `docs/ai-development/completion-scorecard.md` |
 | 親フロー導入 | 完了。Issue -> Orchestrator -> Research -> Design Review -> Implementation -> Code Review -> Review Triage -> Fix Implementation -> Test & Quality -> Handover |
 | GitHub Development Loop 導入 | 完了。Issue Intake / Implementation PR / Review Triage / CI Failure / Scheduled Maintenance |
-| Gate 導入 | 完了。Spec Gate / Storage Conflict Guard |
+| Gate 導入 | 完了。Spec Gate / Storage Conflict Guard / Completion Scorecard Gate |
 | メモリーロック手順 | 完了。ロック本体は ChatGPT 側メモリー `/workspace/memory/locks/roulette-schedule-lock.json` を使う |
 | ChatGPT スケジュール | 旧 12 本は disabled / prompt なし。実装短周期 15 分、レビュー 1 時間、人間確認 / Slack 1 時間の 3 本を有効化済み |
 | Slack 確認先 | `https://app.slack.com/client/T0B0KABNVNX/C0BCAL9FFSP` / `channel_id: C0BCAL9FFSP` |
@@ -31,95 +33,46 @@
 | PR #26 `actions/github-script` major update | fresh CI run `28076738214` が success。requested reviewer が残っているため人間レビュー / merge 判断待ち |
 | PR #45 `fix: resolve CI typecheck errors` | review triage 済み。stale / superseded / close 候補として人間レビューまたは dedicated triage-owner cycle へ委譲 |
 | PR #46 `fix: stabilize public readiness CI and tests` | stale / superseded / close 候補。実装サイクルではコード変更しない |
-| PR #27 `@vitejs/plugin-react` major update | 2026-06-24 20:52 JST 実装短周期サイクルで再確認。PR は open、head `d9978573927fb7389cbe2d677216f7d1c5514d5d`、`mergeable: false`、requested reviewer あり。`@vitejs/plugin-react` 6.0.2 と current Vite 7 系の peer dependency mismatch があり、Vite 8 とセットで再作成するか、close / superseded / 保留にするかの人間確認待ち。merge as-is blocked |
-| PR #18 `vitest` major update | 2026-06-24 20:52 JST 実装短周期サイクルで再確認。PR は open、head `97477654d373090a9494d699d6d1a27aa47754b6`、`mergeable: false`、requested reviewer あり。Slack 投稿 `https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782283714065949` への回答待ちが Open Blocker。人間回答が得られるまで merge / close / recreate / dependency update は停止 |
+| PR #27 `@vitejs/plugin-react` major update | 2026-06-24 21:07 JST 実装短周期サイクルで再確認。PR は open、head `d9978573927fb7389cbe2d677216f7d1c5514d5d`、`mergeable: false`、requested reviewer あり。`@vitejs/plugin-react` 6.0.2 と current Vite 7 系の peer dependency mismatch があり、Vite 8 とセットで再作成するか、close / superseded / 保留にするかの人間確認待ち。merge as-is blocked |
+| PR #18 `vitest` major update | 2026-06-24 21:07 JST 実装短周期サイクルで再確認。PR は open、head `97477654d373090a9494d699d6d1a27aa47754b6`、`mergeable: false`、requested reviewer あり。Slack 投稿 `https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782283714065949` へのスレッド返信なし。人間回答が得られるまで merge / close / recreate / dependency update は停止 |
 
 ## 直近の実施内容
 
-### 2026-06-24 20:52 JST Implementation Cycle / Open Blocker
+### 2026-06-24 21:07 JST Implementation Cycle / Open Blocker
 
 - ChatGPT 側メモリーロックを取得して作業した。
 - `AGENTS.md`、`docs/ai-development/agent-instructions.md`、`docs/requirements.md`、`docs/ai-development/requirements.md`、`docs/ai-development/goal.md`、`docs/ai-development/completion-scorecard.md`、`docs/ai-development/progress.md`、`docs/ai-development/work-log.md` を確認した。
-- 親リポジトリは read-only として、`README.md`、`playbooks/github-development-loop.md`、`playbooks/spec-gate.md`、`playbooks/storage-conflict-guard.md` の必要箇所だけを参照した。
-- `docs/ai-development/requirements.md` とこの文書に PR #18 の Slack 回答待ち Open Blocker が残っているため、実装可能なタスクは選定しなかった。
+- 親リポジトリは read-only として、`playbooks/github-development-loop.md`、`playbooks/spec-gate.md`、`playbooks/storage-conflict-guard.md`、`playbooks/autonomy-scorecard.md` の必要箇所だけを参照した。
+- PR #18 の Slack 回答待ち Open Blocker が残っているため、実装可能なタスクは選定しなかった。
+- Slack スレッド `1782283714.065949` を確認したが、返信はなかった。
 - PR #18 は open、head `97477654d373090a9494d699d6d1a27aa47754b6`、`mergeable: false`、requested reviewer あり。
 - PR #27 は open、head `d9978573927fb7389cbe2d677216f7d1c5514d5d`、`mergeable: false`、requested reviewer あり。
 - Spec Gate 判定: `blocked / human-approval-required`。Open Blocker、回答待ち、方針未確定があるため実装条件を満たさない。
-- Storage Conflict Guard: `docs/ai-development/progress.md` は file SHA `c1b1035e24a31f93f54d95791404d8ddea6a5f2c` を確認して更新した。新規 log は同名ファイル 404 を確認してから作成した。
+- Storage Conflict Guard: 新規 log は同名ファイル 404 を確認してから作成した。`progress.md` は file SHA `361f6bf40055ad2ec89862599e857d93f4ea18ab` を確認して更新した。
 - Completion score: 40 / 100。公開可否は不可。運用適性は停止記録としてはあり、実装を進める状態としては不適。
 - Slack 投稿は行っていない。理由: 既存回答待ちの再確認であり、新しい判断材料、追加質問、追加承認事項はなかったため。
 - プロダクトコード、依存関係、PR 状態、Issue、親リポジトリ、スケジュールは変更していない。
+- 詳細ログ: `docs/ai-development/logs/2026-06-24-2107-implementation-cycle-open-blocker.md`
+
+### 2026-06-24 20:52 JST Implementation Cycle / Open Blocker
+
+- PR #18 の Slack 回答待ち Open Blocker と PR #27 の方針未確定を再確認し、実装に進まず停止した。
+- Completion score: 40 / 100。公開可否は不可。
 - 詳細ログ: `docs/ai-development/logs/2026-06-24-2052-implementation-cycle-open-blocker.md`
 
 ### 2026-06-24 19:22 JST PR #18 Implementation Cycle / Answer Waiting
 
-- ChatGPT 側メモリーロックを取得して作業した。
-- `AGENTS.md`、`docs/ai-development/agent-instructions.md`、`docs/ai-development/goal.md`、`docs/ai-development/progress.md`、`docs/ai-development/work-log.md`、`docs/requirements.md`、`docs/ai-development/requirements.md` を確認した。
-- 実装短周期サイクルで扱う最優先事項として、PR #18 `chore(deps-dev): bump vitest from 3.2.4 to 4.1.6` の扱いに関する既存回答待ちを 1 件だけ選んだ。
-- 親リポジトリは read-only として、`README.md`、`playbooks/github-development-loop.md`、`playbooks/spec-gate.md`、`playbooks/storage-conflict-guard.md` の必要箇所だけを参照した。
-- Slack スレッド `1782283714.065949` を確認したが、返信はなかった。
-- PR #18 は open のまま、`mergeable: false`、head `97477654d373090a9494d699d6d1a27aa47754b6`、requested reviewer ありのまま。
-- Slack 投稿は行っていない。理由: 既に投稿済みの PR #18 質問への回答待ちを確認しただけで、新しい判断材料、追加質問、追加承認事項はなかったため。
-- 判定: `blocked / answer-waiting`。PR #18 を `recreate` / `close` / `keep` / `その他` のどれで扱うかの人間回答が得られるまで、merge / close / recreate / dependency update は進めない。
-- プロダクトコード、依存関係、PR 状態、Issue、親リポジトリ、スケジュールは変更していない。
+- PR #18 の既存 Slack 投稿への返信がないことを確認し、実装に進まず停止した。
 - 詳細ログ: `docs/ai-development/logs/2026-06-24-1922-implementation-cycle-pr18-answer-waiting.md`
 
 ### 2026-06-24 18:30 JST PR #27 Review Cycle / Spec Gate
 
-- ChatGPT 側メモリーロックを取得して作業した。
-- `AGENTS.md`、`docs/ai-development/agent-instructions.md`、`docs/ai-development/goal.md`、`docs/ai-development/progress.md`、`docs/ai-development/work-log.md`、`docs/requirements.md`、`docs/ai-development/requirements.md` を確認した。
-- レビュー 1 時間サイクルで扱える最優先事項として、PR #27 `chore(deps-dev): bump @vitejs/plugin-react from 5.2.0 to 6.0.2` の Spec Gate / Review Triage を 1 件だけ選んだ。PR #18 は人間確認 / Slack サイクルの回答待ちのため、このレビューサイクルでは扱わなかった。
-- 親リポジトリは read-only として、`playbooks/github-development-loop.md`、`playbooks/review-finding-triage.md`、`playbooks/spec-gate.md`、`playbooks/storage-conflict-guard.md` の必要箇所だけを参照した。
-- PR #27 は open、head `d9978573927fb7389cbe2d677216f7d1c5514d5d`、`mergeable: false`、requested reviewer あり。
-- main の `package.json` は `@vitejs/plugin-react: ^5.0.2`、`vite: ^7.1.2`。PR #27 は `@vitejs/plugin-react` を `^6.0.2` に上げるが、lock 上の `@vitejs/plugin-react` 6.0.2 は peer dependency として `vite: ^8.0.0` を要求している。
-- Review Finding Triage: `PR27-F-001 must fix` (plugin-react 6 と Vite 7 の peer mismatch)、`PR27-F-002 question` (Vite 8 とセットで再作成 / close / superseded / 保留の人間判断)、`PR27-F-003 test only` (fresh CI なし) と分類した。
-- Slack 投稿は行っていない。理由: このレビューサイクルでは Slack へ投稿せず、人間確認 / Slack サイクルへ渡す事項として記録するため。また、前回 17:30 JST の分類から新しい判断材料、追加質問、追加承認事項は増えていないため。
-- 判定: `blocked / needs-design-review / needs-test / human-approval-required`。PR #27 は merge as-is しない。
-- プロダクトコード、依存関係、PR 状態、Issue、親リポジトリ、スケジュールは変更していない。
+- PR #27 は `@vitejs/plugin-react` 6.0.2 と Vite 7 系の peer dependency mismatch により merge as-is blocked と判定した。
 - 詳細ログ: `docs/ai-development/logs/2026-06-24-1830-review-cycle-pr27-spec-gate.md`
 
-### 2026-06-24 17:37 JST PR #18 Implementation Cycle / Answer Waiting
+## 最近の詳細ログ
 
-- ChatGPT 側メモリーロックを取得して作業した。
-- `AGENTS.md`、`docs/ai-development/agent-instructions.md`、`docs/ai-development/goal.md`、`docs/ai-development/progress.md`、`docs/ai-development/work-log.md`、`docs/requirements.md`、`docs/ai-development/requirements.md` を確認した。
-- 実装短周期サイクルで扱う最優先事項として、PR #18 `chore(deps-dev): bump vitest from 3.2.4 to 4.1.6` の扱いに関する既存回答待ちを 1 件だけ選んだ。
-- 親リポジトリは read-only として、`playbooks/github-development-loop.md`、`playbooks/spec-gate.md`、`playbooks/storage-conflict-guard.md` の必要箇所だけを参照した。
-- Slack スレッド `1782283714.065949` を確認したが、返信はなかった。
-- PR #18 は open のまま、`mergeable: false`、head `97477654d373090a9494d699d6d1a27aa47754b6`、requested reviewer ありのまま。
-- Slack 投稿は行っていない。理由: 既に投稿済みの PR #18 質問への回答待ちを確認しただけで、新しい判断材料、追加質問、追加承認事項はなかったため。
-- 判定: `blocked / answer-waiting`。PR #18 を `recreate` / `close` / `keep` / `その他` のどれで扱うかの人間回答が得られるまで、merge / close / recreate / dependency update は進めない。
-- プロダクトコード、依存関係、PR 状態、Issue、親リポジトリ、スケジュールは変更していない。
-- 詳細ログ: `docs/ai-development/logs/2026-06-24-1737-implementation-cycle-pr18-answer-waiting.md`
-
-### 2026-06-24 17:30 JST PR #27 Review Cycle / Spec Gate
-
-- ChatGPT 側メモリーロックを取得して作業した。
-- `AGENTS.md`、`docs/ai-development/agent-instructions.md`、`docs/ai-development/goal.md`、`docs/ai-development/progress.md`、`docs/ai-development/work-log.md`、`docs/requirements.md`、`docs/ai-development/requirements.md` を確認した。
-- レビュー 1 時間サイクルで扱える最優先事項として、PR #27 `chore(deps-dev): bump @vitejs/plugin-react from 5.2.0 to 6.0.2` の Spec Gate / Review Triage を 1 件だけ選んだ。PR #18 は人間確認 / Slack サイクルの回答待ちのため、このレビューサイクルでは扱わなかった。
-- 親リポジトリは read-only として、`playbooks/github-development-loop.md`、`playbooks/review-finding-triage.md`、`playbooks/spec-gate.md`、`playbooks/storage-conflict-guard.md` の必要箇所だけを参照した。
-- PR #27 は open、head `d9978573927fb7389cbe2d677216f7d1c5514d5d`、`mergeable: false`、requested reviewer あり。
-- main の `package.json` は `@vitejs/plugin-react: ^5.0.2`、`vite: ^7.1.2`。PR #27 は `@vitejs/plugin-react` を `^6.0.2` に上げるが、lock 上の `@vitejs/plugin-react` 6.0.2 は peer dependency として `vite: ^8.0.0` を要求している。
-- Review Finding Triage: `PR27-F-001 must fix` (plugin-react 6 と Vite 7 の peer mismatch)、`PR27-F-002 question` (Vite 8 とセットで再作成 / close / superseded / 保留の人間判断)、`PR27-F-003 test only` (fresh CI なし) と分類した。
-- Slack 投稿は行っていない。理由: このレビューサイクルでは Slack へ投稿せず、人間確認 / Slack サイクルへ渡す事項として記録するため。通常報告や既知事項の再通知でもない。
-- 判定: `blocked / needs-design-review / needs-test / human-approval-required`。PR #27 は merge as-is しない。
-- プロダクトコード、依存関係、PR 状態、Issue、親リポジトリ、スケジュールは変更していない。
-- 詳細ログ: `docs/ai-development/logs/2026-06-24-1730-review-cycle-pr27-spec-gate.md`
-
-### 2026-06-24 17:22 JST PR #18 Implementation Cycle / Answer Waiting
-
-- ChatGPT 側メモリーロックを取得して作業した。
-- `AGENTS.md`、`docs/ai-development/agent-instructions.md`、`docs/ai-development/goal.md`、`docs/ai-development/progress.md`、`docs/ai-development/work-log.md`、`docs/requirements.md`、`docs/ai-development/requirements.md` を確認した。
-- 実装短周期サイクルで扱う最優先事項として、PR #18 `chore(deps-dev): bump vitest from 3.2.4 to 4.1.6` の扱いに関する既存回答待ちを 1 件だけ選んだ。
-- 親リポジトリは read-only として、`README.md`、`playbooks/automated-development-flow.md`、`playbooks/github-development-loop.md`、`playbooks/spec-gate.md`、`playbooks/storage-conflict-guard.md` の必要箇所だけを参照した。
-- PR #18 は open のまま、`mergeable: false`、head `97477654d373090a9494d699d6d1a27aa47754b6` のまま。
-- Slack スレッド `1782283714.065949` を確認したが、返信はなかった。
-- Slack 投稿は行っていない。理由: 既に投稿済みの PR #18 質問への回答待ちを確認しただけで、新しい判断材料、追加質問、追加承認事項はなかったため。
-- 判定: `blocked / answer-waiting`。PR #18 を `recreate` / `close` / `keep` / `その他` のどれで扱うかの人間回答が得られるまで、merge / close / recreate / dependency update は進めない。
-- プロダクトコード、依存関係、PR 状態、Issue、親リポジトリ、スケジュールは変更していない。
-- 詳細ログ: `docs/ai-development/logs/2026-06-24-1722-implementation-cycle-pr18-answer-waiting.md`
-
-### 最近の詳細ログ
-
+- 2026-06-24 21:07 JST: `docs/ai-development/logs/2026-06-24-2107-implementation-cycle-open-blocker.md`
 - 2026-06-24 20:52 JST: `docs/ai-development/logs/2026-06-24-2052-implementation-cycle-open-blocker.md`
 - 2026-06-24 19:22 JST: `docs/ai-development/logs/2026-06-24-1922-implementation-cycle-pr18-answer-waiting.md`
 - 2026-06-24 18:30 JST: `docs/ai-development/logs/2026-06-24-1830-review-cycle-pr27-spec-gate.md`
@@ -129,14 +82,6 @@
 - 2026-06-24 17:07 JST: `docs/ai-development/logs/2026-06-24-1707-implementation-cycle-pr18-answer-waiting.md`
 - 2026-06-24 16:52 JST: `docs/ai-development/logs/2026-06-24-1652-implementation-cycle-pr18-answer-waiting.md`
 - 2026-06-24 16:45 JST: `docs/ai-development/logs/2026-06-24-1645-human-slack-cycle-pr18-answer-waiting.md`
-- 2026-06-24 16:37 JST: `docs/ai-development/logs/2026-06-24-1637-implementation-cycle-pr18-answer-waiting.md`
-- 2026-06-24 16:30 JST: `docs/ai-development/logs/2026-06-24-1630-review-cycle-pr18-triage.md`
-- 2026-06-24 16:22 JST: `docs/ai-development/logs/2026-06-24-1622-implementation-cycle-pr18-answer-waiting.md`
-- 2026-06-24 16:07 JST: `docs/ai-development/logs/2026-06-24-1607-implementation-cycle-pr18-answer-waiting.md`
-- 2026-06-24 15:52 JST: `docs/ai-development/logs/2026-06-24-1552-implementation-cycle-pr18-answer-waiting.md`
-- 2026-06-24 15:45 JST: `docs/ai-development/logs/2026-06-24-1545-human-slack-cycle-pr18.md`
-- 2026-06-24 15:30 JST: `docs/ai-development/logs/2026-06-24-1530-review-cycle-pr18-triage.md`
-- 2026-06-24 15:22 JST: `docs/ai-development/logs/2026-06-24-1522-implementation-cycle-pr18-spec-gate.md`
 
 ## 次にやる作業
 
@@ -154,7 +99,7 @@
 
 ## Open Blockers
 
-- PR #18: Slack 回答待ち。既存 CI run `25979489135` は古い failure のままで、直前サイクルでは GitHub が rerun を拒否した。`recreate` / `close` / `keep` / `その他` の人間回答が得られるまで、merge / close / recreate / dependency update は進めない。
+- PR #18: Slack 回答待ち。既存 CI run `25979489135` は古い failure のままで、GitHub 側から rerun が拒否された。`recreate` / `close` / `keep` / `その他` の人間回答が得られるまで、merge / close / recreate / dependency update は進めない。
 - PR #27: `@vitejs/plugin-react` 6.0.2 と current `vite` 7.3.3 / `vite: ^7.1.2` の peer dependency mismatch。Vite 8 とセットで再作成するか、close / superseded / 保留にするかが未確定。fresh CI もないため merge as-is blocked。
 
 ## 回答待ち
@@ -168,14 +113,15 @@
 2. `docs/ai-development/agent-instructions.md`
 3. `docs/requirements.md`
 4. `docs/ai-development/requirements.md`
-5. `docs/ai-development/progress.md`
-6. `docs/ai-development/work-log.md`
-7. 関連 Issue / PR / handover
-8. 選んだ作業に対応する親 playbook
+5. `docs/ai-development/goal.md`
+6. `docs/ai-development/completion-scorecard.md`
+7. `docs/ai-development/progress.md`
+8. `docs/ai-development/work-log.md`
+9. 関連 Issue / PR / handover
+10. 選んだ作業に対応する親 playbook
 
 運用レビューやスケジュール準備では、必要に応じて次も読む。
 
-- `docs/ai-development/goal.md`
 - `docs/ai-development/automation-lock.md`
 
 ## 更新ルール
