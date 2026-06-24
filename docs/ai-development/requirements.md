@@ -81,13 +81,13 @@ Slack 投稿は、新しい判断材料があり、設計・実装・検証・�
 
 ## Open Blockers
 
-現時点ではありません。
+- PR #18 `chore(deps-dev): bump vitest from 3.2.4 to 4.1.6`: Slack 回答待ち。既存 CI run `25979489135` は古い failure のままで、GitHub 側から rerun が拒否された。Slack 投稿 `https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782283714065949` への返信がなく、`recreate` / `close` / `keep` / `その他` の人間回答が得られるまで、merge / close / recreate / dependency update は進めない。
 
 実装ジョブは、ここまたは `docs/requirements.md` に Open ブロッカーが追加された場合、実装せず停止理由を `docs/ai-development/work-log.md` または `docs/ai-development/logs/` に記録してください。
 
 ## 回答待ち
 
-現時点ではありません。
+- 2026-06-24 20:45 JST: PR #18 を `recreate` / `close` / `keep` / `その他` のどれで扱うか。Slack 投稿 `https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782283714065949` への返信を待つ。最新確認ではスレッド返信なし。新しい判断材料、追加質問、追加承認事項はないため、Slack への再投稿は行わない。
 
 ## 回答済みの確認ログ
 
