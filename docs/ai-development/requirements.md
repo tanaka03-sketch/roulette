@@ -29,6 +29,16 @@
 - 抽選は初期版では `Math.random()` ベースでよく、厳密な公平性や監査性は対象外。
 - 推奨 Node.js は README と `.nvmrc` に従い Node.js 22 前提。
 
+## GitHub Actions major update 運用方針
+
+2026-06-24 13:20 JST のユーザー依頼により、GitHub Actions major update 方針の回答待ちは解消済みとして扱います。
+
+- Dependabot の GitHub Actions major update PR は、まとめて方針化したうえで triage する。
+- ただし merge / close / recreate は一括で機械的に行わず、PR ごとに互換性、CI 結果、README / 要件 / GitHub 運用文書との整合を確認してから扱う。
+- `actions/checkout`、`actions/setup-node`、`actions/github-script` などの major update は、Node.js 22、`npm ci`、`cache: npm`、`typecheck` / `test` / `build` の成功を確認できる状態にしてから次へ進める。
+- 高リスク変更、権限変更、secret、認証・認可、production readiness の最終判断が絡む場合は、人間承認へ戻す。
+- この方針は AI 開発運用上の blocker 解消であり、プロダクト仕様の正本 `docs/requirements.md` を置き換えない。
+
 ## 人間判断の扱い
 
 人間判断が Issue クローズ、実装可否、設計、検証、管理画面操作に影響する場合、AI ジョブは推測で進めません。
@@ -52,16 +62,17 @@ Slack 投稿は、新しい判断材料があり、設計・実装・検証・�
 
 ## Open Blockers
 
-- GitHub Actions major update 方針が回答待ちのため、Dependabot major update PR の merge / close / recreate など方向性判断は進めない。
+現時点ではありません。
 
 実装ジョブは、ここまたは `docs/requirements.md` に Open ブロッカーが追加された場合、実装せず停止理由を `docs/ai-development/work-log.md` に記録してください。
 
 ## 回答待ち
 
-- 2026-06-24 12:45 JST: GitHub Actions major update 方針。`docs/requirements.md` の FUTURE-008「Node.js / GitHub Actions アクション更新方針」が要決定であり、open PR に PR #51 `actions/checkout` 4 -> 7、PR #26 `actions/github-script` 7 -> 9、`actions/setup-node` 4 -> 6 などの major update がある。次のレビュー・実装サイクルで、まとめて方針化して進める / 個別 PR ごとに判断する / いったん保留する / その他 のどれで扱うか、Slack 投稿 `https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782272893984959` への返信待ち。
+現時点ではありません。
 
 ## 回答済みの確認ログ
 
+- 2026-06-24 13:20 JST: ユーザー依頼「妨げを解消して、サイクルに回せるように妨げになってるものの解決方法をアナウンス」により、GitHub Actions major update 方針の回答待ちを解消。選択肢 1 の `まとめて方針化して進める` を採用し、Dependabot major update PR はまとめて triage しつつ、merge / close / recreate は PR ごとの互換性と CI 結果を確認して判断する。
 - 2026-06-24 12:36 JST: Slack 投稿 `https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782258456427199` への返信 `1` を確認。選択肢 1 の `close` として、PR #52 `docs: switch schedule lock to ChatGPT memory` は古い内容として閉じ、current `main` を正とする方針で処理する。
 
 不明点が実装判断、設計判断、検証判断に影響する場合は推測で進めず、Slack 投稿または質問文案の記録を行ってください。
