@@ -32,30 +32,38 @@
 | PR #51 `actions/checkout` major update | CI 成功、レビューサイクルで must fix なし / should fix は人間レビュー待ちと分類済み。merge は人間判断へ委譲 |
 | PR #14 `actions/setup-node` major update | Dependabot rebase 完了。fresh CI run `28076205733` が success。`typecheck` / `test` / `build` すべて success。requested reviewer が残っているため人間レビュー / merge 判断待ち |
 | PR #26 `actions/github-script` major update | Dependabot rebase 完了。fresh CI run `28076738214` が success。`typecheck` / `test` / `build` すべて success。requested reviewer が残っているため人間レビュー / merge 判断待ち |
-| PR #45 `fix: resolve CI typecheck errors` | CI failure を確認。現在の `main` には主要修正が反映済みで、後続 PR #46 の CI success も確認済み。PR #45 は stale / superseded / close 候補として triage または人間レビューへ渡す |
+| PR #45 `fix: resolve CI typecheck errors` | レビューサイクルで分類済み。`out of scope / no PR-internal fix`、`test only / already evidenced`、`question / human review queue`。stale / superseded / close 候補として人間レビューまたは dedicated triage-owner cycle へ委譲 |
 
 ## 直近の実施内容
+
+### 2026-06-24 14:30 JST PR #45 Review Cycle Triage
+
+- ChatGPT 側メモリーロックを取得して作業した。
+- `AGENTS.md`、`docs/ai-development/agent-instructions.md`、`docs/ai-development/goal.md`、`docs/ai-development/progress.md`、`docs/ai-development/work-log.md`、`docs/requirements.md`、`docs/ai-development/requirements.md` を確認した。
+- 親リポジトリは read-only として、`README.md`、`playbooks/review-finding-triage.md`、`playbooks/spec-gate.md`、`playbooks/storage-conflict-guard.md` を必要範囲で確認した。
+- レビュー 1 時間サイクルの対象として、最優先タスクを 1 件だけ選び、PR #45 `fix: resolve CI typecheck errors` を扱った。
+- PR #45 は open、head `2547bce759e16e2b7a726b90d96345d0b663b8a5`、既存 AI コメント `4786170904` で CI failure / superseded-by-main の整理済みであることを再確認した。
+- Review Finding Triage:
+  - `PR45-F-001`: `out of scope / no PR-internal fix`。主要修正は current `main` と後続作業により既に反映・代替済み。PR 内修正は行わない。
+  - `PR45-F-002`: `test only / already evidenced`。旧 CI failure と後続 PR #46 CI success が既に記録済み。コード変更なしのため新規検証は行わない。
+  - `PR45-F-003`: `question / human review queue`。close はリポジトリ状態変更のため、このレビューサイクルでは実行せず人間レビューまたは dedicated triage-owner cycle へ渡す。
+- Storage Conflict Guard として PR #45 とコメントを re-read し、既存 operation ID があるため重複 PR コメントは作成しなかった。
+- 詳細ログ: `docs/ai-development/logs/2026-06-24-1430-review-cycle-pr45-triage.md`
+- Slack 投稿は行っていない。理由: 既知の stale / superseded 分類であり、新しい設計・実装・検証・運用判断を人間に求める内容ではないため。
 
 ### 2026-06-24 14:22 JST PR #45 CI Failure Triage
 
 - ChatGPT 側メモリーロックを取得して作業した。
-- `AGENTS.md`、`docs/ai-development/agent-instructions.md`、`docs/ai-development/goal.md`、`docs/ai-development/progress.md`、`docs/ai-development/work-log.md`、`docs/requirements.md`、`docs/ai-development/requirements.md` を確認した。
-- 親リポジトリは read-only として、`README.md`、`playbooks/automated-development-flow.md`、`playbooks/github-development-loop.md`、`playbooks/spec-gate.md`、`playbooks/storage-conflict-guard.md` を必要範囲で確認した。
-- 実装可能な最優先タスクを 1 件だけ選び、PR #45 `fix: resolve CI typecheck errors` の CI failure を対象にした。
 - PR #45 head `2547bce759e16e2b7a726b90d96345d0b663b8a5` の CI run `26135304699` は `typecheck` / `test` / `build` が failure。
 - 現在の `main` では、PR #45 の主要修正対象だった `pickRandomCandidate` の indexed access 補強と `vite.config.ts` の `vitest/config` 化が反映済みであることを確認した。
 - 後続 PR #46 head `a98757d3720b04fd7b44511d45167740987131ca` の CI run `26484432550` は success。`typecheck` / `test` / `build` はすべて success。
 - 判定: PR #45 は古い snapshot の CI failure として扱い、今回の実装短周期ではコード修正や rerun は行わない。
-- Storage Conflict Guard として PR #45 とコメント一覧を re-read し、同一 operation ID がないこと、head SHA が変わっていないことを確認した。
 - PR #45 に CI Failure Loop Result コメントを追加した。コメント ID: `4786170904`。
 - 詳細ログ: `docs/ai-development/logs/2026-06-24-1422-pr45-ci-failure-superseded.md`
-- Slack 投稿は行っていない。理由: 古い CI failure の整理であり、新しい設計・実装・検証・運用判断を人間に求める内容ではないため。
 
 ### 2026-06-24 14:12 JST PR #26 fresh CI 確認
 
 - PR #26 `actions/github-script` major update を対象にした。
-- 差分は `.github/workflows/sync-labels.yml` の `actions/github-script@v7` -> `actions/github-script@v9` のみに限定されていることを確認した。
-- 既存 CI run `25996695982` は古すぎて rerun が拒否されたため、Storage Conflict Guard 後に `@dependabot rebase` をコメントした。
 - Dependabot rebase 後の fresh CI run `28076738214` は success。`typecheck` / `test` / `build` はすべて success。
 - requested reviewer が残っているため、merge 最終判断は人間レビューへ委譲する。
 - 詳細ログ: `docs/ai-development/logs/2026-06-24-1412-pr26-ci-success.md`
@@ -67,23 +75,18 @@
 - requested reviewer が残っているため、merge 最終判断は人間レビューへ委譲する。
 - 詳細ログ: `docs/ai-development/logs/2026-06-24-1402-pr14-ci-success.md`
 
-### 2026-06-24 13:52 JST 実装短周期サイクル
-
-- PR #14 `actions/setup-node` major update で古い CI run の rerun が拒否されたため、Storage Conflict Guard 後に `@dependabot rebase` をコメントした。
-- コメント後、PR 本文に `Dependabot is rebasing this PR` が入ったことを確認した。
-- 詳細ログ: `docs/ai-development/logs/2026-06-24-1352-implementation-cycle.md`
-
 ### 以前の主な履歴
 
-- 2026-06-24 13:37 JST: PR #14 を分類し、`actions/setup-node@v6` と `npm ci` は成功済みで古い CI 失敗は既知ブロッカー由来と判断。詳細: `docs/ai-development/logs/2026-06-24-1337-implementation-cycle.md`
+- 2026-06-24 13:52 JST: PR #14 で古い CI run の rerun が拒否されたため、Storage Conflict Guard 後に `@dependabot rebase` をコメント。詳細: `docs/ai-development/logs/2026-06-24-1352-implementation-cycle.md`
+- 2026-06-24 13:37 JST: PR #14 を分類し、古い CI 失敗は既知ブロッカー由来と判断。詳細: `docs/ai-development/logs/2026-06-24-1337-implementation-cycle.md`
 - 2026-06-24 13:30 JST: PR #51 をレビューし、must fix なし / human review queue と分類。詳細: `docs/ai-development/logs/2026-06-24-1330-review-cycle.md`
 - 2026-06-24 13:22 JST: PR #51 に AI 実装サイクル確認コメントを追加。詳細: `docs/ai-development/logs/2026-06-24-1322-implementation-cycle.md`
 - 2026-06-24 13:20 JST: GitHub Actions major update 方針の回答待ちを解消。詳細: `docs/ai-development/logs/2026-06-24-1320-blocker-resolution.md`
 
 ## 次にやる作業
 
-1. PR #45 `fix: resolve CI typecheck errors` は stale / superseded / close 候補として、triage または人間レビューへ渡す。
-2. PR #46 `fix: stabilize public readiness CI and tests` も古い draft PR として残っているため、次回以降に現在の `main` と照合し、superseded / close 候補かを 1 件として確認する。
+1. PR #46 `fix: stabilize public readiness CI and tests` は古い draft PR として残っているため、次回以降に現在の `main` と照合し、superseded / close 候補かを 1 件として確認する。
+2. PR #45 `fix: resolve CI typecheck errors` は review triage 済み。close はこのレビューサイクルでは実施せず、人間レビューまたは dedicated triage-owner cycle に委譲する。
 3. PR #26 `actions/github-script` major update は fresh CI 成功済みのため、人間レビュー / merge 判断へ渡す。
 4. PR #14 `actions/setup-node` major update は fresh CI 成功済みのため、人間レビュー / merge 判断へ渡す。
 5. PR #51 `actions/checkout` major update は CI 成功済み、レビューサイクルでは must fix なし / should fix は人間レビュー待ちとして分類済み。merge は人間判断へ委譲する。
