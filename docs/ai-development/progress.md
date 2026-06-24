@@ -7,7 +7,7 @@
 
 ## 目的
 
-この文書は、AI 開発運用で「何をやったか」「どこまで進んだか」「次に何をやるか」を短く確認するための進捗ファイルです。詳細な履歴は `docs/ai-development/work-log.md` または `docs/ai-development/logs/` に残し、この文書は現在地を把握する入口として使います。
+この文書は、AI 開発運用で現在地、停止条件、次にやる作業を短く確認するための進捗入口です。詳細な履歴は `docs/ai-development/work-log.md` または `docs/ai-development/logs/` に残します。
 
 ## 現在地
 
@@ -19,10 +19,7 @@
 | 親フロー導入 | 完了。Issue -> Orchestrator -> Research -> Design Review -> Implementation -> Code Review -> Review Triage -> Fix Implementation -> Test & Quality -> Handover |
 | GitHub Development Loop 導入 | 完了。Issue Intake / Implementation PR / Review Triage / CI Failure / Scheduled Maintenance |
 | Gate 導入 | 完了。Spec Gate / Storage Conflict Guard |
-| 目的ファイル | `docs/ai-development/goal.md` |
-| 進捗ファイル | この文書 |
 | メモリーロック手順 | 完了。ロック本体は ChatGPT 側メモリー `/workspace/memory/locks/roulette-schedule-lock.json` を使う |
-| GitHub ファイルロック JSON | 廃止。`docs/ai-development/automation-lock.json` は削除済み |
 | ChatGPT スケジュール | 旧 12 本は disabled / prompt なし。実装短周期 15 分、レビュー 1 時間、人間確認 / Slack 1 時間の 3 本を有効化済み |
 | Slack 確認先 | `https://app.slack.com/client/T0B0KABNVNX/C0BCAL9FFSP` / `channel_id: C0BCAL9FFSP` |
 | Slack 投稿方針 | 新しい判断材料があり人間回答が必要な時だけ投稿。通常報告、既知事項の再通知、問題なし報告は投稿しない |
@@ -33,30 +30,31 @@
 | PR #14 `actions/setup-node` major update | fresh CI run `28076205733` が success。requested reviewer が残っているため人間レビュー / merge 判断待ち |
 | PR #26 `actions/github-script` major update | fresh CI run `28076738214` が success。requested reviewer が残っているため人間レビュー / merge 判断待ち |
 | PR #45 `fix: resolve CI typecheck errors` | review triage 済み。stale / superseded / close 候補として人間レビューまたは dedicated triage-owner cycle へ委譲 |
-| PR #46 `fix: stabilize public readiness CI and tests` | 2026-06-24 14:52 JST 実装短周期で再確認。open / draft / mergeable false、既存の stale / superseded 判定を覆す新規返信・状態変化なし。実装サイクルではコード変更しない |
-| PR #27 `@vitejs/plugin-react` major update | 2026-06-24 15:07 JST Spec Gate 実施。`@vitejs/plugin-react` 6 は `vite` `^8.0.0` を peer dependency に要求するが current `main` は `vite` `^7.1.2`。head CI status なし、mergeable false、requested reviewer あり。実装短周期では blocked / needs-design-review-or-recreate |
-| PR #18 `vitest` major update | 2026-06-24 15:30 JST Review Triage 実施。変更は `package.json` / `package-lock.json` のみ。CI run `25979489135` は typecheck failure だが、失敗内容は後続で修正済みの既存型エラー由来。レビュー指摘は `test only` / `should fix` に分類し、must fix は未検出。fresh CI と人間レビュー / merge 判断待ち |
+| PR #46 `fix: stabilize public readiness CI and tests` | stale / superseded / close 候補。実装サイクルではコード変更しない |
+| PR #27 `@vitejs/plugin-react` major update | Spec Gate blocked。`@vitejs/plugin-react` 6 と current `vite` 7 の peer dependency mismatch、head CI status なし、requested reviewer あり |
+| PR #18 `vitest` major update | 2026-06-24 15:52 JST 実装短周期で確認。Slack 投稿 `https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782283714065949` への返信なし。人間回答待ちのため merge / close / recreate / dependency update は停止 |
 
 ## 直近の実施内容
 
-### 2026-06-24 15:30 JST PR #18 Review Triage
+### 2026-06-24 15:52 JST PR #18 Implementation Cycle / Answer Waiting
 
 - ChatGPT 側メモリーロックを取得して作業した。
 - `AGENTS.md`、`docs/ai-development/agent-instructions.md`、`docs/ai-development/goal.md`、`docs/ai-development/progress.md`、`docs/ai-development/work-log.md`、`docs/requirements.md`、`docs/ai-development/requirements.md` を確認した。
-- 親リポジトリは read-only として、`playbooks/review-finding-triage.md`、`playbooks/spec-gate.md`、`playbooks/storage-conflict-guard.md` を必要範囲で確認した。
-- レビュー 1 時間サイクルの対象として PR #18 `chore(deps-dev): bump vitest from 3.2.4 to 4.1.6` を 1 件だけ選び、Review Triage / Spec Gate を実施した。
-- PR #18 は `package.json` と `package-lock.json` のみを変更する Dependabot PR。
-- PR #18 head `97477654d373090a9494d699d6d1a27aa47754b6` は CI run `25979489135` が failure。失敗ステップは `Run typecheck`。
-- CI 失敗内容は `src/domain/roulette.ts`、`src/domain/roulette.test.ts`、`src/ui/RouletteApp.test.tsx`、`vite.config.ts` の既存型エラーで、後続の CI ブロッカー対応で扱われた内容と一致する。
-- レビューコメントと未解決レビュー thread は存在しない。
-- Review Finding Triage: `must fix` は未検出。`test only`: fresh CI 必須。`should fix`: requested reviewer と mergeable false が残るため人間レビュー / merge 判断待ち。`out of scope`: プロダクト仕様、`localStorage`、認証、権限、secret、破壊的変更、本番判断に関わる新規指摘なし。
-- 判定: `blocked / needs-fresh-ci-and-review`。このレビューサイクルではコード修正、rerun、merge、close、PR コメント追加、Slack 投稿を行わない。
-- 詳細ログ: `docs/ai-development/logs/2026-06-24-1530-review-cycle-pr18-triage.md`
-- Slack 投稿は行っていない。理由: 新しい人間回答が必要な設計・実装・検証判断ではなく、客観的なレビュー分類と既存の fresh CI / 人間レビュー待ち状態を記録したため。
-- `docs/ai-development/work-log.md` への追記は、利用可能な GitHub connector が全文置換型であり、長文ファイルの安全な append 経路をこの実行で確保できなかったため見送った。詳細は上記ログファイルに残した。
+- 親リポジトリは read-only として、`playbooks/github-development-loop.md`、`playbooks/spec-gate.md`、`playbooks/storage-conflict-guard.md` の必要箇所だけを確認した。
+- 実装短周期サイクルで扱える最優先候補として PR #18 `chore(deps-dev): bump vitest from 3.2.4 to 4.1.6` を 1 件だけ選んだ。
+- PR #18 は open、head `97477654d373090a9494d699d6d1a27aa47754b6`、`mergeable: true`、requested reviewer あり。変更対象は `package.json` / `package-lock.json`。
+- PR #18 には 2026-06-24 15:45 JST の人間確認 / Slack 回答待ちコメントが残っている。
+- Slack スレッドを確認したが、返信はなかった。
+- 判定: `blocked / answer-waiting`。Spec Gate は「未確定事項なし」「Open ブロッカーなし」を満たさないため未通過。
+- Storage Conflict Guard: `progress.md` は更新前に file SHA `92167effe3d93937fdd904f4e5bc0ce1901bc0e4` を確認した。詳細ログは新規パスに追加し、既存ログを上書きしない。
+- Slack 投稿は行っていない。理由: 既に投稿済みの PR #18 質問への回答待ちを確認しただけで、新しい判断材料、追加質問、追加承認事項はなかったため。
+- プロダクトコード、依存関係、PR 状態、Issue、親リポジトリ、スケジュールは変更していない。
+- 詳細ログ: `docs/ai-development/logs/2026-06-24-1552-implementation-cycle-pr18-answer-waiting.md`
 
 ### 最近の詳細ログ
 
+- 2026-06-24 15:52 JST: `docs/ai-development/logs/2026-06-24-1552-implementation-cycle-pr18-answer-waiting.md`
+- 2026-06-24 15:45 JST: `docs/ai-development/logs/2026-06-24-1545-human-slack-cycle-pr18.md`
 - 2026-06-24 15:30 JST: `docs/ai-development/logs/2026-06-24-1530-review-cycle-pr18-triage.md`
 - 2026-06-24 15:22 JST: `docs/ai-development/logs/2026-06-24-1522-implementation-cycle-pr18-spec-gate.md`
 - 2026-06-24 15:07 JST: `docs/ai-development/logs/2026-06-24-1507-implementation-cycle-pr27-spec-gate.md`
@@ -69,28 +67,24 @@
 
 ## 次にやる作業
 
-1. 次回のレビュー 1 時間サイクルでは、`progress.md` と open PR / Issue を再確認し、Review Triage / Code Review / Spec Gate / Storage Conflict Guard の範囲でレビュー可能な最優先タスクを 1 件だけ選ぶ。
-2. PR #18 `vitest` major update は Review Triage で `blocked / needs-fresh-ci-and-review`。レビュー上の must fix は未検出だが、CI run `25979489135` は古い typecheck failure のまま。merge / rerun / close / recreate はこのレビューサイクルでは実施せず、verification / human-review cycle で fresh CI と人間レビュー状態を確認する。
-3. PR #27 `@vitejs/plugin-react` major update は Spec Gate で blocked。`@vitejs/plugin-react` 6 と current `vite` 7 の peer dependency mismatch、head CI status なし、mergeable false、requested reviewer あり。実装短周期では merge / rerun / close / recreate せず、review / human-decision / design-review cycle で `Vite 8 とセットで再作成するか` または `close / superseded とするか` を扱う。
-4. PR #46 `fix: stabilize public readiness CI and tests` は stale / superseded / close 候補として確認済み。Slack 追加投稿条件は未達。close はこの実装短周期サイクルでは実施せず、人間レビューまたは dedicated triage-owner cycle に委譲する。
-5. PR #45 `fix: resolve CI typecheck errors` は review triage 済み。close はこの実装短周期サイクルでは実施せず、人間レビューまたは dedicated triage-owner cycle に委譲する。
-6. PR #26 `actions/github-script` major update は fresh CI 成功済みのため、人間レビュー / merge 判断へ渡す。
-7. PR #14 `actions/setup-node` major update は fresh CI 成功済みのため、人間レビュー / merge 判断へ渡す。
-8. PR #51 `actions/checkout` major update は CI 成功済み、レビューサイクルでは must fix なし / should fix は人間レビュー待ちとして分類済み。merge は人間判断へ委譲する。
-9. merge / close / recreate は一括で機械的に行わず、PR ごとの確認結果に基づいて判断する。
-10. 設計確定済み、未確定事項なし、Open ブロッカーなし、小さく分解済み、検証方法明確、セキュリティ・権限・個人情報・入力検証の判断確定済み、レビュー指摘 triage 済みを満たす場合だけ実装へ進む。
-11. 条件未達の場合は実装せず、停止理由と次に必要な判断を `docs/ai-development/work-log.md` または `docs/ai-development/logs/` に残す。
-12. Slack 投稿は、新しい判断材料があり、人間回答なしでは設計・実装・検証・運用判断を進められない場合だけ行う。
-13. 親リポジトリに adoption / templates パスが追加または移動された場合、`roulette` 側の文書とテンプレートを再確認する。
-14. 旧 12 ジョブ名が active schedule や開発サイクルとして復活していないか、定期的に検索して確認する。
+1. 人間確認 / Slack サイクルで、PR #18 の Slack 投稿 `https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782283714065949` への返信を確認する。
+2. PR #18 の回答が得られたら、実装より先に `docs/ai-development/requirements.md`、`docs/ai-development/progress.md`、`docs/ai-development/work-log.md` または `docs/ai-development/logs/`、必要に応じて PR #18 へ反映する。
+3. 回答が `recreate` の場合は、Dependabot 側で fresh CI を作れる状態にする方法を人間確認 / review cycle で扱う。実装短周期では推測して dependency update を作らない。
+4. 回答が `close` / `keep` / `その他` の場合も、方針反映後に PR ごとの Spec Gate / Storage Conflict Guard を再確認する。
+5. PR #27 は `@vitejs/plugin-react` 6 と current `vite` 7 の peer dependency mismatch があるため、Vite 8 とセットで再作成するか close / superseded とするかを review / human-decision / design-review cycle で扱う。
+6. PR #45 / #46 は stale / superseded / close 候補として、人間レビューまたは dedicated triage-owner cycle に委譲する。
+7. PR #14 / #26 / #51 は CI 成功済みのため、人間レビュー / merge 判断へ渡す。
+8. merge / close / recreate は一括で機械的に行わず、PR ごとの確認結果に基づいて判断する。
+9. 設計確定済み、未確定事項なし、Open ブロッカーなし、小さく分解済み、検証方法明確、セキュリティ・権限・個人情報・入力検証の判断確定済み、レビュー指摘 triage 済み、Spec Gate 通過済み、保存や更新を伴う場合は Storage Conflict Guard 通過済みを満たす場合だけ実装へ進む。
+10. 条件未達の場合は実装せず、停止理由と次に必要な判断を `docs/ai-development/work-log.md` または `docs/ai-development/logs/` に残す。
 
 ## Open Blockers
 
-現時点ではありません。
+- PR #18: Slack 回答待ち。既存 CI run `25979489135` は古い failure のままで、直前サイクルでは GitHub が rerun を拒否した。`recreate` / `close` / `keep` / `その他` の人間回答が得られるまで、merge / close / recreate / dependency update は進めない。
 
 ## 回答待ち
 
-現時点ではありません。
+- PR #18 を `recreate` / `close` / `keep` / `その他` のどれで扱うか。Slack 投稿 `https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782283714065949` への返信を待つ。
 
 ## 読み込み順
 
