@@ -31,10 +31,24 @@
 | PR #26 `actions/github-script` major update | fresh CI run `28076738214` が success。requested reviewer が残っているため人間レビュー / merge 判断待ち |
 | PR #45 `fix: resolve CI typecheck errors` | review triage 済み。stale / superseded / close 候補として人間レビューまたは dedicated triage-owner cycle へ委譲 |
 | PR #46 `fix: stabilize public readiness CI and tests` | stale / superseded / close 候補。実装サイクルではコード変更しない |
-| PR #27 `@vitejs/plugin-react` major update | 2026-06-24 17:30 JST レビューサイクルで再分類。must fix: `@vitejs/plugin-react` 6.0.2 の peer dependency は `vite: ^8.0.0` だが current main は `vite` 7.3.3 / `vite: ^7.1.2`。question: Vite 8 とセットで再作成するか、close / superseded / 保留にするかを人間確認 / Slack サイクルへ渡す。test only: fresh CI なし。merge as-is blocked |
+| PR #27 `@vitejs/plugin-react` major update | 2026-06-24 18:30 JST レビューサイクルで再確認。PR は open、head `d9978573927fb7389cbe2d677216f7d1c5514d5d`、`mergeable: false`、requested reviewer あり。must fix: `@vitejs/plugin-react` 6.0.2 の peer dependency は `vite: ^8.0.0` だが current main は `vite` 7.3.3 / `vite: ^7.1.2`。question: Vite 8 とセットで再作成するか、close / superseded / 保留にするかを人間確認 / Slack サイクルへ渡す。test only: fresh CI なし。merge as-is blocked |
 | PR #18 `vitest` major update | 2026-06-24 17:37 JST 実装短周期サイクルで再確認。PR は open、head `97477654d373090a9494d699d6d1a27aa47754b6`、`mergeable: false`、requested reviewer あり。Slack 投稿 `https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782283714065949` への返信なし。新しい判断材料がないため追加 Slack 投稿なし。人間回答待ちのため merge / close / recreate / dependency update は停止 |
 
 ## 直近の実施内容
+
+### 2026-06-24 18:30 JST PR #27 Review Cycle / Spec Gate
+
+- ChatGPT 側メモリーロックを取得して作業した。
+- `AGENTS.md`、`docs/ai-development/agent-instructions.md`、`docs/ai-development/goal.md`、`docs/ai-development/progress.md`、`docs/ai-development/work-log.md`、`docs/requirements.md`、`docs/ai-development/requirements.md` を確認した。
+- レビュー 1 時間サイクルで扱える最優先事項として、PR #27 `chore(deps-dev): bump @vitejs/plugin-react from 5.2.0 to 6.0.2` の Spec Gate / Review Triage を 1 件だけ選んだ。PR #18 は人間確認 / Slack サイクルの回答待ちのため、このレビューサイクルでは扱わなかった。
+- 親リポジトリは read-only として、`playbooks/github-development-loop.md`、`playbooks/review-finding-triage.md`、`playbooks/spec-gate.md`、`playbooks/storage-conflict-guard.md` の必要箇所だけを参照した。
+- PR #27 は open、head `d9978573927fb7389cbe2d677216f7d1c5514d5d`、`mergeable: false`、requested reviewer あり。
+- main の `package.json` は `@vitejs/plugin-react: ^5.0.2`、`vite: ^7.1.2`。PR #27 は `@vitejs/plugin-react` を `^6.0.2` に上げるが、lock 上の `@vitejs/plugin-react` 6.0.2 は peer dependency として `vite: ^8.0.0` を要求している。
+- Review Finding Triage: `PR27-F-001 must fix` (plugin-react 6 と Vite 7 の peer mismatch)、`PR27-F-002 question` (Vite 8 とセットで再作成 / close / superseded / 保留の人間判断)、`PR27-F-003 test only` (fresh CI なし) と分類した。
+- Slack 投稿は行っていない。理由: このレビューサイクルでは Slack へ投稿せず、人間確認 / Slack サイクルへ渡す事項として記録するため。また、前回 17:30 JST の分類から新しい判断材料、追加質問、追加承認事項は増えていないため。
+- 判定: `blocked / needs-design-review / needs-test / human-approval-required`。PR #27 は merge as-is しない。
+- プロダクトコード、依存関係、PR 状態、Issue、親リポジトリ、スケジュールは変更していない。
+- 詳細ログ: `docs/ai-development/logs/2026-06-24-1830-review-cycle-pr27-spec-gate.md`
 
 ### 2026-06-24 17:37 JST PR #18 Implementation Cycle / Answer Waiting
 
@@ -78,6 +92,7 @@
 
 ### 最近の詳細ログ
 
+- 2026-06-24 18:30 JST: `docs/ai-development/logs/2026-06-24-1830-review-cycle-pr27-spec-gate.md`
 - 2026-06-24 17:37 JST: `docs/ai-development/logs/2026-06-24-1737-implementation-cycle-pr18-answer-waiting.md`
 - 2026-06-24 17:30 JST: `docs/ai-development/logs/2026-06-24-1730-review-cycle-pr27-spec-gate.md`
 - 2026-06-24 17:22 JST: `docs/ai-development/logs/2026-06-24-1722-implementation-cycle-pr18-answer-waiting.md`
