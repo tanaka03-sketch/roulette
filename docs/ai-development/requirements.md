@@ -52,13 +52,13 @@ Slack 投稿は、新しい判断材料があり、設計・実装・検証・�
 
 ## Open Blockers
 
-現時点で、この導入作業に対する Open ブロッカーはありません。
+- GitHub Actions major update 方針が回答待ちのため、Dependabot major update PR の merge / close / recreate など方向性判断は進めない。
 
 実装ジョブは、ここまたは `docs/requirements.md` に Open ブロッカーが追加された場合、実装せず停止理由を `docs/ai-development/work-log.md` に記録してください。
 
 ## 回答待ち
 
-現時点ではありません。
+- 2026-06-24 12:45 JST: GitHub Actions major update 方針。`docs/requirements.md` の FUTURE-008「Node.js / GitHub Actions アクション更新方針」が要決定であり、open PR に PR #51 `actions/checkout` 4 -> 7、PR #26 `actions/github-script` 7 -> 9、`actions/setup-node` 4 -> 6 などの major update がある。次のレビュー・実装サイクルで、まとめて方針化して進める / 個別 PR ごとに判断する / いったん保留する / その他 のどれで扱うか、Slack 投稿 `https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782272893984959` への返信待ち。
 
 ## 回答済みの確認ログ
 
