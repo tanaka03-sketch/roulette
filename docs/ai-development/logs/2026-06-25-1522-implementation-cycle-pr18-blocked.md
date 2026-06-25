@@ -24,7 +24,7 @@
 
 ## Storage Conflict Guard
 
-- 判定: log-only write として通過。
+- 判定: log-only write / PR comment append として通過。
 - Read snapshot:
   - PR #18: open、head `97477654d373090a9494d699d6d1a27aa47754b6`、`mergeable: false`、requested reviewer あり。
   - `docs/ai-development/progress.md`: file SHA `02fc7a65a5e25f1b72d8916b40cbebe5d778c58a` を確認。
@@ -58,7 +58,8 @@
 ## 更新したもの
 
 - 作成: `docs/ai-development/logs/2026-06-25-1522-implementation-cycle-pr18-blocked.md`
-- 更新予定: `docs/ai-development/progress.md`
+- 追記: PR #18 review comment
+- 未更新: `docs/ai-development/progress.md`。詳細ログと PR コメントに同一 operation ID、completion score、停止理由、次アクションを記録した。
 
 ## 次アクション
 
