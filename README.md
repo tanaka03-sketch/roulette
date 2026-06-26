@@ -42,6 +42,7 @@ npm run dev
 - 現時点では、アプリ起動に必須の環境変数はありません。
 - 将来追加する場合は `.env.example` を更新し、ローカルでは `.env` を使用してください。
 - `.env` と `.env.*` は Git 管理対象外です。
+- 本番アプリには AI 開発運用ログやデバッグ出力を残しません。production build では `console` と `debugger` を除去します。
 
 ## Verify
 
@@ -93,6 +94,7 @@ npm run build
 - [GitHub Admin Checklist](docs/github-admin-checklist.md)
 - [GitHub Settings Playbook](docs/github-settings-playbook.md)
 - [GitHub Label Specification](docs/github-label-spec.md)
+- [AI 開発運用ログ方針](docs/ai-development/logging-policy.md)
 - [Release 運用チェックリスト](docs/requirements/release-handoff-2026-05-18.md)
 - [モバイル確認方針](docs/requirements/mobile-verification-plan-2026-05-18.md)
 - [package-lock 受け渡し手順](docs/requirements/package-lock-handoff-2026-05-16.md)
