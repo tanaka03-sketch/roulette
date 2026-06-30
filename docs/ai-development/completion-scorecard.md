@@ -2,13 +2,15 @@
 
 - 対象リポジトリ: `tanaka03-sketch/roulette`
 - 作成日: 2026-06-24
+- 最終更新日: 2026-06-30
 - ステータス: Active
+- 親参照: `tanaka03-sketch/ai-development-operations:playbooks/completion-scorecard.md`
 
 ## 目的
 
-開発中の Issue、PR、文書更新、運用変更を、目的に対して 100 点満点で記録するためのスコアカードです。
+開発中または完了候補の Issue、PR、文書更新、運用変更を、目的に対して 100 点満点で記録し、公開して大丈夫か、継続運用に適しているか、追加レビューが必要かを判断するためのスコアカードです。
 
-この文書はプロダクト要件の正本ではありません。プロダクト仕様の正本は `docs/requirements.md`、AI 開発運用の目的は `docs/ai-development/goal.md` です。この文書は、作業中のものが目的に対してどこまで到達しているか、公開して大丈夫か、継続運用に適しているかを判断するために使います。
+この文書はプロダクト要件の正本ではありません。プロダクト仕様の正本は `docs/requirements.md`、AI 開発運用の目的は `docs/ai-development/goal.md` です。
 
 ## 採点対象
 
@@ -21,36 +23,61 @@
 - 文書体系や運用手順の更新
 - スケジュール運用変更
 - production readiness / publish readiness に関わる確認
+- Service Publication Review を必要とする公開前確認
+
+## 親準拠の 100 点配分
+
+| 分野 | 点数 | 見ること |
+| --- | ---: | --- |
+| 目的適合 | 30 | Issue / PR の目的、対象範囲、完了条件、`docs/requirements.md`、`docs/ai-development/goal.md` に合っているか |
+| 公開可否 | 20 | 公開して大丈夫か。秘密情報、個人情報、破壊的変更、権限、ライセンス、説明不足がないか |
+| 運用適合 | 20 | 3 サイクル運用、親 loop / gate、ロック、handover、再開性、rollback、記録に耐えるか |
+| レビュー品質 | 15 | Design Review、Code Review、Review Triage、Minimal Implementation Review、人間判断が必要な論点の扱いが十分か |
+| 検証と引き継ぎ | 15 | `npm run typecheck`、`npm test`、`npm run build`、必要な手動確認、未確認事項、次アクションが残っているか |
+| 合計 | 100 |  |
 
 ## 総合判定
 
 | 点数 | 判定 | 扱い |
-| --- | --- | --- |
-| 95-100 | complete / operation ready | 目的に対してほぼ完了。自律運用上も完了候補。ただし公開、本番、CAB の最終判断は人間承認 |
-| 80-94 | publish candidate | 目的には概ね合う。残不足を記録し、人間確認または次改善へ回す |
-| 60-79 | not publish ready | 目的に対して不足が大きい。公開・merge readiness 扱いにしない |
-| 0-59 | blocked / unsafe | 実装、公開判断、継続運用を止め、停止理由と次アクションを記録 |
+| ---: | --- | --- |
+| 90-100 | publish-ready / operation-ready | 公開または運用へ進めてよい候補。ただし人間承認が必要な条件は別途満たす |
+| 80-89 | limited-ready | 限定公開または内部運用は可。公開前に不足点を Issue / PR / log に残す |
+| 60-79 | needs-fix | 目的に対して不足がある。次 iteration または別 Issue に戻す |
+| 0-59 | blocked | 公開または運用に進めない。目的、仕様、権限、検証、レビューのいずれかへ戻す |
 | scoring blocked | 採点不可 | 目的、受入条件、対象出力、検証方法のいずれかが不明。実装へ進めない |
 
-## 採点項目
+`roulette` の自律運用では、95 点未満を完全完了として扱いません。80 点未満は公開・merge readiness として扱いません。
 
-| 項目 | 配点 | 100 点条件 |
-| --- | ---: | --- |
-| 目的適合 | 20 | `docs/requirements.md` と `docs/ai-development/goal.md` の目的に直接合っている |
-| 公開可否 | 15 | 公開しても README の公開利用時の注意、単一ユーザー、localStorage 前提と矛盾しない |
-| 運用適性 | 15 | 現在の 3 サイクル運用、親 loop / gate、ロック、記録ルールで継続運用できる |
-| 要件・設計明確性 | 15 | 未確定事項、Open blocker、Slack / 人間回答待ちがない |
-| 検証可能性 | 15 | `npm run typecheck`、`npm test`、`npm run build`、必要な手動確認で判定できる |
-| 安全性・権限 | 10 | 認証、secret、個人情報、破壊的変更、権限変更、本番判断を勝手に含まない |
-| 記録・handover | 10 | Issue / PR / progress / work-log / logs に判断、検証、残リスク、次アクションが残る |
+## 公開可否レビュー
 
-合計: 100 点
+公開して大丈夫かは、最低限次を確認します。ウェブサービス / アプリとして公開してよい状態かを詳しく判定する場合は、親 `playbooks/service-publication-review.md` を使います。
+
+- README の「公開利用時の注意」と矛盾しない
+- 秘密情報、認証情報、内部 URL、個人情報が含まれていない
+- 誤解を招く説明、未検証の断定、古い仕様がない
+- 初期版の単一ユーザー、認証なし、サーバー保存なし、外部 API なし、`localStorage` 保存の前提を崩していない
+- 個人情報、社内情報、未公開情報など端末内に残したくない情報の入力に向かないことを隠していない
+- 破壊的変更、権限変更、データ移行、本番判断を AI が単独で決めていない
+- 人間承認が必要な条件は Slack 確認、Repository Decision Queue、または `needs-human-decision` Issue へ切り出されている
+- 公開後に戻せる rollback または訂正方針がある
+
+## 運用適合レビュー
+
+運用に適しているかは、最低限次を確認します。
+
+- scheduled run / cycle / loop / gate のどこで扱うかが明確
+- ChatGPT 側メモリーロック、更新対象、Storage Conflict Guard の要否が明確
+- 同じ Issue / PR / file を複数サイクルが同時更新しない
+- 失敗時の stop condition と handover が書ける
+- Review cycle が独立して確認できる材料がある
+- 次回のエージェントまたは人間が再開できる状態が GitHub 上に残る
 
 ## 必須確認
 
 採点時は必ず次を短く書きます。
 
 - 総合点:
+- 判定:
 - 公開可否:
 - 運用適性:
 - 100 点に足りない理由:
@@ -66,29 +93,37 @@
 - 関連 Issue / PR:
 - 採点日:
 - 採点者 / サイクル:
+- 目的:
 
-### 総合点
-- 点数:
-- 判定:
-
-### 公開可否
-- 判定:
-- 理由:
-
-### 運用適性
-- 判定:
-- 理由:
-
-### 分野別
-| 項目 | 点数 | 根拠 | 不足 / 改善アクション |
+| 分野 | 点数 | 理由 | 不足 / 次アクション |
 | --- | ---: | --- | --- |
-| 目的適合 |  |  |  |
-| 公開可否 |  |  |  |
-| 運用適性 |  |  |  |
-| 要件・設計明確性 |  |  |  |
-| 検証可能性 |  |  |  |
-| 安全性・権限 |  |  |  |
-| 記録・handover |  |  |  |
+| 目的適合 |  / 30 |  |  |
+| 公開可否 |  / 20 |  |  |
+| 運用適合 |  / 20 |  |  |
+| レビュー品質 |  / 15 |  |  |
+| 検証と引き継ぎ |  / 15 |  |  |
+| 合計 |  / 100 |  |  |
+
+### 判定
+
+- [ ] publish-ready / operation-ready
+- [ ] limited-ready
+- [ ] needs-fix
+- [ ] blocked
+- [ ] scoring blocked
+
+### 公開して大丈夫か
+
+- 判定:
+- 理由:
+- 必要な人間判断:
+- Service Publication Review の要否:
+
+### 運用に適しているか
+
+- 判定:
+- 理由:
+- 必要な補強:
 
 ### 100 点に足りない理由
 - 
@@ -102,50 +137,49 @@
 
 ## 現在の運用スコア
 
-### 2026-06-24 運用文書更新
+### 2026-06-30 親リポジトリ更新反映
 
-- 対象: completion scorecard 導入と開発サイクル調整
+- 対象: 親リポジトリ更新に合わせた AI 開発運用文書・テンプレートの再整合
 - 関連 Issue / PR: なし。ユーザー直接依頼
-- 採点日: 2026-06-24 20:00 JST
+- 採点日: 2026-06-30 20:48 JST 以降
 - 採点者 / サイクル: 手動導入 / Scheduled Maintenance
 
 #### 総合点
 
 - 点数: 88 / 100
-- 判定: publish candidate
+- 判定: limited-ready
 
 #### 公開可否
 
 - 判定: 条件付きで公開候補
-- 理由: `docs/requirements.md` を正本として維持し、AI 開発運用文書側に completion score の記録先を追加するだけなので、プロダクト公開内容とは衝突しない。ただし実際の公開・merge・production readiness 最終判断は人間承認が必要。
+- 理由: `docs/requirements.md` を正本として維持し、AI 開発運用文書とテンプレートの参照先を親リポジトリの現行 playbook へ合わせる変更であり、プロダクト仕様や公開挙動には影響しない。ただし既存の PR #18 / PR #27 などの回答待ち blocker は別途残る。
 
 #### 運用適性
 
 - 判定: 運用に適している
-- 理由: 3 サイクル運用を維持し、親 repo の loop / gate を増やさず、Completion Scorecard Gate を報告 gate として追加したため、旧 12 本ジョブへ戻らない。
+- 理由: 旧 12 本サイクルに戻さず、親の Issue Intake / Implementation PR / Review Triage / CI Failure / Scheduled Maintenance、Spec Gate、Storage Conflict Guard、Minimal Implementation Review、Completion Scorecard、Service Publication Review、Repository Decision Queue に合わせたため。
 
 #### 分野別
 
-| 項目 | 点数 | 根拠 | 不足 / 改善アクション |
+| 分野 | 点数 | 理由 | 不足 / 次アクション |
 | --- | ---: | --- | --- |
-| 目的適合 | 18 / 20 | ユーザー要望の「目的に対して100点満点で記録」を専用文書化 | 実 PR / Issue への継続記録を次サイクルで確認 |
-| 公開可否 | 13 / 15 | 公開可否レビュー項目を追加 | 最終公開判断は人間承認として残る |
-| 運用適性 | 14 / 15 | 3 サイクルと親 loop / gate を維持 | 実スケジュールプロンプトが文書と一致するか継続確認 |
-| 要件・設計明確性 | 13 / 15 | 正本分担を維持 | PR #18 / #27 の回答待ちは別 blocker として残る |
-| 検証可能性 | 12 / 15 | 文書変更のためコード検証は不要、基本検証コマンドは維持 | 実装 PR では必ず CI / local 検証が必要 |
-| 安全性・権限 | 9 / 10 | 本番・公開最終判断、人間承認を維持 | なし |
-| 記録・handover | 9 / 10 | scorecard と log を作成 | 次回以降、Issue / PR 側にも score を残す |
+| 目的適合 | 27 / 30 | 親更新後の実在 playbook / template を roulette 側に反映 | 実スケジュール出力と継続運用で確認が必要 |
+| 公開可否 | 17 / 20 | プロダクトコードや要件正本を変更せず、公開挙動に影響なし | 既存 PR blocker の解消は別タスク |
+| 運用適合 | 18 / 20 | 3 サイクル、ChatGPT 側ロック、親 loop / gate を維持 | `.github/agent-decisions.yml` の実運用は今後確認 |
+| レビュー品質 | 13 / 15 | Minimal Implementation Review、Service Publication Review、人間判断キューを追加 | 実 PR / Issue での利用確認が必要 |
+| 検証と引き継ぎ | 13 / 15 | 文書更新ログを追加し、検証未実行理由を明記 | コード検証はコード変更時に実施 |
+| 合計 | 88 / 100 |  |  |
 
 #### 100 点に足りない理由
 
-- 実際の各 PR / Issue に completion score がまだ継続記録されていない。
-- ChatGPT scheduled run の実プロンプトが今回の文書更新どおりに動くかは次回サイクルで確認が必要。
-- PR #18 / #27 など既存回答待ち blocker は、この scorecard 導入とは別に残っている。
+- 実際の open PR / Issue に対して、新しい human-decision template と `.github/agent-decisions.yml` を使った判断反映がまだ未実施。
+- 既存の回答待ち blocker はこの文書更新とは別に残っている。
+- スケジュールプロンプトそのものの再登録・変更は今回明示依頼がないため行っていない。
 
 #### 次に 1 つだけ進める改善
 
-- 次のレビュー 1 時間サイクルで、対象 PR 1 件に Completion Scorecard を適用し、Issue / PR / log のどこかに点数を残す。
+- 人間確認 / Slack サイクルで、PR #18 または PR #27 の回答待ちを GitHub の Decision record へ移す必要があるかを 1 件だけ判定する。
 
 #### 人間確認事項
 
-- 公開、本番運用 readiness、CAB の最終判断は引き続き人間承認。
+- スケジュールの再登録・再有効化、公開、本番運用 readiness、CAB の最終判断は引き続き人間承認。
