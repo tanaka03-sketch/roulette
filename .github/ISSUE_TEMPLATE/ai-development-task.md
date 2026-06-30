@@ -8,21 +8,27 @@ assignees: []
 
 ## 目的
 
--
 
 ## 背景
 
--
 
 ## 対象範囲
 
 ### 含む
 
--
+- 
 
 ### 含まない
 
 - 認証、認可、サーバー保存、外部 API、複数ユーザー同時編集は、`docs/requirements.md` が更新されない限り対象外です。
+
+## 完了条件
+
+- [ ] 
+- [ ] 必要に応じて親 `playbooks/minimal-implementation-review.md` に従い、作らない選択肢、既存流用、標準機能、新規依存の判断を残す
+- [ ] `docs/ai-development/completion-scorecard.md` に従い、目的に対して 100 点満点で記録する
+- [ ] 公開して大丈夫かをレビューする
+- [ ] 運用に適しているかをレビューする
 
 ## 対象正本
 
@@ -30,13 +36,15 @@ assignees: []
 - [ ] `docs/implementation-tasks.md`
 - [ ] `docs/requirements/document-catalog-2026-05-18.md`
 - [ ] `docs/ai-development/requirements.md`
+- [ ] `docs/ai-development/goal.md`
+- [ ] `docs/ai-development/completion-scorecard.md`
 - [ ] `docs/ai-development/progress.md`
-- [ ] `docs/ai-development/work-log.md`
+- [ ] `docs/ai-development/work-log.md` または `docs/ai-development/logs/`
 - [ ] 関連 Issue / PR:
 
 ## GitHub Development Loop
 
-親リポジトリに存在する loop / gate だけを使います。
+親リポジトリに存在する loop / gate / review だけを使います。
 
 ### Loop Type
 
@@ -46,10 +54,14 @@ assignees: []
 - [ ] CI Failure
 - [ ] Scheduled Maintenance
 
-### Gate
+### Gate / Review
 
 - [ ] Spec Gate
 - [ ] Storage Conflict Guard
+- [ ] Minimal Implementation Review
+- [ ] Completion Scorecard
+- [ ] Service Publication Review
+- [ ] Repository Decision Queue
 - [ ] Not applicable
 
 ### Success Criteria
@@ -63,8 +75,10 @@ assignees: []
 - [ ] `npm run build`
 - [ ] README の Mobile verification（モバイル変更時）
 - [ ] Review triage
+- [ ] Minimalism review triage
 - [ ] Spec Gate
 - [ ] Storage Conflict Guard
+- [ ] Completion Scorecard
 - [ ] Manual verification
 - [ ] Not applicable
 
@@ -82,6 +96,8 @@ assignees: []
 - [ ] rollback 方針が説明できなければ停止する
 - [ ] 検証 gate が確認不能になったら停止する
 - [ ] Issue / PR の目的を超える修正が必要になったら停止する
+- [ ] completion scorecard が 80 点未満なら完了扱いにしない
+- [ ] 公開可否または運用適合に不安が残る場合は Review cycle または Human Decision へ戻す
 - [ ] ロック取得できなければ write しない
 - [ ] stale snapshot の場合は write しない
 - [ ] human approval が必要な場合は実装しない
@@ -119,6 +135,8 @@ assignees: []
 | `localStorage` 影響 |  |  |  |
 | 入力検証 / XSS |  |  |  |
 | モバイル影響 |  |  |  |
+| safe outputs |  |  |  |
+| retry / timeout / duplicate execution |  |  |  |
 | rollback / revert |  |  |  |
 | 人間承認条件 |  |  |  |
 
@@ -158,6 +176,33 @@ Issue / PR / comment / label / branch / file を保存・更新する場合に�
 - [ ] path-level write conflict なし
 - [ ] human approval が必要な write なし
 
+## Minimal Implementation Review
+
+### 作らない選択肢
+
+- 
+
+### 既存で流用できるもの
+
+- 
+
+### 標準機能 / ネイティブ機能で済むもの
+
+- 
+
+### 新規依存の判断
+
+- 追加する / 追加しない:
+- 追加する場合の理由:
+- 追加しない場合の代替:
+- 見送った案:
+
+### 意図的な簡略化
+
+- minimal-debt:
+- ceiling:
+- revisit when:
+
 ## AI 作業単位チェック
 
 - [ ] 1つの PR で完了できる
@@ -167,10 +212,31 @@ Issue / PR / comment / label / branch / file を保存・更新する場合に�
 - [ ] ロールバックまたは取り消し方針がある
 - [ ] Spec Gate を通過している
 - [ ] 保存・更新を伴う場合は Storage Conflict Guard を通過している
+- [ ] 必要に応じて Minimal Implementation Review を通過している
+- [ ] Completion Scorecard で目的適合、公開可否、運用適合を確認できる
 
-## 完了条件
+## Service Publication Review
+
+- [ ] 公開可
+- [ ] 条件付き公開可
+- [ ] 公開不可
+- [ ] 判断保留
+- [ ] not applicable
+
+理由:
 
 -
+
+## Completion Scorecard
+
+| 分野 | 点数 | 理由 | 不足 / 次アクション |
+| --- | ---: | --- | --- |
+| 目的適合 |  / 30 |  |  |
+| 公開可否 |  / 20 |  |  |
+| 運用適合 |  / 20 |  |  |
+| レビュー品質 |  / 15 |  |  |
+| 検証と引き継ぎ |  / 15 |  |  |
+| 合計 |  / 100 |  |  |
 
 ## 検証
 
@@ -180,15 +246,19 @@ Issue / PR / comment / label / branch / file を保存・更新する場合に�
 - [ ] README の Mobile verification（モバイル変更時）
 - [ ] 未実行理由:
 
-## 参照
+## 未確定事項
 
--
+- 
 
-## Handover
+## Handover に残すこと
 
 - [ ] 変更内容
 - [ ] Spec Gate の結果
 - [ ] Storage Conflict Guard の結果
+- [ ] Minimal Implementation Review の結果
+- [ ] Completion Scorecard の点数と判定
+- [ ] 公開可否レビューの結果
+- [ ] 運用適合レビューの結果
 - [ ] 確認済み事項
 - [ ] 未確認事項
 - [ ] 残 Issue
