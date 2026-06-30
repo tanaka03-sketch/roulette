@@ -1,0 +1,8 @@
+version: 1
+repository: tanaka03-sketch/roulette
+updated_at: 2026-06-30T20:48:00+09:00
+labels:
+  human_decision_required: needs-human-decision
+  ready_for_automation: ready-for-automation
+
+decisions: []
