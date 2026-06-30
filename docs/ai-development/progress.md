@@ -2,8 +2,8 @@
 
 - 対象リポジトリ: `tanaka03-sketch/roulette`
 - 作成日: 2026-06-22
-- 最終更新日: 2026-06-30
-- ステータス: Active
+- 最終更新日: 2026-07-01
+- ステータス: Active / human-decision waiting
 
 ## 目的
 
@@ -31,10 +31,10 @@
 
 | 対象 | 状態 |
 | --- | --- |
-| Issue #54 `Decision: HD-20260630-001 PR #18 vitest major update の扱い` | open / `needs-human-decision`。PR #18 の `recreate` / `close` / `keep` / `その他` 判断待ち |
-| Issue #55 `Decision: HD-20260630-002 PR #27 plugin-react major update の扱い` | open / `needs-human-decision`。PR #27 を Vite 8 とセットで recreate / close / keep on hold / その他の判断待ち |
-| PR #18 `vitest` major update | open / `needs-human-decision`。Decision Issue #54 に移管済み。fresh CI success なし、workflow run `25979489135` failure、completion score 43 / 100、blocked / unsafe |
-| PR #27 `@vitejs/plugin-react` major update | open / `needs-human-decision`。Decision Issue #55 に移管済み。`@vitejs/plugin-react` 6.0.2 と current Vite 7 系の peer dependency mismatch、merge as-is blocked |
+| Issue #54 `Decision: HD-20260630-001 PR #18 vitest major update の扱い` | open / `needs-human-decision`。コメント 0 件。PR #18 の `recreate` / `close` / `keep` / `その他` 判断待ち |
+| Issue #55 `Decision: HD-20260630-002 PR #27 plugin-react major update の扱い` | open / `needs-human-decision`。コメント 0 件。PR #27 を Vite 8 とセットで recreate / close / keep on hold / その他の判断待ち |
+| PR #18 `vitest` major update | open / `needs-human-decision` / mergeable true。Decision Issue #54 に移管済み。head `97477654d373090a9494d699d6d1a27aa47754b6` の CI run `25979489135` は failure。fresh CI success なし。人間判断待ちのため merge / close / recreate / dependency update はしない |
+| PR #27 `@vitejs/plugin-react` major update | open / `needs-human-decision` / mergeable true。Decision Issue #55 に移管済み。head `d9978573927fb7389cbe2d677216f7d1c5514d5d` の CI run `25996706622` は failure。`@vitejs/plugin-react` 6.0.2 と current Vite 7 系の peer dependency mismatch。merge as-is blocked |
 | PR #52 `docs: switch schedule lock to ChatGPT memory` | 完了。Slack 返信 `1` を close 方針として反映し、2026-06-24 12:42 JST に superseded として closed |
 | GitHub Actions major update 方針 | 完了。ユーザー依頼により `まとめて方針化して進める` を採用し、回答待ちを解除済み |
 | PR #51 `actions/checkout` major update | completion score 92 / 100。publish candidate だが requested reviewer が残るため最終 merge / publish readiness は人間判断へ委譲 |
@@ -44,6 +44,15 @@
 | PR #46 `fix: stabilize public readiness CI and tests` | open / draft、mergeable false。stale / superseded / close 候補。completion score 64 / 100。not publish ready |
 
 ## 直近の実施内容
+
+### 2026-07-01 Decision Queue Refresh
+
+- Issue #54 / #55 を確認し、どちらもコメント 0 件で人間判断未回答であることを確認した。
+- PR #18 / #27 を確認し、どちらも open / mergeable true へ変わっていることを確認した。
+- CI は PR #18 が run `25979489135` failure、PR #27 が run `25996706622` failure のままで、fresh CI success は確認できなかった。
+- `.github/agent-decisions.yml` を更新し、古い `mergeable false` 前提を現在値に直した。
+- 依存更新、PR close、recreate、merge、Slack 再投稿は行っていない。
+- 詳細ログ: `docs/ai-development/logs/2026-07-01-decision-queue-refresh.md`
 
 ### 2026-06-30 Decision Queue 整備
 
@@ -64,6 +73,7 @@
 
 ## 最近の詳細ログ
 
+- 2026-07-01 JST: `docs/ai-development/logs/2026-07-01-decision-queue-refresh.md`
 - 2026-06-30 JST: `docs/ai-development/logs/2026-06-30-decision-queue-setup.md`
 - 2026-06-30 JST: `docs/ai-development/logs/2026-06-30-parent-update-adoption.md`
 - 2026-06-25 20:30 JST: `docs/ai-development/logs/2026-06-25-2030-review-cycle-pr18-blocked.md`
@@ -80,8 +90,8 @@
 
 ## Open Blockers
 
-- Issue #54 / PR #18: `HD-20260630-001` の人間判断待ち。回答が得られるまで、PR #18 の merge / close / recreate / dependency update は進めない。
-- Issue #55 / PR #27: `HD-20260630-002` の人間判断待ち。回答が得られるまで、PR #27 の merge / close / recreate / dependency update は進めない。
+- Issue #54 / PR #18: `HD-20260630-001` の人間判断待ち。PR は mergeable true だが、CI failure と fresh CI success なしは残っている。回答が得られるまで、PR #18 の merge / close / recreate / dependency update は進めない。
+- Issue #55 / PR #27: `HD-20260630-002` の人間判断待ち。PR は mergeable true だが、CI failure と Vite 7 / plugin-react 6 peer dependency mismatch は残っている。回答が得られるまで、PR #27 の merge / close / recreate / dependency update は進めない。
 
 ## 回答待ち
 
