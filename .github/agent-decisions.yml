@@ -1,8 +1,114 @@
 version: 1
 repository: tanaka03-sketch/roulette
-updated_at: 2026-06-30T20:48:00+09:00
+updated_at: 2026-06-30T21:41:00+09:00
 labels:
   human_decision_required: needs-human-decision
   ready_for_automation: ready-for-automation
 
-decisions: []
+decisions:
+  - id: HD-20260630-001
+    status: waiting-human
+    title: PR #18 vitest major update の扱い
+    issue: 54
+    pr: 18
+    owner_lane: human-decision
+    lock_key: decision:HD-20260630-001
+    required_issue_label: needs-human-decision
+    created_at: 2026-06-30T21:40:49+09:00
+    updated_at: 2026-06-30T21:41:00+09:00
+    decision_needed: PR #18 を recreate / close / keep / その他のどれで扱うか。
+    background: PR #18 は Vitest 3.2.4 から 4.1.6 への major update。既存 CI run 25979489135 は failure のままで、fresh CI success がなく、mergeable false。既存 Slack 投稿への返信待ちだったため、GitHub 上の判断キューへ移した。
+    options:
+      - key: 1
+        label: recreate
+        description: 最新 main と現在の依存状態を前提に Vitest major update を再作成する。
+        reason: stale failure と rerun 不可状態に依存せず、fresh CI を作れる状態へ戻しやすい。
+        risk: 新しい PR 作成や依存更新は別途 Spec Gate / Storage Conflict Guard / 検証が必要。
+        next_action: PR #18 を superseded として扱う準備をし、再作成方針を AI 運用文書と PR #18 に反映する。
+      - key: 2
+        label: close
+        description: PR #18 を取り込まず close する。
+        reason: Vitest major update を今は扱わず、既存安定状態を維持できる。
+        risk: Dependabot update は未対応として残り、後続で再発する可能性がある。
+        next_action: PR #18 を superseded / not planned として close するための記録を残す。
+      - key: 3
+        label: keep
+        description: PR #18 を open のまま保留する。
+        reason: 今すぐ判断せず、他の依存更新や CI 状態を待てる。
+        risk: Open blocker が残り、実装サイクルが停止し続ける。
+        next_action: 保留期限または再確認条件を決める。
+      - key: 4
+        label: その他 / 自由記述
+        description: 上記以外の扱いを指定する。
+        reason: 追加の制約や優先度がある場合に使う。
+        risk: 指定内容により異なる。
+        next_action: 指定内容を AI 運用文書、関連 PR、log に反映する。
+    ai_recommendation:
+      option: 1
+      reason: stale failure と rerun 不可に依存せず、fresh CI と現在の main に基づく検証へ戻せるため。
+    human_decision:
+      selected_option: null
+      decided_by: null
+      decided_at: null
+      rationale: null
+      source_issue: 54
+      source_comment: null
+    reflection:
+      reflected_at: null
+      reflected_by: null
+      reflected_pr: null
+      updated_files: []
+      next_task: null
+  - id: HD-20260630-002
+    status: waiting-human
+    title: PR #27 plugin-react major update の扱い
+    issue: 55
+    pr: 27
+    owner_lane: human-decision
+    lock_key: decision:HD-20260630-002
+    required_issue_label: needs-human-decision
+    created_at: 2026-06-30T21:41:09+09:00
+    updated_at: 2026-06-30T21:41:00+09:00
+    decision_needed: PR #27 を Vite 8 とセットで recreate / close / keep on hold / その他のどれで扱うか。
+    background: PR #27 は @vitejs/plugin-react 5.2.0 から 6.0.2 への major update。plugin-react 6.0.2 は peer dependency として vite ^8.0.0 を要求するが、現行 repo は Vite 7 系のため merge as-is blocked。
+    options:
+      - key: 1
+        label: Vite 8 とセットで recreate
+        description: PR #27 単体は取り込まず、Vite 8 への更新とセットで再作成する。
+        reason: peer dependency mismatch を解消した形で fresh CI と基本検証を確認できる。
+        risk: Vite 8 更新は影響範囲が広がるため、別途 Spec Gate / Minimal Implementation Review / Storage Conflict Guard が必要。
+        next_action: PR #27 を superseded として扱う準備をし、Vite 8 セット更新の Issue / PR 方針を作る。
+      - key: 2
+        label: close / superseded
+        description: PR #27 を取り込まず close する。
+        reason: 現行 Vite 7 系と合わない更新を止め、依存更新の混乱を避ける。
+        risk: plugin-react major update は未対応として残り、後続 Dependabot で再発する可能性がある。
+        next_action: PR #27 を superseded / not planned として close するための記録を残す。
+      - key: 3
+        label: keep on hold
+        description: PR #27 を open のまま保留する。
+        reason: Vite 8 の採用可否を後で判断できる。
+        risk: Open blocker が残り、依存更新レビューのノイズになる。
+        next_action: 保留期限または再確認条件を決める。
+      - key: 4
+        label: その他 / 自由記述
+        description: 上記以外の扱いを指定する。
+        reason: 追加の制約や優先度がある場合に使う。
+        risk: 指定内容により異なる。
+        next_action: 指定内容を AI 運用文書、関連 PR、log に反映する。
+    ai_recommendation:
+      option: 1
+      reason: PR #27 単体では peer dependency mismatch があり、現在の CI / publish readiness に進めないため。
+    human_decision:
+      selected_option: null
+      decided_by: null
+      decided_at: null
+      rationale: null
+      source_issue: 55
+      source_comment: null
+    reflection:
+      reflected_at: null
+      reflected_by: null
+      reflected_pr: null
+      updated_files: []
+      next_task: null
