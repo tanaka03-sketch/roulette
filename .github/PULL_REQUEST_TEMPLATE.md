@@ -1,10 +1,25 @@
-## 目的
+## Summary
 
--
 
-## 変更内容
+## Related Issue
 
--
+
+## Scope
+
+### Included
+
+- 
+
+### Not Included
+
+- 
+- 認証、サーバー保存、外部 API、複数ユーザー同時編集は `docs/requirements.md` が更新されない限り対象外です。
+
+## Related Subtasks
+
+| Subtask ID | 内容 | 対応状況 |
+| --- | --- | --- |
+|  |  |  |
 
 ## 対象正本・参照資料
 
@@ -15,58 +30,22 @@
 - [ ] `docs/ai-development/goal.md`
 - [ ] `docs/ai-development/completion-scorecard.md`
 - [ ] `docs/ai-development/progress.md`
-- [ ] `docs/ai-development/work-log.md`
+- [ ] `docs/ai-development/work-log.md` または `docs/ai-development/logs/`
 - [ ] 関連 Issue / PR:
 
-## AI 開発運用チェック
+## Split Decision
 
-- [ ] 仕様判断は `docs/requirements.md` と矛盾していない
-- [ ] AI 運用上の未確定事項は `docs/ai-development/requirements.md` または work-log / logs に記録した
-- [ ] Open ブロッカーはない、または停止理由を記録した
-- [ ] レビュー指摘は triage 済み
-- [ ] 人間承認が必要な操作を含まない、または承認待ちとして明記した
-- [ ] 初期版のクライアント完結、単一ユーザー、`localStorage` 前提から外れていない
-- [ ] 親リポジトリに存在しない開発サイクルを追加していない
-- [ ] Completion score または scoring blocker を記録した
+### 分割したもの
 
-## Completion Scorecard
+- 
 
-目的に対して 100 点満点で記録します。採点基準は `docs/ai-development/completion-scorecard.md` を参照します。
+### 分割しなかったものと理由
 
-### 総合点
+- 
 
-- 点数:
-- 判定:
+## Research Notes
 
-### 公開可否
-
-- [ ] 公開候補として問題なし
-- [ ] 条件付き公開候補
-- [ ] 公開候補ではない
-- [ ] 人間判断待ち
-
-理由:
-
--
-
-### 運用適性
-
-- [ ] 現在の AI 開発運用に適している
-- [ ] 条件付きで運用可能
-- [ ] 運用に適していない
-- [ ] 人間判断待ち
-
-理由:
-
--
-
-### 100 点に足りない理由
-
--
-
-### 次に 1 つだけ進める改善
-
--
+- 
 
 ## Spec Gate Result
 
@@ -82,24 +61,112 @@
 
 ### 確認済み
 
-- [ ] 入力と出力が明確
-- [ ] 正本と更新先を確認した
-- [ ] 権限、secret、個人情報、破壊的変更の影響を確認した
-- [ ] `localStorage`、入力検証、XSS、モバイル影響を必要に応じて確認した
-- [ ] rollback または revert 方針を確認した
-- [ ] 検証 gate が明確
+- [ ] 入力が明確
+- [ ] 出力が明確
+- [ ] 権限差分を確認した
+- [ ] safe outputs の範囲を確認した
+- [ ] 保存対象を確認した
+- [ ] retryable / context-required / fatal / upstream error を分類した
+- [ ] retry / timeout / cancel / duplicate execution を確認した
+- [ ] rollback または取り消し方針を確認した
+- [ ] 評価条件を確認した
+- [ ] 人間承認が必要な条件を確認した
+- [ ] `docs/requirements.md` と矛盾していない
+- [ ] 初期版のクライアント完結、単一ユーザー、`localStorage` 前提から外れていない
 
 ## Storage Conflict Guard Result
 
-- [ ] GitHub write の競合確認は不要
-- [ ] file / Issue / PR / comment / label / branch の snapshot を write 前に再確認した
-- [ ] stale snapshot を使っていない
-- [ ] duplicate operation / duplicate finding を必要に応じて確認した
-- [ ] path 単位で file update を直列化した
+### 保存対象
+
+- [ ] Issue
+- [ ] PR
+- [ ] comment
+- [ ] label
+- [ ] branch
+- [ ] file
+- [ ] 保存・更新なし
+
+### Operation / Snapshot
+
+- operation ID:
+- finding fingerprint:
+- read snapshot:
+- re-read before write:
+- changed fields:
+- lock scope:
+
+### 判定
+
+- [ ] 通過
+- [ ] duplicate-operation なし
+- [ ] duplicate-finding なし
+- [ ] stale-snapshot なし
+- [ ] write-lock-required なし
+- [ ] human approval が必要な write なし
+
+## Minimal Implementation Check
+
+`playbooks/minimal-implementation-review.md` に従い、必要な場合に実装前の最小化判断を残します。
+
+### 作らない選択肢
+
+- 
+
+### 既存で流用できるもの
+
+- 
+
+### 標準機能 / ネイティブ機能で済むもの
+
+- 
+
+### 新規依存の判断
+
+- 追加する / 追加しない:
+- 追加する場合の理由:
+- 追加しない場合の代替:
+- 見送った案:
+
+### 最小実装方針
+
+- 
+
+### 削らない品質要件
+
+- [ ] セキュリティ
+- [ ] 入力検証
+- [ ] データ損失防止
+- [ ] 権限
+- [ ] 監査ログ
+- [ ] 通知
+- [ ] ロールバック
+- [ ] アクセシビリティ
+- [ ] not applicable
+
+### 意図的な簡略化
+
+- minimal-debt:
+- ceiling:
+- revisit when:
+
+## Design Review
+
+- [ ] 権限差分を確認した
+- [ ] safe outputs を確認した
+- [ ] 状態遷移を確認した
+- [ ] データ整合性を確認した
+- [ ] 監査ログの要否を確認した
+- [ ] 通知の要否を確認した
+- [ ] 再試行 / 重複実行を確認した
+- [ ] timeout / cancel を確認した
+- [ ] ロールバック方法を確認した
+- [ ] 評価条件を確認した
+- [ ] 作りすぎ、不要依存、不要抽象を確認した
 
 ## Development Loop Result
 
-親リポジトリに存在する loop だけを選択します。
+### Goal
+
 
 ### Loop Type
 
@@ -114,22 +181,28 @@
 | --- | --- | --- | --- | ---: | --- |
 | 1 |  |  |  |  |  |
 
-## 確認手順
+### Final Verify
 
 - [ ] `npm run typecheck`
 - [ ] `npm test`
 - [ ] `npm run build`
 - [ ] README の Mobile verification（モバイル変更時）
-- [ ] 必要に応じて画面確認
+- [ ] review findings triaged
+- [ ] minimalism findings triaged
+- [ ] Spec Gate recorded
+- [ ] Storage Conflict Guard recorded
+- [ ] Minimal Implementation Check recorded
+- [ ] Completion Scorecard recorded
+- [ ] manual verification complete
+- [ ] not applicable
 - [ ] 未実行理由:
 
-## 影響範囲
+### Stop / Handover
 
-- [ ] UI のみ
-- [ ] ドメインロジック
-- [ ] 保存処理
-- [ ] CI / ツール
-- [ ] ドキュメントのみ
+- 完了:
+- 未完了:
+- 停止理由:
+- 次アクション:
 
 ## Review Finding Triage
 
@@ -137,20 +210,126 @@
 | --- | --- | --- | --- | --- |
 |  |  |  |  |  |
 
-## 未確認事項・残リスク
+### PR 内で対応するもの
 
--
+- 
+
+### 別 Issue にするもの
+
+- 
+
+### 仕様確認が必要なもの
+
+- 
+
+### Spec Gate へ戻すもの
+
+- 
+
+### Storage Conflict Guard へ戻すもの
+
+- 
+
+### 人間承認待ちにするもの
+
+- 
+
+## Minimalism Review Findings
+
+| Finding ID | 種別 | 場所 | 削るもの | 置き換え | 分類 | 次アクション |
+| --- | --- | --- | --- | --- | --- | --- |
+| M-001 | delete / stdlib / native / yagni / shrink |  |  |  |  |  |
+
+### PR 内で削るもの
+
+- 
+
+### 別 Issue にするもの
+
+- 
+
+### 対応しないものと理由
+
+- 
+
+## Service Publication Review
+
+公開可否を詳しく確認する必要がある場合に記録します。
+
+### 公開判定
+
+- [ ] 公開可
+- [ ] 条件付き公開可
+- [ ] 公開不可
+- [ ] 判断保留
+- [ ] not applicable
+
+### 判定理由
+
+
+### 確認した観点
+
+- [ ] サービス目的と実装内容が一致している
+- [ ] 想定ユーザーの主要導線が成立している
+- [ ] 表示、入力、エラー、空状態が破綻していない
+- [ ] 外部公開してよい情報だけが表示されている
+- [ ] セキュリティ、権限、個人情報の懸念がない
+- [ ] データ保存、更新、削除、再試行の整合性を確認した
+- [ ] 主要シナリオがテストまたは手動確認で確認されている
+- [ ] rollback または一時停止の方法がある
+- [ ] 人間判断が必要な論点を切り出した
+
+## Completion Scorecard
+
+`docs/ai-development/completion-scorecard.md` と親 `playbooks/completion-scorecard.md` に従い、開発中または完了候補の成果物を目的に対して 100 点満点で記録します。
+
+| 分野 | 点数 | 理由 | 不足 / 次アクション |
+| --- | ---: | --- | --- |
+| 目的適合 |  / 30 |  |  |
+| 公開可否 |  / 20 |  |  |
+| 運用適合 |  / 20 |  |  |
+| レビュー品質 |  / 15 |  |  |
+| 検証と引き継ぎ |  / 15 |  |  |
+| 合計 |  / 100 |  |  |
+
+### 判定
+
+- [ ] publish-ready / operation-ready
+- [ ] limited-ready
+- [ ] needs-fix
+- [ ] blocked
+- [ ] scoring blocked
+
+### 公開して大丈夫か
+
+- 判定:
+- 理由:
+- 必要な人間判断:
+- Service Publication Review の要否:
+
+### 運用に適しているか
+
+- 判定:
+- 理由:
+- 必要な補強:
+
+## Risks / Rollback
+
 
 ## Handover
 
 ### 完了したこと
 
--
+- 
 
-### 未完了 / 停止理由
+### Minimal Implementation Review で確認したこと
 
--
+- 
+
+### 未確認
+
+- 
 
 ### 次アクション
 
--
+- 
