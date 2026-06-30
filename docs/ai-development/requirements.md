@@ -132,18 +132,19 @@ Slack 投稿は、新しい判断材料があり、設計・実装・検証・�
 
 ## Open Blockers
 
-- PR #18 `chore(deps-dev): bump vitest from 3.2.4 to 4.1.6`: Slack 回答待ち。既存 CI run `25979489135` は古い failure のままで、GitHub 側から rerun が拒否された。Slack 投稿 `https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782283714065949` への返信がなく、`recreate` / `close` / `keep` / `その他` の人間回答が得られるまで、merge / close / recreate / dependency update は進めない。
-- PR #27 `@vitejs/plugin-react` major update: `@vitejs/plugin-react` 6.0.2 と current Vite 7 系の peer dependency mismatch があり、Vite 8 とセットで再作成するか、close / superseded / 保留にするかの人間確認待ち。merge as-is blocked。
+- Issue #54 / PR #18 `chore(deps-dev): bump vitest from 3.2.4 to 4.1.6`: `HD-20260630-001` の人間判断待ち。既存 CI run `25979489135` は failure のままで、fresh CI success がない。`recreate` / `close` / `keep` / `その他` の人間回答が得られるまで、merge / close / recreate / dependency update は進めない。
+- Issue #55 / PR #27 `@vitejs/plugin-react` major update: `HD-20260630-002` の人間判断待ち。`@vitejs/plugin-react` 6.0.2 と current Vite 7 系の peer dependency mismatch があり、Vite 8 とセットで再作成するか、close / superseded / 保留にするかの人間回答が得られるまで、merge / close / recreate / dependency update は進めない。
 
 実装ジョブは、ここまたは `docs/requirements.md` に Open ブロッカーが追加された場合、実装せず停止理由を `docs/ai-development/work-log.md` または `docs/ai-development/logs/` に記録してください。
 
 ## 回答待ち
 
-- PR #18 を `recreate` / `close` / `keep` / `その他` のどれで扱うか。Slack 投稿 `https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782283714065949` への返信を待つ。新しい判断材料、追加質問、追加承認事項がない限り、Slack への再投稿は行わない。
-- PR #27 を Vite 8 とセットで再作成するか、close / superseded とするか、保留するか。PR #18 の回答待ちが最優先で残る間は複数質問を同時に扱わない。
+- `HD-20260630-001`: Issue #54 で PR #18 を `recreate` / `close` / `keep` / `その他` のどれで扱うか。
+- `HD-20260630-002`: Issue #55 で PR #27 を Vite 8 とセットで recreate / close / keep on hold / その他のどれで扱うか。
 
 ## 回答済みの確認ログ
 
+- 2026-06-30: PR #18 と PR #27 の回答待ちを GitHub Decision Queue へ移管。Issue #54 / #55 を作成し、`.github/agent-decisions.yml` に `HD-20260630-001` / `HD-20260630-002` を `waiting-human` として登録。
 - 2026-06-30: 親リポジトリ更新により、現行参照先を `playbooks/completion-scorecard.md`、`playbooks/minimal-implementation-review.md`、`playbooks/service-publication-review.md`、`operations/repository-decision-queue.md`、`templates/repository-decision-queue/agent-decisions.yml` へ拡張。
 - 2026-06-24 19:51 JST: ユーザー依頼により、目的に対して公開して大丈夫か、運用に適しているかをレビュー観点へ追加し、開発中のものを `completion-scorecard.md` で 100 点満点記録する方針を採用。
 - 2026-06-24 13:20 JST: ユーザー依頼により、GitHub Actions major update 方針の回答待ちを解消。選択肢 1 の `まとめて方針化して進める` を採用し、Dependabot major update PR はまとめて triage しつつ、merge / close / recreate は PR ごとの互換性と CI 結果を確認して判断する。
