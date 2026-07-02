@@ -1,6 +1,6 @@
 version: 1
 repository: tanaka03-sketch/roulette
-updated_at: 2026-07-02T15:30:00+09:00
+updated_at: 2026-07-02T18:20:00+09:00
 labels:
   human_decision_required: needs-human-decision
   ready_for_automation: ready-for-automation
@@ -107,6 +107,112 @@ decisions:
       decided_at: null
       rationale: null
       source_issue: 55
+      source_comment: null
+    reflection:
+      reflected_at: null
+      reflected_by: null
+      reflected_pr: null
+      updated_files: []
+      next_task: null
+  - id: HD-20260702-001
+    status: waiting-human
+    title: Slack 内部URL/IDの公開前除去範囲
+    issue: 56
+    owner_lane: human-decision
+    lock_key: decision:HD-20260702-001
+    required_issue_label: needs-human-decision
+    created_at: 2026-07-02T18:16:17+09:00
+    updated_at: 2026-07-02T18:20:00+09:00
+    decision_needed: 現在ファイルと必要に応じた履歴に含まれる Slack 内部情報を、どの範囲で除去または匿名化するか。
+    current_status: Issue #56 を作成済み。公開前ブロッカーとして、実装前に人間判断が必要。現在ファイルのプレースホルダー化を推奨し、履歴書き換えや大量ログ削除は別判断に分離する方針。
+    background: 公開前レビューで AGENTS.md、work-log、logs 配下に Slack workspace URL / ID / channel ID / 投稿リンクが含まれる可能性が指摘された。AGENTS.md で実 Slack URL / channel ID の存在を確認済み。リポジトリは public。
+    options:
+      - key: 1
+        label: 現在ファイルをプレースホルダー化
+        description: 現在ファイルの Slack URL / workspace ID / channel ID / 投稿リンクを公開用プレースホルダーへ置換し、履歴書き換えは別 Issue で判断する。
+        reason: 公開前リスクを最小実装で下げられ、大量削除や履歴書き換えを分離できる。
+        risk: 過去コミットには残る可能性があるため、必要なら別途履歴対応が必要。
+        next_action: 対象文字列を検索し、現在ファイルをプレースホルダーへ置換する実装 Issue / PR に進める。
+      - key: 2
+        label: ログ保持方針を見直す
+        description: docs/ai-development/logs と長大な work-log の公開リポジトリ保持方針を見直し、不要ログを削除または別管理に移す。
+        reason: アプリ利用者に不要な運用ノイズを減らせる。
+        risk: 大量削除になりやすく、運用証跡を失う可能性がある。
+        next_action: 削除範囲を別 Issue で明確化し、人間承認後に実施する。
+      - key: 3
+        label: 履歴書き換えも検討
+        description: 過去コミットに残る Slack 情報も含めて履歴書き換えを検討する。
+        reason: 公開済み履歴からも識別子を除去したい場合に必要。
+        risk: 破壊的で影響が大きく、ブランチやPRへの影響も出る。
+        next_action: 人間承認付きの別 Issue / 手順へ分離する。
+      - key: 4
+        label: その他 / 自由記述
+        description: 上記以外の扱いを指定する。
+        reason: 公開方針や運用証跡要件に応じる。
+        risk: 指定内容により異なる。
+        next_action: 指定内容を progress、requirements、work-log、関連 Issue に反映する。
+    ai_recommendation:
+      option: 1
+      reason: 現在ファイルから実 Slack 情報を消すのが最短の公開前リスク低減で、履歴書き換えや大量ログ削除は別の人間承認に分けられるため。
+    human_decision:
+      selected_option: null
+      decided_by: null
+      decided_at: null
+      rationale: null
+      source_issue: 56
+      source_comment: null
+    reflection:
+      reflected_at: null
+      reflected_by: null
+      reflected_pr: null
+      updated_files: []
+      next_task: null
+  - id: HD-20260702-002
+    status: waiting-human
+    title: 最後の1件を抽選できない挙動の扱い
+    issue: 58
+    owner_lane: human-decision
+    lock_key: decision:HD-20260702-002
+    required_issue_label: needs-human-decision
+    created_at: 2026-07-02T18:16:26+09:00
+    updated_at: 2026-07-02T18:20:00+09:00
+    decision_needed: 抽選対象が最後の1件になったとき、現状維持、確定表示、通常抽選許可のどれにするか。
+    current_status: Issue #58 を作成済み。現行 docs/requirements.md では抽選対象1件は抽選しない仕様のため、要件違反ではない。UX改善として人間判断待ち。
+    background: 公開前レビューで、除外設定ON時に最後の1件が引けず「抽選には2件以上の候補が必要です」と表示される挙動が指摘された。利用シナリオによっては発表順などの引き切り用途とずれる可能性がある。
+    options:
+      - key: 1
+        label: 現状維持と文言改善
+        description: 最後の1件は抽選しない仕様を維持し、UI文言や要件補足を改善する。
+        reason: 現行要件と最も整合し、実装変更を小さくできる。
+        risk: 全員を順に引き切る用途の違和感は残る。
+        next_action: UI文言と docs/requirements.md の補足を改善する。
+      - key: 2
+        label: 最後の1件として確定表示
+        description: 抽選対象が1件になったらランダム抽選ではなく確定結果として表示し、抽選済みにする。
+        reason: 引き切り用途に合い、1件状態ではランダム性が不要なことも説明しやすい。
+        risk: 現行要件とテストの変更が必要。
+        next_action: docs/requirements.md、getDrawAvailability、UI文言、テストを更新する。
+      - key: 3
+        label: 1件抽選を通常許可
+        description: 除外設定ONでも最後の1件を通常の抽選として許可する。
+        reason: 最後まで抽選ボタン操作で進められる。
+        risk: 抽選対象2件以上という現行ルールを変更する必要がある。
+        next_action: 要件とテストを仕様変更として更新する。
+      - key: 4
+        label: その他 / 自由記述
+        description: 上記以外の扱いを指定する。
+        reason: ユースケース優先度に応じる。
+        risk: 指定内容により異なる。
+        next_action: 指定内容を requirements、progress、work-log、関連 Issue に反映する。
+    ai_recommendation:
+      option: 2
+      reason: 全員を順に引き切る用途に合いやすく、最後の1件だけは確定扱いとして説明できるため。
+    human_decision:
+      selected_option: null
+      decided_by: null
+      decided_at: null
+      rationale: null
+      source_issue: 58
       source_comment: null
     reflection:
       reflected_at: null
