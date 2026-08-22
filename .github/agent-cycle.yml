@@ -1,0 +1,45 @@
+schema_version: 2
+repository: tanaka03-sketch/roulette
+cycle_family: development
+cycle_driver: github-development-cycle
+entrypoint: docs/ai-development/agent-instructions.md
+
+shared_cache:
+  set_id: github-operations-shared-library-cache-set
+  owner_core: GITHUB_OPERATIONS_00_OWNER_CORE.md
+  family_core: GITHUB_OPERATIONS_10_DEVELOPMENT_CORE.md
+  validate: once-per-explicit-user-started-outer-cycle
+  repeat-validation-within-same-outer-cycle: false
+  lazy_modules:
+    execution: GITHUB_OPERATIONS_20_EXECUTION.md
+    exploration: GITHUB_OPERATIONS_30_EXPLORATION.md
+    audit_handover: GITHUB_OPERATIONS_40_AUDIT_HANDOVER.md
+    structure: GITHUB_OPERATIONS_50_STRUCTURE.md
+
+upstream_authority:
+  owner: tanaka03-sketch/tanaka03-sketch-ai-operations-meta:config/owner-capability-floor.yaml
+  family: tanaka03-sketch/ai-development-operations:operations/target-cycle-minimum-policy.yaml
+
+local_authority:
+  hard_rules_and_purpose: AGENTS.md
+  local_how: docs/ai-development/agent-instructions.md
+  current_state_and_evidence: repository-local-live-canon
+
+loading:
+  stable-common-policy: shared-cache-after-start-validation
+  target-local-how-and-state: current-target-canon
+  active-current-downstream-directive: live-when-applicable
+  issue-pr-ci-branch-and-write-identities: live
+  unused-lazy-module: do-not-load
+
+legacy_precedence:
+  policy_receipt_runtime_gate: superseded
+  per-file-owner-or-family-policy-cache: superseded
+  per-file-common-policy-refresh-materialization: superseded
+  local-body-cache-for-target-local-canon: may-remain
+  local-entrypoint-may-not-reintroduce-superseded-common-policy: true
+  common-policy-change-requires-this-router-update: false
+
+write_boundary:
+  normal-cycle-write-target: this-repository-only
+  cross-repository-write: current-explicit-owner-authorization-required
