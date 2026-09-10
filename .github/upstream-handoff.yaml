@@ -1,0 +1,64 @@
+schema_version: 1
+repository: tanaka03-sketch/roulette
+handoffs:
+  - handoff_id: UH-20260911-001
+    state: active
+    candidate_scope: development_methods
+    summary: Reconcile roulette Development routing with current Development membership before ordinary dispatch.
+    observed_fact: >
+      roulette main routes to cycle_family development with cycle_driver github-development-cycle, while the
+      current Development membership authority lists roulette only under inactive_affiliated_repositories.
+      That contract states inactive affiliation is not product membership and is not dispatchable.
+    evidence_refs:
+      - tanaka03-sketch/roulette:.github/agent-cycle.yml@9bb24f0eb92e60a2db5eaed01a25f2d3a0aa2c20
+      - tanaka03-sketch/roulette:main@4e0254727d465bb073fddb2db710f1ccb938333c
+      - tanaka03-sketch/ai-development-operations:operations/cross-projects.yml@27452a79e7b6a3a7cb8a21d16a584ab9ce377f9f
+    why_nonlocal: >
+      The target cannot make itself a current Development product member because membership authority lives in
+      tanaka03-sketch/ai-development-operations and normal target-cycle writes are restricted to this repository.
+    requested_upstream_revalidation: >
+      Revalidate roulette against the current Development membership contract and reconcile the authoritative
+      state: either explicitly admit roulette to product_repositories after the required live content
+      reclassification, or define the correct non-dispatchable launch/routing state without weakening the fixed
+      Repository Kernel or current safety boundaries.
+    evidence_fingerprint: roulette-development-router-membership-nondispatchable-v1
+    updated_at: 2026-09-11T01:41:00+09:00
+    local_impact: >
+      Ordinary Development Issue/PR dispatch is resume-required. Historical progress pointers such as Issue #60
+      are not executed while the current family membership authority remains non-dispatchable.
+    current_git_identity: main@4e0254727d465bb073fddb2db710f1ccb938333c
+    retry_or_revisit_condition: >
+      Re-read the target router and operations/cross-projects.yml after current authoritative membership or routing
+      is reconciled.
+
+  - handoff_id: UH-20260911-002
+    state: active
+    candidate_scope: development_methods
+    summary: Reconcile roulette CI automatic root triggers with current owner workflow-trigger authority.
+    observed_fact: >
+      .github/workflows/ci.yml currently has push-to-main and pull_request root triggers. Current owner policy
+      defaults owner-managed executable workflows to workflow_dispatch-only unless an exact current exception is
+      bound to repository, workflow path, event, and scope. roulette docs/requirements.md simultaneously requires
+      CI to run automatically on main push and pull requests. No roulette-specific exact current exception was
+      found in the current owner or Development downstream directive surfaces inspected in this cycle.
+    evidence_refs:
+      - tanaka03-sketch/roulette:.github/workflows/ci.yml@5f68c34813903cbbffdac2441ddac2d95843c9a7
+      - tanaka03-sketch/roulette:docs/requirements.md@main
+      - tanaka03-sketch/tanaka03-sketch-ai-operations-meta:config/owner-capability-floor.yaml@main
+      - tanaka03-sketch/ai-development-operations:.github/downstream-directives.yaml@main
+    why_nonlocal: >
+      Removing automatic triggers would contradict the target requirements source of truth, while granting a
+      standing trigger exception is owner/family authority rather than a target-local implementation choice.
+    requested_upstream_revalidation: >
+      Decide the current authoritative outcome for roulette CI: publish an exact current trigger exception for
+      the required push/pull_request events, or direct reconciliation of the target requirement and workflow to
+      the owner manual-only model. Preserve CI verification coverage and do not weaken tests merely to conform.
+    evidence_fingerprint: roulette-ci-trigger-owner-local-requirement-conflict-v1
+    updated_at: 2026-09-11T01:41:00+09:00
+    local_impact: >
+      Trigger conformance cannot be truthfully reported PASS, and the workflow is not changed while the authority
+      conflict is unresolved.
+    current_git_identity: main@4e0254727d465bb073fddb2db710f1ccb938333c
+    retry_or_revisit_condition: >
+      Re-read current owner/family downstream directives and target requirements after the authority conflict is
+      resolved.
