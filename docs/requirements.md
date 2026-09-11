@@ -2,7 +2,7 @@
 
 - ステータス: 正本 / Active Draft
 - 作成日: 2026-05-15
-- 最終更新日: 2026-05-18
+- 最終更新日: 2026-09-11
 - 対象リポジトリ: `tanaka03-sketch/roulette`
 - 正本ファイル: `docs/requirements.md`
 
@@ -27,7 +27,7 @@
 - ブラウザ再読み込み後の状態保持
 - 基本的な入力エラー表示
 - PC およびスマートフォンでの利用
-- GitHub Actions による基本的な自動検証
+- GitHub Actions による基本的な CI 検証
 
 ### 2.2 対象外
 
@@ -119,8 +119,8 @@
 | NFR-008 | 保存対象は候補リスト、抽選済み状態、抽選済み除外設定に限定する | 必須 |
 | NFR-009 | 将来の機能追加に備え、抽選ロジックと UI 表示を分離する | 推奨 |
 | NFR-010 | 抽選ロジックは単体テスト可能な純粋関数として切り出す | 推奨 |
-| NFR-011 | `main` への push 時に GitHub Actions の CI が自動実行される | 必須 |
-| NFR-012 | pull request 時にも GitHub Actions の CI が自動実行される | 必須 |
+| NFR-011 | GitHub Actions の CI は `workflow_dispatch` による明示的な手動実行のみを root execution trigger とする | 必須 |
+| NFR-012 | CI は `push`、`pull_request`、`schedule` その他の非手動 root execution trigger では自動実行されない | 必須 |
 | NFR-013 | CI は依存関係導入、テスト、ビルドまで到達できる構成を維持する | 必須 |
 | NFR-014 | CI の依存関係解決方式は、リポジトリのパッケージ運用方針と整合している | 必須 |
 
@@ -193,6 +193,7 @@ type RouletteSettings = {
 
 ### 8.6 CI 運用
 
+- CI の root execution trigger は `workflow_dispatch` のみとし、push や pull request では自動起動しない。
 - CI では Node.js 環境をセットアップしたうえで、依存関係導入、テスト、ビルドを順に実行する。
 - CI の依存関係導入は `npm ci` を用いる。
 - `package-lock.json` をリポジトリで管理し、`actions/setup-node` の `cache: npm` と整合させる。
@@ -244,8 +245,8 @@ type RouletteSettings = {
 | AC-012 | ページ再読み込み後も候補リスト、抽選済み状態、除外設定が復元される | FR-015 |
 | AC-013 | スマートフォン幅でも主要操作が画面内で完結する | NFR-001, NFR-003 |
 | AC-014 | 候補名に HTML やスクリプト文字列が含まれても、安全に文字列として表示される | NFR-006 |
-| AC-015 | `main` への push 時に GitHub Actions の CI が自動起動する | NFR-011 |
-| AC-016 | pull request 時にも GitHub Actions の CI が自動起動する | NFR-012 |
+| AC-015 | CI workflow の root execution trigger が `workflow_dispatch` のみである | NFR-011 |
+| AC-016 | push、pull request、schedule その他の非手動 root execution trigger で CI が自動起動しない | NFR-012 |
 | AC-017 | CI が依存関係導入、テスト、ビルドまで到達し、ロックファイル運用と矛盾しない | NFR-013, NFR-014 |
 | AC-018 | 候補名が120文字を超える場合は登録・保存できず、理由を表示する | FR-012 |
 | AC-019 | 同一名称の候補が複数ある場合でも、利用者は各候補を識別して編集・削除できる | FR-017 |
@@ -293,8 +294,8 @@ type RouletteSettings = {
 
 ### 11.5 CI / 開発品質
 
-- `main` への push で CI が起動すること。
-- pull request でも CI が起動すること。
+- CI workflow の root execution trigger が `workflow_dispatch` のみであること。
+- push、pull request、schedule その他の非手動 root execution trigger で CI が自動起動しないこと。
 - CI が依存関係導入の段階で停止せず、テストとビルドまで到達すること。
 - ロックファイル運用と CI 設定が矛盾しないこと。
 - CI 失敗時に、GitHub Actions 上で失敗段階を特定できること。
@@ -324,3 +325,4 @@ type RouletteSettings = {
 | 2026-05-16 | GitHub Actions CI の要件、受入条件、未確定事項を追加 |
 | 2026-05-16 | CI の lockfile 方針と `npm ci` 運用を確定内容へ更新し、保存異常系と抽選中の操作競合をテスト観点に反映 |
 | 2026-05-18 | 同名候補の識別仕様、候補名120文字制限、関連受入条件とテスト観点を追加 |
+| 2026-09-11 | 現行 Owner Actions authority に合わせ、CI の root execution trigger を `workflow_dispatch` のみに統一し、push / pull request 等による自動起動要件を廃止 |
