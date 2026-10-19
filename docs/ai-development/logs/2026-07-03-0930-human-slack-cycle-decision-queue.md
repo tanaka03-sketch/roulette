@@ -19,7 +19,7 @@
 - `.github/agent-decisions.yml`
 - Issue #54 / #55 / #56 / #58
 - PR #18 / #27
-- Slack 既定チャンネル `C0BCAL9FFSP`
+- Slack 既定チャンネル `[HISTORICAL-SLACK-CHANNEL-ID-REDACTED]`
 
 ## 確認結果
 
