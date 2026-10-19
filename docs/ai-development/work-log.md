@@ -316,13 +316,13 @@ Open Issue のうち、GitHub 管理画面でしか完了確認できない `mai
 
 - ジョブ種別: スケジュール運用変更 / Slack 確認先設定
 - 対象リポジトリ: `tanaka03-sketch/roulette`
-- Slack 確認先: `https://app.slack.com/client/T0B0KABNVNX/C0BCAL9FFSP` / `channel_id: C0BCAL9FFSP`
+- Slack 確認先: `[Slack確認先: 公開版で匿名化]` / `channel_id: [SlackチャンネルID: 公開版で匿名化]`
 
 ### 実施内容
 
-- 人間確認 / Slack 1 時間サイクルのプロンプトに、Slack 確認先 `C0BCAL9FFSP` を明記。
-- レビュー 1 時間サイクルのプロンプトに、Slack 確認が必要な事項は `C0BCAL9FFSP` へ渡す質問として記録することを明記。
-- 実装短周期サイクルのプロンプトに、未確定事項は推測せず `C0BCAL9FFSP` へ確認する質問として記録することを明記。
+- 人間確認 / Slack 1 時間サイクルのプロンプトに、Slack 確認先 `[SlackチャンネルID: 公開版で匿名化]` を明記。
+- レビュー 1 時間サイクルのプロンプトに、Slack 確認が必要な事項は `[SlackチャンネルID: 公開版で匿名化]` へ渡す質問として記録することを明記。
+- 実装短周期サイクルのプロンプトに、未確定事項は推測せず `[SlackチャンネルID: 公開版で匿名化]` へ確認する質問として記録することを明記。
 - `AGENTS.md` と `docs/ai-development/agent-instructions.md` の Slack 不明点確認ループに、固定チャンネルと `channel_id` を追加。
 - `docs/ai-development/progress.md` に Slack 確認先を記録。
 
@@ -344,7 +344,7 @@ Open Issue のうち、GitHub 管理画面でしか完了確認できない `mai
 
 ### 次アクション
 
-- 次回の人間確認 / Slack 1 時間サイクルで、Slack connector が使える場合に `C0BCAL9FFSP` へ 1 投稿 1 質問で投稿できるか確認する。
+- 次回の人間確認 / Slack 1 時間サイクルで、Slack connector が使える場合に `[SlackチャンネルID: 公開版で匿名化]` へ 1 投稿 1 質問で投稿できるか確認する。
 
 ## 2026-06-23 Slack 質問形式ルール追加
 
@@ -383,7 +383,7 @@ Open Issue のうち、GitHub 管理画面でしか完了確認できない `mai
 - ジョブ種別: 人間確認 / Slack 確認 / Scheduled Maintenance / Spec Gate / Storage Conflict Guard
 - 対象リポジトリ: `tanaka03-sketch/roulette`
 - 対象事項: PR #52 `docs: switch schedule lock to ChatGPT memory`
-- Slack 確認先: `https://app.slack.com/client/T0B0KABNVNX/C0BCAL9FFSP` / `channel_id: C0BCAL9FFSP`
+- Slack 確認先: `[Slack確認先: 公開版で匿名化]` / `channel_id: [SlackチャンネルID: 公開版で匿名化]`
 
 ### 確認した事項
 
@@ -401,7 +401,7 @@ Slack 投稿を実施した。
 
 投稿内容: 日本語、1 投稿 1 質問、番号付き選択肢付き。
 
-投稿リンク: https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782258456427199
+投稿リンク: [Slack投稿リンク: 公開版で匿名化]
 
 ### 回答待ち
 
@@ -496,7 +496,7 @@ Slack 投稿は行っていない。
 - `AGENTS.md`、`docs/ai-development/agent-instructions.md`、`docs/ai-development/goal.md`、`docs/ai-development/progress.md`、`docs/ai-development/work-log.md`、`docs/requirements.md`、`docs/ai-development/requirements.md` を確認した。
 - 親リポジトリは read-only として、`README.md`、`playbooks/automated-development-flow.md`、`playbooks/github-development-loop.md`、`playbooks/spec-gate.md`、`playbooks/storage-conflict-guard.md` の必要箇所だけを参照した。
 - PR #52 は open のままで、`mergeable: false`、head `efefce2e009e816954538582db3a4aba9041902f` のまま変化がないことを確認した。
-- Slack 投稿 `https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782258456427199` のスレッドには返信がなく、PR #52 の扱いに関する回答はまだ得られていない。
+- Slack 投稿 `[Slack投稿リンク: 公開版で匿名化]` のスレッドには返信がなく、PR #52 の扱いに関する回答はまだ得られていない。
 - `docs/requirements.md` と `docs/ai-development/requirements.md` には新しい製品実装 blocker は見つからなかったが、`progress.md` の PR #52 Open blocker / 回答待ちが引き続き停止条件に該当する。
 
 ### Spec Gate / Storage Conflict Guard
@@ -550,7 +550,7 @@ Slack 投稿は行っていない。
 - `AGENTS.md`、`docs/ai-development/agent-instructions.md`、`docs/ai-development/goal.md`、`docs/ai-development/progress.md`、`docs/ai-development/work-log.md`、`docs/requirements.md`、`docs/ai-development/requirements.md` を確認した。
 - 親リポジトリは read-only として、`playbooks/spec-gate.md` と `playbooks/storage-conflict-guard.md` の必要箇所だけを参照した。
 - PR #52 は open のままで、`mergeable: false`、head `efefce2e009e816954538582db3a4aba9041902f` のまま変化がないことを確認した。
-- Slack 投稿 `https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782258456427199` のスレッドには返信がなく、PR #52 の扱いに関する回答はまだ得られていない。
+- Slack 投稿 `[Slack投稿リンク: 公開版で匿名化]` のスレッドには返信がなく、PR #52 の扱いに関する回答はまだ得られていない。
 - `docs/requirements.md` と `docs/ai-development/requirements.md` には新しい製品実装 blocker は見つからなかったが、`progress.md` の PR #52 Open blocker / 回答待ちが引き続き停止条件に該当する。
 
 ### Spec Gate / Storage Conflict Guard
