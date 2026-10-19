@@ -207,10 +207,10 @@ Slack だけを正式判断履歴にしません。Slack で方向性が決ま�
 
 不明点が実装判断、設計判断、検証判断、公開可否、運用適性に影響する場合は推測しません。
 
-- Slack 確認先は `https://app.slack.com/client/T0B0KABNVNX/C0BCAL9FFSP`（`channel_id: C0BCAL9FFSP`）です。
+- Slack 確認先は実行環境で指定・確認できた認可済みチャンネルを使用します。公開リポジトリには実 workspace ID / channel ID を固定せず、例示する場合は `https://app.slack.com/client/T-EXAMPLE-WORKSPACE/C-EXAMPLE-CHANNEL` のみを使います（例示先には送信しません）。
 - Slack 投稿は、新しい判断材料があり、設計・実装・検証・公開可否・運用判断を進めるために人間回答が必要な時だけ行います。
 - 毎時サイクルの通常報告、進捗確認、既知事項の再通知、単なる問題なし報告は Slack に投稿せず、ChatGPT 内報告と `docs/ai-development/progress.md` / `docs/ai-development/work-log.md` / `docs/ai-development/logs/` の記録を中心にします。
-- Slack 投稿環境があり、かつ投稿条件を満たす場合は、`C0BCAL9FFSP` に日本語で 1 回につき 1 問だけ投稿します。
+- Slack 投稿環境・投稿条件に加え、実行環境で認可済みチャンネルを確認できた場合だけ、その宛先へ日本語で 1 回につき 1 問だけ投稿します。宛先が未確認の場合は送信せず、下記の既存 Issue／作業ログへの記録経路へ戻します。
 - Slack の質問には、相手が選択肢で回答できるように、簡潔な番号付きまたはラベル付きの選択肢を必ず添えます。選択肢だけで判断を覆いきれない場合は、自由記述 / その他の選択肢も含めます。
 - Slack で方向性を決める返信権限はチャンネル側の参加・投稿権限で担保されます。チャンネル内で回答できる人全員にある前提で扱い、特定個人だけの回答を必須にしません。
 - Slack 投稿環境がない場合、投稿に失敗した場合、または投稿条件を満たさない場合は、質問文案や判断候補を `docs/ai-development/work-log.md`、関連 Issue、必要に応じて `docs/ai-development/requirements.md` に `回答待ち` または `ChatGPT 内確認事項` として記録します。
