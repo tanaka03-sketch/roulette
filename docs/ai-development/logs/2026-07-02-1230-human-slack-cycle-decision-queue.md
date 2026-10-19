@@ -28,9 +28,9 @@ Read and applied:
 - PR #27 remains open / `mergeable: false`, head `d9978573927fb7389cbe2d677216f7d1c5514d5d`.
 - PR #18 discussion still points to Decision Issue #54 and the earlier Slack question.
 - PR #27 discussion still points to Decision Issue #55.
-- Slack thread `1782283714.065949` in `C0BCAL9FFSP` has no replies.
-- Slack search for `HD-20260630-001` in `C0BCAL9FFSP` returned no answer candidate.
-- Slack search for `HD-20260630-002` in `C0BCAL9FFSP` returned no answer candidate.
+- Slack thread `[Slack thread ID redacted for public copy]` in `[Slack channel ID redacted for public copy]` has no replies.
+- Slack search for `HD-20260630-001` in `[Slack channel ID redacted for public copy]` returned no answer candidate.
+- Slack search for `HD-20260630-002` in `[Slack channel ID redacted for public copy]` returned no answer candidate.
 
 ## Result
 
