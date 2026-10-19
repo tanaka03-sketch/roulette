@@ -205,10 +205,10 @@ Stop and record the reason in `docs/ai-development/work-log.md` or `docs/ai-deve
 
 If an unknown affects implementation, design, verification, publish readiness, or operation readiness, do not guess.
 
-- Slack confirmation destination: `https://app.slack.com/client/T0B0KABNVNX/C0BCAL9FFSP` (`channel_id: C0BCAL9FFSP`).
+- Slack confirmation destination: use only an authorized channel configured and confirmed in the execution environment. Do not hard-code live workspace/channel identifiers in this public repository. Example format only: `https://app.slack.com/client/T-EXAMPLE-WORKSPACE/C-EXAMPLE-CHANNEL` (never post to the example destination).
 - Slack posting is reserved for new decision material: post only when there is a new fact, blocker, trade-off, or approval item that needs a human answer before design, implementation, verification, publish readiness, or operation can proceed.
 - Do not post routine hourly reports, no-issue reports, repeated known blockers, or progress summaries to Slack. Keep those in the ChatGPT scheduled-run report and in `docs/ai-development/progress.md` / `docs/ai-development/work-log.md` / `docs/ai-development/logs/`.
-- If Slack posting is available and the posting condition is met, post to `C0BCAL9FFSP` in Japanese and ask exactly one question per post.
+- If Slack posting is available, the posting condition is met, and the authorized destination has been confirmed from the execution environment, post there in Japanese and ask exactly one question per post. Otherwise do not post; use the existing GitHub Issue / work-log fallback below.
 - Each Slack question must include concise numbered or labeled choices so the human can answer by selecting an option. Include a free-form / other option when the provided choices may not cover the decision.
 - Direction-setting replies in Slack are accepted from anyone who can reply in the destination channel. The channel's membership and posting permissions are the authority boundary; do not require a specific named person unless a separate user instruction says so.
 - If Slack posting is unavailable, posting fails, or the posting condition is not met, record the proposed question or internal confirmation item as `回答待ち` or `ChatGPT 内確認事項` in `docs/ai-development/work-log.md`, the related Issue, and when relevant `docs/ai-development/requirements.md`.
