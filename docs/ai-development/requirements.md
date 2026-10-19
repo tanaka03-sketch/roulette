@@ -148,7 +148,7 @@ Slack 投稿は、新しい判断材料があり、設計・実装・検証・�
 - 2026-06-30: 親リポジトリ更新により、現行参照先を `playbooks/completion-scorecard.md`、`playbooks/minimal-implementation-review.md`、`playbooks/service-publication-review.md`、`operations/repository-decision-queue.md`、`templates/repository-decision-queue/agent-decisions.yml` へ拡張。
 - 2026-06-24 19:51 JST: ユーザー依頼により、目的に対して公開して大丈夫か、運用に適しているかをレビュー観点へ追加し、開発中のものを `completion-scorecard.md` で 100 点満点記録する方針を採用。
 - 2026-06-24 13:20 JST: ユーザー依頼により、GitHub Actions major update 方針の回答待ちを解消。選択肢 1 の `まとめて方針化して進める` を採用し、Dependabot major update PR はまとめて triage しつつ、merge / close / recreate は PR ごとの互換性と CI 結果を確認して判断する。
-- 2026-06-24 12:36 JST: Slack 投稿 `https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782258456427199` への返信 `1` を確認。選択肢 1 の `close` として、PR #52 `docs: switch schedule lock to ChatGPT memory` は古い内容として閉じ、current `main` を正とする方針で処理する。
+- 2026-06-24 12:36 JST: Slack 投稿 `[Slack投稿リンク: 公開版で匿名化]` への返信 `1` を確認。選択肢 1 の `close` として、PR #52 `docs: switch schedule lock to ChatGPT memory` は古い内容として閉じ、current `main` を正とする方針で処理する。
 
 不明点が実装判断、設計判断、検証判断、公開可否、運用適性に影響する場合は推測で進めず、Slack 投稿、Repository Decision Queue、または質問文案の記録を行ってください。
 
