@@ -3,14 +3,14 @@
 - ジョブ種別: 人間確認 / Slack 確認 / Scheduled Maintenance / Spec Gate / Storage Conflict Guard
 - 対象リポジトリ: `tanaka03-sketch/roulette`
 - 対象事項: PR #52 `docs: switch schedule lock to ChatGPT memory` の扱いに関する既存回答待ち
-- Slack 確認先: `https://app.slack.com/client/T0B0KABNVNX/C0BCAL9FFSP` / `channel_id: C0BCAL9FFSP`
+- Slack 確認先: `[Slack確認先: 公開版で匿名化]` / `channel_id: [SlackチャンネルID: 公開版で匿名化]`
 
 ## 確認した事項
 
 - ChatGPT 側メモリーロック `/workspace/memory/locks/roulette-schedule-lock.json` が unlocked であることを確認し、ロック取得後に作業した。
 - `AGENTS.md`、`docs/ai-development/agent-instructions.md`、`docs/ai-development/goal.md`、`docs/ai-development/progress.md`、`docs/ai-development/work-log.md`、`docs/requirements.md`、`docs/ai-development/requirements.md` を確認した。
 - 最優先事項は、既存 Slack 投稿への回答待ちである PR #52 の扱い 1 件のみと判断した。複数の質問は扱っていない。
-- Slack スレッド `1782258456.427199` を確認したが、返信はなかった。
+- Slack スレッド `[SlackスレッドID: 公開版で匿名化]` を確認したが、返信はなかった。
 - PR #52 は open のままで、今回反映できる回答済み事項はなかった。
 - `docs/requirements.md` と `docs/ai-development/requirements.md` には、今回新たに反映すべき製品仕様判断は見つからなかった。
 
@@ -23,7 +23,7 @@ Slack 投稿は行っていない。
 ## 回答待ち
 
 - PR #52 を `close` / `rebase` / `other` のどれで扱うか。既存 Slack 投稿への返信を待つ。
-- 投稿リンク: `https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782258456427199`
+- 投稿リンク: [Slack投稿リンク: 公開版で匿名化]
 
 ## 更新したファイル / Issue / PR
 
