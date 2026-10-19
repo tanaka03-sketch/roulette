@@ -18,7 +18,7 @@
 - head: `97477654d373090a9494d699d6d1a27aa47754b6`
 - `mergeable: false`
 - workflow run `25979489135`: `failure`
-- Slack 投稿 `https://x-8oh3631.slack.com/archives/C0BCAL9FFSP/p1782283714065949` のスレッドには返信なし。
+- Slack 投稿 `[Slack投稿リンク: 公開版で匿名化]` のスレッドには返信なし。
 
 ## Spec Gate Result
 
