@@ -27,7 +27,7 @@
 - PR #18 `chore(deps-dev): bump vitest from 3.2.4 to 4.1.6`
 - PR #27 `chore(deps-dev): bump @vitejs/plugin-react from 5.2.0 to 6.0.2`
 - `.github/agent-decisions.yml`
-- Slack channel `C0BCAL9FFSP`
+- Slack channel `[HISTORICAL-SLACK-CHANNEL-ID-REDACTED]`
 
 ## 結果
 
@@ -38,7 +38,7 @@
 - PR #18 は open / mergeable false のまま。head SHA は `97477654d373090a9494d699d6d1a27aa47754b6`。人間判断待ちは解除されていない。
 - PR #27 は open / mergeable false のまま。head SHA は `d9978573927fb7389cbe2d677216f7d1c5514d5d`。人間判断待ちは解除されていない。
 - `.github/agent-decisions.yml` の `HD-20260630-001`、`HD-20260630-002`、`HD-20260702-001`、`HD-20260702-002` はすべて `waiting-human` のまま。
-- Slack channel `C0BCAL9FFSP` の 2026-07-03 08:30-18:30 JST 範囲に新規メッセージは見つからなかった。
+- Slack channel `[HISTORICAL-SLACK-CHANNEL-ID-REDACTED]` の 2026-07-03 08:30-18:30 JST 範囲に新規メッセージは見つからなかった。
 - Slack search で `HD-20260630-001`、`HD-20260630-002`、`HD-20260702-001`、`HD-20260702-002` の回答候補は見つからなかった。
 - 既存 PR #18 Slack thread `1782283714.065949` に返信はなかった。
 
